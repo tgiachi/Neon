@@ -1,30 +1,29 @@
-﻿{
-  "$schema": "http://json.schemastore.org/launchsettings.json",
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:5409",
-      "sslPort": 44328
+      "applicationUrl": "http://localhost:63167",
+      "sslPort": 44356
     }
   },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "Neon.WebApi": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "weatherforecast",
-      "applicationUrl": "https://localhost:5001;http://localhost:5000",
+      "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }
   }
 }
