@@ -22,11 +22,6 @@ namespace Neon.WebApi
 
 		public static void Main(string[] args)
 		{
-
-
-
-
-
 			try
 			{
 				CreateWebHostBuilder(args).Run();

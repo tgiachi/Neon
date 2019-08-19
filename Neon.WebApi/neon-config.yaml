@@ -1,8 +1,10 @@
 engine:
   home_directory: ./Neon
   logs_directory: logs
+  use_swagger: true
 services:
   mqtt:
     client:
-      hostname: ''
+      hostname: 'mqtt.anaconda.net-freaks.com'
+      port: 1883
     embedded_server_port: 1883

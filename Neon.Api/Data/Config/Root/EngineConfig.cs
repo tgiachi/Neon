@@ -7,6 +7,10 @@ namespace Neon.Api.Data.Config.Root
 		[YamlMember(Alias = "home_directory")]
 		public string HomeDirectory { get; set; }
 
+
+		[YamlMember(Alias = "use_swagger")]
+		public bool UseSwagger { get; set; }
+
 		[YamlMember(Alias = "logs_directory")]
 		public string LogsDirectory { get; set; }
 
@@ -14,6 +18,7 @@ namespace Neon.Api.Data.Config.Root
 		{
 			HomeDirectory = "./Neon";
 			LogsDirectory = "logs";
+			UseSwagger = true;
 		}
 	}
 }

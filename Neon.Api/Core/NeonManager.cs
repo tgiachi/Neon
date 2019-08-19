@@ -7,7 +7,9 @@ using Autofac;
 using MediatR;
 using MediatR.Pipeline;
 using Neon.Api.Attributes;
+using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces;
+using Neon.Api.Interfaces.Managers;
 using Neon.Api.Utils;
 using Serilog;
 using Serilog.Events;
@@ -33,6 +35,7 @@ namespace Neon.Api.Core
 
 		public ContainerBuilder ContainerBuilder => _containerBuilder;
 		public List<Type> AvailableServices { get; }
+		public NeonConfig Config => _configManager.Configuration;
 
 		public bool IsRunningInDocker { get; }
 
@@ -52,6 +55,7 @@ namespace Neon.Api.Core
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterBuildCallback(container => { _logger.Debug($"Container is ready"); });
 			_configManager = new ConfigManager(_logger, this, _containerBuilder);
+			_configManager.LoadConfig();
 		}
 
 		private void ConfigureLogger()
@@ -86,7 +90,7 @@ namespace Neon.Api.Core
 
 			ScanTypes();
 
-			_configManager.LoadConfig();
+			
 			
 
 			return true;

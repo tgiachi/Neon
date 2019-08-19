@@ -8,6 +8,7 @@ using Autofac;
 using Neon.Api.Data.Config;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces;
+using Neon.Api.Interfaces.Managers;
 using Serilog;
 using YamlDotNet.Serialization;
 
@@ -27,7 +28,7 @@ namespace Neon.Api.Core
 		private bool _isConfigFound;
 
 
-		public NeonConfig Configuration { get; set; }
+		public NeonConfig Configuration => _config;
 
 		public ConfigManager(ILogger logger, INeonManager neonManager, ContainerBuilder containerBuilder)
 		{

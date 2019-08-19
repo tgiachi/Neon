@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Autofac;
+using Neon.Api.Data.Config.Root;
 
-namespace Neon.Api.Interfaces
+namespace Neon.Api.Interfaces.Managers
 {
 	/// <summary>
 	/// Interface for create Neon Manager
@@ -14,6 +14,8 @@ namespace Neon.Api.Interfaces
 		ContainerBuilder ContainerBuilder { get; }
 
 		List<Type> AvailableServices { get; }
+
+		NeonConfig Config { get; }
 
 		bool IsRunningInDocker { get; }
 		

@@ -14,11 +14,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Neon.Api.Core;
+using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces;
 using Neon.Api.Logger;
 using Neon.Api.Utils;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Neon.WebApi
 {
@@ -26,26 +28,39 @@ namespace Neon.WebApi
 	{
 		public IContainer ApplicationContainer { get; set; }
 		public IConfiguration Configuration { get; }
-		private readonly ILoggerFactory _loggerFactory;
 
-		
+		private readonly ILoggerFactory _loggerFactory;
+		private readonly ILogger _logger;
+
+		private NeonConfig _config;
 
 		public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
 		{
 			Configuration = configuration;
 			_loggerFactory = loggerFactory;
+			_logger = _loggerFactory.CreateLogger<Startup>();
 		}
 
 
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
-			
-			services.AddSwaggerGen(c =>
-			{
-				c.SwaggerDoc("v1", new Info() { Title = "Neon", Version = "v1" });
-			});
 
+			_config = Program.NeonManager.Config;
+
+
+			if (_config.EngineConfig.UseSwagger)
+			{
+				services.AddSwaggerGen(c =>
+				{
+					c.SwaggerDoc("v1", new Info() { Title = "Neon", Version = "v1" });
+				});
+			}
+
+			services.AddCors(c =>
+			{
+				c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+			});
 
 			services.AddMvc();
 			services.AddSingleton(typeof(ILogger<>), typeof(LoggerEx<>));
@@ -55,35 +70,41 @@ namespace Neon.WebApi
 			Program.NeonManager.ContainerBuilder.Populate(services);
 
 			Program.NeonManager.Init();
+
+
 			ApplicationContainer = Program.NeonManager.Build();
 
 			return new AutofacServiceProvider(ApplicationContainer);
 
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public async void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime appLifetime)
 		{
 
 			appLifetime.ApplicationStopped.Register(async () => await Program.NeonManager.Shutdown());
-
+			
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 			}
 			else
 			{
-				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
 
-			app.UseSwagger();
+			app.UseCors(options => options.AllowAnyOrigin());
 			app.UseHttpsRedirection();
 
-			app.UseSwaggerUI(c =>
+			if (_config.EngineConfig.UseSwagger)
 			{
-				c.SwaggerEndpoint("/swagger/v1/swagger.json", "Neon v1");
-			});
+				_logger.LogInformation($"Configuring Swagger on /swagger/ endpoint");
+				app.UseSwagger();
+				app.UseSwaggerUI(c =>
+				{
+					c.SwaggerEndpoint("/swagger/v1/swagger.json", "Neon v1");
+				});
+			}
+
 			app.UseMvc();
 
 			await Program.NeonManager.Start();

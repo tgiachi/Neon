@@ -16,4 +16,8 @@
     <PackageReference Include="YamlDotNet" Version="6.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\NoSql\" />
+  </ItemGroup>
+
 </Project>
