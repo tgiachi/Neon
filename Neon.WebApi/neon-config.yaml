@@ -1,10 +1,14 @@
 engine:
-  home_directory: ./Neon
-  logs_directory: logs
+  home_directory: C:\Neon
   use_swagger: true
+  logs_directory: logs
+  secret_key: '#%hCxRCegTnes6iH6A$V69VLO#j7*b'
 services:
   mqtt:
     client:
-      hostname: 'mqtt.anaconda.net-freaks.com'
+      hostname: mqtt.anaconda.net-freaks.com
       port: 1883
     embedded_server_port: 1883
+  script_engine:
+    directory:
+      name: Scripts

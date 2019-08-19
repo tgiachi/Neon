@@ -5,7 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MQTTnet" Version="3.0.7" />
+    <PackageReference Include="LiteDB" Version="4.1.4" />
+    <PackageReference Include="MongoDB.Driver" Version="2.9.0" />
+    <PackageReference Include="MQTTnet" Version="3.0.8" />
     <PackageReference Include="System.Reactive" Version="4.1.6" />
   </ItemGroup>
 

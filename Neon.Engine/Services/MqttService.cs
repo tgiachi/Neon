@@ -11,6 +11,7 @@ using MQTTnet.Client;
 using MQTTnet.Client.Options;
 using MQTTnet.Server;
 using Neon.Api.Attributes;
+using Neon.Api.Attributes.Services;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Data.Config.Services;
 using Neon.Api.Data.Mqtt;
@@ -18,7 +19,7 @@ using Neon.Api.Interfaces.Services;
 
 namespace Neon.Engine.Services
 {
-	[NeonService("MQTT Service", "Connect to MQTT queue", LoadOrder = 1)]
+	[NeonService("MQTT Service", "Connect to MQTT queue", LoadOrder = 2)]
 	public class MqttService : IMqttService
 	{
 		private readonly ILogger _logger;

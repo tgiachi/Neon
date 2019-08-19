@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes;
+using Neon.Api.Attributes.Services;
 using Neon.Api.Data.Services;
 using Neon.Api.Interfaces;
 using Neon.Api.Interfaces.Base;

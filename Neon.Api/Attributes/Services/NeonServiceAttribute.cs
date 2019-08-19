@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Neon.Api.Attributes
+namespace Neon.Api.Attributes.Services
 {
 	[AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
 	public class NeonServiceAttribute : Attribute

@@ -8,10 +8,14 @@ namespace Neon.Api.Data.Config.Root
 		[YamlMember(Alias = "mqtt")]
 		public MqttConfig MqttConfig { get; set; }
 
+		[YamlMember(Alias = "script_engine")]
+		public ScriptEngineConfig ScriptEngineConfig { get; set; }
+
 
 		public ServicesConfig()
 		{
 			MqttConfig = new MqttConfig();
+			ScriptEngineConfig = new ScriptEngineConfig();
 		}
 	}
 }

@@ -12,6 +12,7 @@ using Neon.Api.Interfaces;
 using Serilog;
 using Serilog.Events;
 using Microsoft.Extensions.DependencyInjection;
+using Neon.Api.Interfaces.Managers;
 
 namespace Neon.WebApi
 {

@@ -7,6 +7,8 @@ using Autofac;
 using MediatR;
 using MediatR.Pipeline;
 using Neon.Api.Attributes;
+using Neon.Api.Attributes.NoSql;
+using Neon.Api.Attributes.Services;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces;
 using Neon.Api.Interfaces.Managers;
@@ -32,13 +34,14 @@ namespace Neon.Api.Core
 
 		private IServicesManager _servicesManager;
 		private IConfigManager _configManager;
+		private IFileSystemManager _fileSystemManager;
+		private ISecretKeyManager _secretKeyManager;
 
 		public ContainerBuilder ContainerBuilder => _containerBuilder;
 		public List<Type> AvailableServices { get; }
 		public NeonConfig Config => _configManager.Configuration;
 
 		public bool IsRunningInDocker { get; }
-
 
 
 		public NeonManager()
@@ -54,8 +57,14 @@ namespace Neon.Api.Core
 
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterBuildCallback(container => { _logger.Debug($"Container is ready"); });
+
 			_configManager = new ConfigManager(_logger, this, _containerBuilder);
 			_configManager.LoadConfig();
+
+			_secretKeyManager = new SecretKeyManager(Config.EngineConfig.SecretKey);
+
+			_fileSystemManager = new FileSystemManager(_logger, Config, _secretKeyManager);
+		
 		}
 
 		private void ConfigureLogger()
@@ -82,16 +91,25 @@ namespace Neon.Api.Core
 			_logger.Debug($"Registering NeonManager");
 			_containerBuilder.Register(n => this).As<INeonManager>().SingleInstance();
 
+			_logger.Debug($"Registering Config Manager");
+			_containerBuilder.Register(n => _configManager).As<IConfigManager>().SingleInstance();
+
+			_logger.Debug($"Registering Secret Keys Manager");
+			_containerBuilder.Register(n => _secretKeyManager).As<ISecretKeyManager>().SingleInstance();
+
+			_logger.Debug($"Registering FileSystem Manager");
+			_containerBuilder.Register(n => _fileSystemManager).As<IFileSystemManager>().SingleInstance();
+
 			_logger.Debug($"Registering Services Manager");
 			_containerBuilder.RegisterType<ServicesManager>().As<IServicesManager>().SingleInstance();
 
-
+			_logger.Debug($"Registering Mediator");
 			RegisterMediator();
 
-			ScanTypes();
+			_logger.Debug($"Registering NoSQL connectors");
+			RegisterNoSqlConnectors();
 
-			
-			
+			ScanTypes();
 
 			return true;
 		}
@@ -101,7 +119,7 @@ namespace Neon.Api.Core
 			_logger.Debug($"Scan for services");
 			AssemblyUtils.GetAttribute<NeonServiceAttribute>().ForEach(s =>
 			{
-				_logger.Debug($"Registering type {s.Name}");
+				_logger.Debug($"Registering service {s.Name}");
 
 				_containerBuilder.RegisterType(s).As(AssemblyUtils.GetInterfaceOfType(s)).SingleInstance();
 				AvailableServices.Add(s);
@@ -135,12 +153,19 @@ namespace Neon.Api.Core
 			});
 		}
 
+		private void RegisterNoSqlConnectors()
+		{
+			AssemblyUtils.GetAttribute<NoSqlConnectorAttribute>().ForEach(t =>
+				{
+					ContainerBuilder.RegisterType(t).SingleInstance();
+				});
+		}
+
 		public async Task Start()
 		{
-			
+			_fileSystemManager.Start();
 
 			await _servicesManager.Start();
-
 		}
 
 		/// <summary>
@@ -153,13 +178,14 @@ namespace Neon.Api.Core
 
 			_servicesManager = _container.Resolve<IServicesManager>();
 
-
 			return _container;
 		}
 
 		public async Task Shutdown()
 		{
+			
 			await _servicesManager.Stop();
+			_fileSystemManager.Stop();
 		}
 
 		public T Resolve<T>()

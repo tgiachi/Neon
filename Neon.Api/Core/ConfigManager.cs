@@ -27,7 +27,6 @@ namespace Neon.Api.Core
 		private string _configFullPath;
 		private bool _isConfigFound;
 
-
 		public NeonConfig Configuration => _config;
 
 		public ConfigManager(ILogger logger, INeonManager neonManager, ContainerBuilder containerBuilder)
@@ -60,12 +59,16 @@ namespace Neon.Api.Core
 			_logger.Information($"Loading config [is Docker = {_neonManager.IsRunningInDocker}]  config found: {_isConfigFound}");
 
 			if (!_isConfigFound)
-				SaveDefaultConfig();
+			{
+				_config = new NeonConfig();
+				SaveConfig();
+			}
 			else
 				DeserializeConfig();
 
 
 			_containerBuilder.RegisterInstance(_config);
+			SaveConfig();
 
 			return true;
 		}
@@ -75,12 +78,10 @@ namespace Neon.Api.Core
 			_config = new Deserializer().Deserialize<NeonConfig>(File.ReadAllText(_configFullPath));
 		}
 
-		private void SaveDefaultConfig()
+		private void SaveConfig()
 		{
-			_config = new NeonConfig();
-
 			File.WriteAllText(_configFullPath, new Serializer().Serialize(_config));
-
 		}
+
 	}
 }
