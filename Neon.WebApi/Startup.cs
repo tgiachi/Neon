@@ -1,25 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Neon.Api.Core;
 using Neon.Api.Data.Config.Root;
-using Neon.Api.Interfaces;
 using Neon.Api.Logger;
 using Neon.Api.Utils;
-using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Neon.WebApi
@@ -82,7 +73,7 @@ namespace Neon.WebApi
 		{
 
 			appLifetime.ApplicationStopped.Register(async () => await Program.NeonManager.Shutdown());
-			
+
 			if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();

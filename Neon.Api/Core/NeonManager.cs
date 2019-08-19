@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Autofac;
+﻿using Autofac;
 using MediatR;
 using MediatR.Pipeline;
-using Neon.Api.Attributes;
 using Neon.Api.Attributes.NoSql;
 using Neon.Api.Attributes.Services;
 using Neon.Api.Data.Config.Root;
-using Neon.Api.Interfaces;
 using Neon.Api.Interfaces.Managers;
 using Neon.Api.Utils;
 using Serilog;
-using Serilog.Events;
 using Serilog.Filters;
 using Serilog.Formatting.Compact;
 using Serilog.Sinks.SystemConsole.Themes;
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Threading.Tasks;
 
 
 namespace Neon.Api.Core
@@ -64,7 +60,7 @@ namespace Neon.Api.Core
 			_secretKeyManager = new SecretKeyManager(Config.EngineConfig.SecretKey);
 
 			_fileSystemManager = new FileSystemManager(_logger, Config, _secretKeyManager);
-		
+
 		}
 
 		private void ConfigureLogger()
@@ -75,7 +71,7 @@ namespace Neon.Api.Core
 				.ByExcluding(Matching.FromSource("System"))
 				.Enrich.FromLogContext()
 				.MinimumLevel.Debug()
-				.WriteTo.File(new CompactJsonFormatter(), "logs/Neon.log", 
+				.WriteTo.File(new CompactJsonFormatter(), "logs/Neon.log",
 					rollingInterval: RollingInterval.Day)
 				.WriteTo.Console(
 					theme: AnsiConsoleTheme.Literate,
@@ -183,7 +179,7 @@ namespace Neon.Api.Core
 
 		public async Task Shutdown()
 		{
-			
+
 			await _servicesManager.Stop();
 			_fileSystemManager.Stop();
 		}

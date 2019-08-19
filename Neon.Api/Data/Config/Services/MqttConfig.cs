@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
 
 namespace Neon.Api.Data.Config.Services
 {
@@ -22,6 +19,6 @@ namespace Neon.Api.Data.Config.Services
 			UseEmbeddedServer = false;
 			EmbeddedServerPort = 1883;
 		}
-		
+
 	}
 }

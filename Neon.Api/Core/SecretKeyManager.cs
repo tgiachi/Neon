@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Neon.Api.Attributes.SecretKey;
+using Neon.Api.Interfaces.Managers;
+using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using Neon.Api.Attributes.SecretKey;
-using Neon.Api.Interfaces.Managers;
 
 namespace Neon.Api.Core
 {

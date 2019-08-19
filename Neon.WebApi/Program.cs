@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 using Neon.Api.Core;
-using Neon.Api.Interfaces;
-using Serilog;
-using Serilog.Events;
-using Microsoft.Extensions.DependencyInjection;
 using Neon.Api.Interfaces.Managers;
+using Serilog;
 
 namespace Neon.WebApi
 {

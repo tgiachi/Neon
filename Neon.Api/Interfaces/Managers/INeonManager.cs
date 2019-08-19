@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Autofac;
+using Neon.Api.Data.Config.Root;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Autofac;
-using Neon.Api.Data.Config.Root;
 
 namespace Neon.Api.Interfaces.Managers
 {
@@ -18,7 +18,7 @@ namespace Neon.Api.Interfaces.Managers
 		NeonConfig Config { get; }
 
 		bool IsRunningInDocker { get; }
-		
+
 		/// <summary>
 		/// Pre load service for startup
 		/// </summary>

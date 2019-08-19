@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Services;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Data.Config.Services;
 using Neon.Api.Interfaces.Managers;
 using Neon.Api.Interfaces.Services;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Neon.Engine.Services
 {
@@ -39,8 +36,36 @@ namespace Neon.Engine.Services
 
 			_logger.LogInformation($"Script directory: {_config.Directory.DirectoryName}");
 
+			//https://docs.microsoft.com/en-us/powershell/developer/hosting/creating-an-initialsessionstate
+			//https://docs.microsoft.com/en-us/powershell/developer/hosting/creating-a-constrained-runspace
+			//https://www.powershellmagazine.com/2014/03/18/writing-a-powershell-module-in-c-part-1-the-basics/
+
 			return Task.FromResult(true);
 		}
+
+
+		//public Runspace GetRunspace()
+		//{
+		//	var state = InitialSessionState.CreateDefault2();
+		//	if (_modules != null)
+		//	{
+		//		state.ImportPSModule(_modules);
+		//	}
+		//	state.ExecutionPolicy = ExecutionPolicy.RemoteSigned;
+		//	state.Providers.Remove("Registry", null);
+		//	state.Providers.Remove("FileSystem", null);
+		//	if (_variables != null)
+		//	{
+		//		foreach (var variable in _variables)
+		//		{
+		//			state.Variables.Add(new SessionStateVariableEntry(variable.Key, variable.Value, variable.Key, ScopedItemOptions.Constant));
+		//		}
+		//	}
+		//	var runspace = RunspaceFactory.CreateRunspace(_host, state);
+		//	runspace.Open();
+
+		//	return runspace;
+		//}
 
 		public Task<bool> Stop()
 		{

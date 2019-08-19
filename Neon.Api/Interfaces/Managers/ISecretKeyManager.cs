@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Neon.Api.Interfaces.Managers
+﻿namespace Neon.Api.Interfaces.Managers
 {
 	public interface ISecretKeyManager
 	{

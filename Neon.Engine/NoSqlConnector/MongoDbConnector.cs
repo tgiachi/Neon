@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 using Neon.Api.Attributes.NoSql;
 using Neon.Api.Interfaces.Entity;
 using Neon.Api.Interfaces.NoSql;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neon.Engine.NoSqlConnector
 {
@@ -73,7 +71,7 @@ namespace Neon.Engine.NoSqlConnector
 
 		public bool Delete<TEntity>(string collectionName, TEntity obj) where TEntity : INeonEntity
 		{
-			var result =  _mongoDatabase.GetCollection<TEntity>(collectionName).DeleteOne(entity => entity.Id == obj.Id);
+			var result = _mongoDatabase.GetCollection<TEntity>(collectionName).DeleteOne(entity => entity.Id == obj.Id);
 
 			return result.DeletedCount > 0;
 		}

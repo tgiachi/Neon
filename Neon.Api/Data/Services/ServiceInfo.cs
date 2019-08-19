@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Neon.Api.Data.Services
 {
@@ -22,7 +20,7 @@ namespace Neon.Api.Data.Services
 			Status = ServiceStatus.Stopped;
 		}
 
-		
+
 	}
 
 	public enum ServiceStatus

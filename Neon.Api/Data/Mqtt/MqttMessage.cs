@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Neon.Api.Data.Mqtt
+﻿namespace Neon.Api.Data.Mqtt
 {
 	public class MqttMessage
 	{

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Neon.Api.Data.Mqtt;
+﻿using Neon.Api.Data.Mqtt;
 using Neon.Api.Interfaces.Base;
+using System;
+using System.Threading.Tasks;
 
 namespace Neon.Api.Interfaces.Services
 {
