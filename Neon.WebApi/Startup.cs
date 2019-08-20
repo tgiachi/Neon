@@ -57,6 +57,8 @@ namespace Neon.WebApi
 			services.AddSingleton(typeof(ILogger<>), typeof(LoggerEx<>));
 
 			services.AddMediatR(AssemblyUtils.GetAppAssemblies().ToArray());
+			services.AddHttpClient();
+			
 
 			Program.NeonManager.ContainerBuilder.Populate(services);
 
