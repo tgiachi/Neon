@@ -7,6 +7,7 @@ using Neon.Api.Attributes.Components;
 using Neon.Api.Impl.Components;
 using Neon.Api.Interfaces.Services;
 using Neon.Engine.Components.Configs;
+using Neon.Engine.Components.Events;
 
 namespace Neon.Engine.Components
 {
@@ -18,10 +19,19 @@ namespace Neon.Engine.Components
 
 		}
 
-		[ComponentPollRate(10)]
+		[ComponentPollRate(30)]
 		public override Task Poll()
 		{
+			var rnd = new Random();
 			Logger.LogInformation($"Test");
+			var entity = new TestEvent()
+			{
+				Name = "TEST_ENTITY",
+				Value = rnd.Next(0, 5)
+			};
+
+			PublishEntity(entity);
+
 			return base.Poll();
 		}
 

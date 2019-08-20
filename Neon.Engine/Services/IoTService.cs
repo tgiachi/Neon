@@ -135,6 +135,9 @@ namespace Neon.Engine.Services
 			if (oldEntity == null)
 				return true;
 
+			if (newEntity == null)
+				return true;
+
 			#region OldCode
 			var properties = oldEntity.GetType().GetProperties();
 
