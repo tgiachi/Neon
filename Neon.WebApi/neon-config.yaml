@@ -3,13 +3,22 @@ engine:
   use_swagger: true
   logger:
     log_level: Info
-  secret_key: '#%hCxRCegTnes6iH6A$V69VLO#j7*b'
+  secret_key: X&TFMU_qHYOvx1rLgbakQFlhXlMQoGmmzoxWdEXhofw$(T@XDQ
 services:
   mqtt:
     client:
       hostname: mqtt.anaconda.net-freaks.com
       port: 1883
-    embedded_server_port: 1883
   script_engine:
-    directory:
+    scripts_directory:
       name: Scripts
+    modules_directory:
+      name: Modules
+    write_output_on_log: true
+  iot:
+    entities_database:
+      name: mongo_db
+      connection_string: mongodb://localhost:27017/neon_iot_db
+    events_database:
+      name: mongo_db
+      connection_string: mongodb://localhost:27017/neon_iot_db

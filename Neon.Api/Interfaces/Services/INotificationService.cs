@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MediatR;
 using Neon.Api.Interfaces.Base;
+using System.Threading.Tasks;
 
 namespace Neon.Api.Interfaces.Services
 {

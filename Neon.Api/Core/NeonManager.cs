@@ -2,6 +2,7 @@
 using MediatR;
 using MediatR.Pipeline;
 using Neon.Api.Attributes.NoSql;
+using Neon.Api.Attributes.ScriptEngine;
 using Neon.Api.Attributes.Services;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces.Managers;
@@ -102,6 +103,9 @@ namespace Neon.Api.Core
 			_logger.Debug($"Registering Mediator");
 			RegisterMediator();
 
+			_logger.Debug($"Registering Script Modules");
+			RegisterScriptModules();
+
 			_logger.Debug($"Registering NoSQL connectors");
 			RegisterNoSqlConnectors();
 
@@ -120,6 +124,16 @@ namespace Neon.Api.Core
 				_containerBuilder.RegisterType(s).As(AssemblyUtils.GetInterfaceOfType(s)).SingleInstance();
 				AvailableServices.Add(s);
 			});
+		}
+
+		private void RegisterScriptModules()
+		{
+			_logger.Debug($"Scan for Script Modules");
+			AssemblyUtils.GetAttribute<ScriptModuleAttribute>().ForEach(m =>
+				{
+					_logger.Debug($"Registering Script module {m.Name}");
+					ContainerBuilder.RegisterType(m).SingleInstance();
+				});
 		}
 
 		private void RegisterMediator()
@@ -153,7 +167,7 @@ namespace Neon.Api.Core
 		{
 			AssemblyUtils.GetAttribute<NoSqlConnectorAttribute>().ForEach(t =>
 				{
-					ContainerBuilder.RegisterType(t).SingleInstance();
+					ContainerBuilder.RegisterType(t).InstancePerDependency();
 				});
 		}
 

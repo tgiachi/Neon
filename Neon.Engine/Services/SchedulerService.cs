@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using FluentScheduler;
+﻿using FluentScheduler;
 using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Scheduler;
 using Neon.Api.Attributes.Services;
@@ -14,6 +7,12 @@ using Neon.Api.Interfaces.Managers;
 using Neon.Api.Interfaces.Scheduler;
 using Neon.Api.Interfaces.Services;
 using Neon.Api.Utils;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Neon.Engine.Services
 {

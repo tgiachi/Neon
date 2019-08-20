@@ -11,10 +11,13 @@ namespace Neon.Api.Data.Config.Root
 		[YamlMember(Alias = "script_engine")]
 		public ScriptEngineConfig ScriptEngineConfig { get; set; }
 
+		[YamlMember(Alias = "iot")]
+		public IoTConfig IoTConfig { get; set; }
 
 		public ServicesConfig()
 		{
 			MqttConfig = new MqttConfig();
+			IoTConfig = new IoTConfig();
 			ScriptEngineConfig = new ScriptEngineConfig();
 		}
 	}

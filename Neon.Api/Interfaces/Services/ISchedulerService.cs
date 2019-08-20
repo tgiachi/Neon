@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.Api.Data.Scheduler;
+﻿using Neon.Api.Data.Scheduler;
 using Neon.Api.Interfaces.Base;
+using System;
+using System.Collections.Generic;
 
 namespace Neon.Api.Interfaces.Services
 {

@@ -32,6 +32,11 @@ namespace Neon.Api.Core
 			}
 		}
 
+		public string BuildFilePath(string path)
+		{
+			return Path.Combine(_rootDirectory, path);
+		}
+
 		public void Start()
 		{
 			CreateDirectory(_rootDirectory);

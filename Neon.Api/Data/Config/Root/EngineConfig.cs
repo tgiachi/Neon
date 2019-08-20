@@ -9,14 +9,12 @@ namespace Neon.Api.Data.Config.Root
 		[YamlMember(Alias = "home_directory")]
 		public string HomeDirectory { get; set; }
 
-
 		[YamlMember(Alias = "use_swagger")]
 		public bool UseSwagger { get; set; }
 
 		[YamlMember(Alias = "logger")]
 		public LoggerConfig Logger { get; set; }
 
-		
 		[YamlMember(Alias = "secret_key")]
 		public string SecretKey { get; set; }
 
@@ -25,7 +23,7 @@ namespace Neon.Api.Data.Config.Root
 			HomeDirectory = "./Neon";
 			Logger = new LoggerConfig();
 			UseSwagger = true;
-			SecretKey = RandomStringUtils.RandomString(30);
+			SecretKey = RandomStringUtils.RandomString(50);
 		}
 	}
 }

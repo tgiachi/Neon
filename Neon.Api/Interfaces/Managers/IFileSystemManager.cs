@@ -4,6 +4,7 @@
 	{
 		void CreateDirectory(string directory);
 
+		string BuildFilePath(string path);
 		void Start();
 
 		void Stop();

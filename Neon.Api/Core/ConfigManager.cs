@@ -1,9 +1,12 @@
 ﻿using Autofac;
+using Neon.Api.Attributes.Config;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces.Managers;
 using Serilog;
 using System;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using YamlDotNet.Serialization;
 
 namespace Neon.Api.Core
@@ -60,11 +63,46 @@ namespace Neon.Api.Core
 			else
 				DeserializeConfig();
 
+			CheckEnvVariables();
+
 
 			_containerBuilder.RegisterInstance(_config);
 			SaveConfig();
 
 			return true;
+		}
+
+		private void CheckEnvVariables()
+		{
+			_config.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList().ForEach(p =>
+			  {
+				  _logger.Debug($"Property {p.Name}");
+				  ScanProperty(_config, p);
+			  });
+
+		}
+
+		private void ScanProperty(object obj, PropertyInfo property)
+		{
+			if (property.PropertyType != typeof(string) && property.PropertyType != typeof(int) && property.PropertyType != typeof(Boolean))
+			{
+				property.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList().ForEach(p =>
+				  {
+					  ScanProperty(property.GetValue(obj), p);
+				  });
+			}
+			else
+			{
+				if (property.GetCustomAttribute<ConfigEnvVariableAttribute>() != null)
+				{
+					var attr = property.GetCustomAttribute<ConfigEnvVariableAttribute>();
+
+					var envValue = Environment.GetEnvironmentVariable(attr.EnvName);
+					_logger.Debug($"Set env variable {attr.EnvName} to property {property.Name}");
+
+					property.SetValue(obj, envValue);
+				}
+			}
 		}
 
 		private void DeserializeConfig()

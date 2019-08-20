@@ -13,14 +13,14 @@ namespace Neon.Api.Interfaces.NoSql
 
 		Task<bool> Configure(string connectionString);
 
-		List<TEntity> List<TEntity>(string collectionName) where TEntity : INeonEntity;
+		List<TEntity> List<TEntity>(string collectionName) where TEntity : INeonIoTEntity;
 
-		IQueryable<TEntity> Query<TEntity>(string collectionName) where TEntity : INeonEntity;
+		IQueryable<TEntity> Query<TEntity>(string collectionName) where TEntity : INeonIoTEntity;
 
-		TEntity Insert<TEntity>(string collectionName, TEntity obj) where TEntity : INeonEntity;
+		TEntity Insert<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity;
 
-		TEntity Update<TEntity>(string collectionName, TEntity obj) where TEntity : INeonEntity;
+		TEntity Update<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity;
 
-		bool Delete<TEntity>(string collectionName, TEntity obj) where TEntity : INeonEntity;
+		bool Delete<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity;
 	}
 }

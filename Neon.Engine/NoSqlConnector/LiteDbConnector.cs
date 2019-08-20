@@ -1,8 +1,10 @@
 ﻿using LiteDB;
 using Neon.Api.Attributes.NoSql;
 using Neon.Api.Interfaces.Entity;
+using Neon.Api.Interfaces.Managers;
 using Neon.Api.Interfaces.NoSql;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,8 +14,14 @@ namespace Neon.Engine.NoSqlConnector
 	[NoSqlConnector("lite_db")]
 	public class LiteDbConnector : INoSqlConnector
 	{
+		private readonly IFileSystemManager _fileSystemManager;
 		private readonly object _databaseLock = new object();
 		private LiteDatabase _liteDatabase;
+
+		public LiteDbConnector(IFileSystemManager fileSystemManager)
+		{
+			_fileSystemManager = fileSystemManager;
+		}
 
 		public Task<bool> Start()
 		{
@@ -39,13 +47,24 @@ namespace Neon.Engine.NoSqlConnector
 		{
 			lock (_databaseLock)
 			{
+				CheckDatabaseDirectory(connectionString);
+				connectionString = _fileSystemManager.BuildFilePath(connectionString);
+
 				_liteDatabase = new LiteDatabase(connectionString);
 			}
 
 			return Task.FromResult(true);
 		}
 
-		public List<TEntity> List<TEntity>(string collectionName) where TEntity : INeonEntity
+		private void CheckDatabaseDirectory(string connectionString)
+		{
+			var directory = Path.GetDirectoryName(connectionString);
+			_fileSystemManager.CreateDirectory(directory);
+
+
+		}
+
+		public List<TEntity> List<TEntity>(string collectionName) where TEntity : INeonIoTEntity
 		{
 			lock (_databaseLock)
 			{
@@ -54,7 +73,7 @@ namespace Neon.Engine.NoSqlConnector
 
 		}
 
-		public IQueryable<TEntity> Query<TEntity>(string collectionName) where TEntity : INeonEntity
+		public IQueryable<TEntity> Query<TEntity>(string collectionName) where TEntity : INeonIoTEntity
 		{
 			lock (_databaseLock)
 			{
@@ -62,7 +81,7 @@ namespace Neon.Engine.NoSqlConnector
 			}
 		}
 
-		public TEntity Insert<TEntity>(string collectionName, TEntity obj) where TEntity : INeonEntity
+		public TEntity Insert<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity
 		{
 			lock (_databaseLock)
 			{
@@ -71,7 +90,7 @@ namespace Neon.Engine.NoSqlConnector
 			}
 		}
 
-		public TEntity Update<TEntity>(string collectionName, TEntity obj) where TEntity : INeonEntity
+		public TEntity Update<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity
 		{
 			lock (_databaseLock)
 			{
@@ -80,7 +99,7 @@ namespace Neon.Engine.NoSqlConnector
 			}
 		}
 
-		public bool Delete<TEntity>(string collectionName, TEntity obj) where TEntity : INeonEntity
+		public bool Delete<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity
 		{
 			lock (_databaseLock)
 			{

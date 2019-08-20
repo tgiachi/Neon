@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Neon.Api.Data.Scheduler
+﻿namespace Neon.Api.Data.Scheduler
 {
 	/// <summary>
 	///     Enum for choose polling timer
