@@ -1,4 +1,6 @@
-﻿namespace Neon.Api.Interfaces.Managers
+﻿using System;
+
+namespace Neon.Api.Interfaces.Managers
 {
 	public interface IFileSystemManager
 	{
@@ -16,6 +18,7 @@
 		bool WriteToFile(string filename, string context);
 
 		T ReadFromFile<T>(string filename);
+		object ReadFromFile(string filename, Type type);
 
 		string ReadFromFile(string filename);
 	}

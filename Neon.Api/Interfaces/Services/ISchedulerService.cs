@@ -29,5 +29,7 @@ namespace Neon.Api.Interfaces.Services
 		void AddJob(Action job, string name, int hours, int minutes);
 
 		void AddPolling(Action job, string name, SchedulerServicePollingEnum pollingType);
+
+		void AddPolling(Action job, string name, int seconds);
 	}
 }

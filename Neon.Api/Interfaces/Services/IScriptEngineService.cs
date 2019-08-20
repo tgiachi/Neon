@@ -10,6 +10,8 @@ namespace Neon.Api.Interfaces.Services
 	{
 
 		List<ScriptFunctionData> Functions { get; }
+
+		List<ScriptEngineVariable> Variables { get; }
 		void LoadFile(string fileName, bool immediateExecute);
 
 		void RegisterFunction(string functionName, object obj, MethodInfo method);

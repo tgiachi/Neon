@@ -20,7 +20,7 @@ namespace Neon.Api.Core
 
 		public T ProcessLoad<T>(T obj)
 		{
-			obj.GetType().GetProperties(BindingFlags.Public).ToList().ForEach(p =>
+			obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList().ForEach(p =>
 			{
 				if (p.GetCustomAttribute<SecretValueAttribute>() != null)
 				{
@@ -44,7 +44,7 @@ namespace Neon.Api.Core
 
 		public T ProcessSave<T>(T obj)
 		{
-			obj.GetType().GetProperties(BindingFlags.Public).ToList().ForEach(p =>
+			obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList().ForEach(p =>
 			{
 				if (p.GetCustomAttribute<SecretValueAttribute>() != null)
 				{

@@ -29,19 +29,28 @@ namespace Neon.Api.Core
 
 		public async Task<bool> Start()
 		{
+			var timeBoot = TimeSpan.Zero;
 
 			foreach (var entry in _orderedService)
 			{
 				foreach (var service in entry.Value)
 				{
+					var sw = new Stopwatch();
+					sw.Start();
+
 					var result = await StartService(service);
 
+					sw.Stop();
+
+					timeBoot += sw.Elapsed;
 					if (result.Status == ServiceStatus.Error)
 					{
 						_logger.LogError($"Error during starting service {service.Name}: {result.Error.Message}");
 					}
 				}
 			}
+
+			_logger.LogInformation($"{_services.Count} services loaded in {timeBoot.TotalSeconds} seconds");
 
 			return true;
 		}

@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neon.Api", "Neon.Api\Neon.A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neon.WebApi", "Neon.WebApi\Neon.WebApi.csproj", "{27F30DA7-77B9-45A7-AE95-56A667A05551}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neon.Engine", "Neon.Engine\Neon.Engine.csproj", "{0D96888E-191D-4D40-AD78-3755DAB1B9BB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neon.Engine", "Neon.Engine\Neon.Engine.csproj", "{0D96888E-191D-4D40-AD78-3755DAB1B9BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

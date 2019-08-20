@@ -1,5 +1,4 @@
-﻿using Neon.Api.Attributes.Config;
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
 
 namespace Neon.Api.Data.Config.Services
 {
@@ -12,13 +11,16 @@ namespace Neon.Api.Data.Config.Services
 		[YamlMember(Alias = "use_embedded_server")]
 		public bool UseEmbeddedServer { get; set; }
 
-		[ConfigEnvVariable("TEST")]
 		[YamlMember(Alias = "embedded_server_port")]
 		public int EmbeddedServerPort { get; set; }
 
 		public MqttConfig()
 		{
-			Client = new MqttConnectorConfig();
+			Client = new MqttConnectorConfig()
+			{
+				Hostname = "iot.eclipse.org",
+				Port = 1883
+			};
 			UseEmbeddedServer = false;
 			EmbeddedServerPort = 1883;
 		}

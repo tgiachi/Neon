@@ -5,6 +5,7 @@
 	/// </summary>
 	public enum SchedulerServicePollingEnum
 	{
+		EverySecondPolling = 1,
 		ShortPolling = 10,
 		NormalPolling = 60,
 		LongPolling = 300,

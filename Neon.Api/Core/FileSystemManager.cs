@@ -1,4 +1,5 @@
-﻿using Neon.Api.Data.Config.Root;
+﻿using System;
+using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces.Managers;
 using Serilog;
 using System.Diagnostics;
@@ -80,6 +81,16 @@ namespace Neon.Api.Core
 			if (!File.Exists(Path.Combine(_rootDirectory, filename))) return default(T);
 
 			var obj = _deserializer.Deserialize<T>(File.ReadAllText(Path.Combine(_rootDirectory, filename)));
+
+			obj = _secretKeyManager.ProcessLoad(obj);
+			return obj;
+		}
+
+		public object ReadFromFile(string filename, Type type)
+		{
+			if (!File.Exists(Path.Combine(_rootDirectory, filename))) return null;
+
+			var obj = _deserializer.Deserialize(File.ReadAllText(Path.Combine(_rootDirectory, filename)), type);
 
 			obj = _secretKeyManager.ProcessLoad(obj);
 			return obj;

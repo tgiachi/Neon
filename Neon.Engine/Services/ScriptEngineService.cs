@@ -24,11 +24,13 @@ namespace Neon.Engine.Services
 		private const string BootstrapFilename = "bootstrap.lua";
 
 		public List<ScriptFunctionData> Functions { get; }
+		public List<ScriptEngineVariable> Variables { get; }
 
 		private readonly IFileSystemManager _fileSystemManager;
 		private readonly INeonManager _neonManager;
 		private readonly ILogger _logger;
 		private readonly ScriptEngineConfig _config;
+		private readonly NeonConfig _neonConfig;
 		private readonly Lua _luaEngine = new Lua();
 		private readonly List<LuaFunction> _functions = new List<LuaFunction>();
 
@@ -40,8 +42,10 @@ namespace Neon.Engine.Services
 			_logger = logger;
 			_neonManager = neonManager;
 			_fileSystemManager = fileSystemManager;
+			_neonConfig = neonConfig;
 			_config = neonConfig.ServicesConfig.ScriptEngineConfig;
 			Functions = new List<ScriptFunctionData>();
+			Variables = new List<ScriptEngineVariable>();
 		}
 
 		public async Task<bool> Start()
@@ -63,11 +67,19 @@ namespace Neon.Engine.Services
 
 			CheckModulesDirectory();
 
+			AddDefaultVariables();
+
 			LoadBootstrap();
 
 			await Build();
 
 			return true;
+		}
+
+		private void AddDefaultVariables()
+		{
+			AddVariable("home", _neonConfig.HomeConfig);
+			AddVariable("system_config", _neonConfig);
 		}
 
 		private void CheckModulesDirectory()
@@ -216,6 +228,7 @@ namespace Neon.Engine.Services
 		public void AddVariable(string variable, object value)
 		{
 			_luaEngine[variable] = value;
+			Variables.Add(new ScriptEngineVariable() { Key = variable, Value = value });
 		}
 
 
@@ -228,10 +241,5 @@ namespace Neon.Engine.Services
 		}
 	}
 
-	public class ScriptVariable
-	{
-		public string Key { get; set; }
 
-		public object Value { get; set; }
-	}
 }

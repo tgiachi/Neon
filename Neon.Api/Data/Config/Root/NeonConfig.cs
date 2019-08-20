@@ -10,11 +10,18 @@ namespace Neon.Api.Data.Config.Root
 		[YamlMember(Alias = "services")]
 		public ServicesConfig ServicesConfig { get; set; }
 
+		[YamlMember(Alias = "home")]
+		public HomeConfig HomeConfig { get; set; }
+
+		[YamlMember(Alias = "components")]
+		public ComponentsConfig ComponentsConfig { get; set; }
 
 		public NeonConfig()
 		{
 			EngineConfig = new EngineConfig();
 			ServicesConfig = new ServicesConfig();
+			HomeConfig = new HomeConfig();
+			ComponentsConfig = new ComponentsConfig();
 		}
 	}
 }

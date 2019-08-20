@@ -4,6 +4,7 @@ using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces.Managers;
 using Serilog;
 using System;
+using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -88,7 +89,8 @@ namespace Neon.Api.Core
 			{
 				property.PropertyType.GetProperties(BindingFlags.Public | BindingFlags.Instance).ToList().ForEach(p =>
 				  {
-					  ScanProperty(property.GetValue(obj), p);
+					  if (p.PropertyType != typeof(IList) && p.PropertyType.IsGenericType)
+						  ScanProperty(property.GetValue(obj), p);
 				  });
 			}
 			else

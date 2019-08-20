@@ -23,7 +23,7 @@ namespace Neon.Api.Data.Config.Root
 			HomeDirectory = "./Neon";
 			Logger = new LoggerConfig();
 			UseSwagger = true;
-			SecretKey = RandomStringUtils.RandomString(50);
+			SecretKey = RandomStringUtils.RandomString(32);
 		}
 	}
 }

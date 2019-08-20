@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using MediatR;
 using MediatR.Pipeline;
+using Neon.Api.Attributes.Components;
 using Neon.Api.Attributes.NoSql;
 using Neon.Api.Attributes.ScriptEngine;
 using Neon.Api.Attributes.Services;
@@ -109,6 +110,9 @@ namespace Neon.Api.Core
 			_logger.Debug($"Registering NoSQL connectors");
 			RegisterNoSqlConnectors();
 
+			_logger.Debug("Registering Components");
+			RegisterComponents();
+
 			ScanTypes();
 
 			return true;
@@ -123,6 +127,16 @@ namespace Neon.Api.Core
 
 				_containerBuilder.RegisterType(s).As(AssemblyUtils.GetInterfaceOfType(s)).SingleInstance();
 				AvailableServices.Add(s);
+			});
+		}
+
+		private void RegisterComponents()
+		{
+			_logger.Debug($"Scan for Components");
+			AssemblyUtils.GetAttribute<NeonComponentAttribute>().ForEach(c =>
+			{
+				_containerBuilder.RegisterType(c).As(AssemblyUtils.GetInterfaceOfType(c)).As(c).SingleInstance();
+
 			});
 		}
 

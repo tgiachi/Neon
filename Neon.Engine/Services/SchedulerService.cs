@@ -101,6 +101,12 @@ namespace Neon.Engine.Services
 			AddJob(job, $"{name.ToUpper()}_POLLING", (int)pollingType, false);
 		}
 
+		public void AddPolling(Action job, string name, int seconds)
+		{
+			_logger.LogDebug($"Adding polling {name} [{seconds} seconds]");
+			AddJob(job, $"{name.ToUpper()}_POLLING", seconds, false);
+		}
+
 		public Task<bool> Stop()
 		{
 			JobManager.StopAndBlock();
