@@ -35,7 +35,6 @@ namespace Neon.Api.Core
 							p.SetValue(obj, DecryptString(strValue));
 						}
 					}
-
 				}
 
 			});

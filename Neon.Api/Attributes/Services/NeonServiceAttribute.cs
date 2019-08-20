@@ -2,7 +2,7 @@
 
 namespace Neon.Api.Attributes.Services
 {
-	[AttributeUsage(AttributeTargets.All, Inherited = false, AllowMultiple = true)]
+	[AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = true)]
 	public class NeonServiceAttribute : Attribute
 	{
 		public string Name { get; set; }

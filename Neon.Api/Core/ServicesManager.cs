@@ -19,7 +19,7 @@ namespace Neon.Api.Core
 		private readonly SortedDictionary<int, List<Type>> _orderedService = new SortedDictionary<int, List<Type>>();
 		private readonly Dictionary<Guid, INeonService> _services = new Dictionary<Guid, INeonService>();
 
-		public ServicesManager(ILogger<IServicesManager> logger, INeonManager neonManager)
+		public ServicesManager(ILogger<ServicesManager> logger, INeonManager neonManager)
 		{
 			_logger = logger;
 			_neonManager = neonManager;

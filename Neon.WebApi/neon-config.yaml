@@ -1,7 +1,8 @@
 engine:
   home_directory: C:\Neon
   use_swagger: true
-  logs_directory: logs
+  logger:
+    log_level: Info
   secret_key: '#%hCxRCegTnes6iH6A$V69VLO#j7*b'
 services:
   mqtt:

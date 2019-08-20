@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentScheduler" Version="5.3.0" />
     <PackageReference Include="LiteDB" Version="4.1.4" />
     <PackageReference Include="Microsoft.PowerShell.SDK" Version="6.2.2" />
     <PackageReference Include="MongoDB.Driver" Version="2.9.0" />
