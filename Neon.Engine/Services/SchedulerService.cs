@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Neon.Engine.Services
 {
-	[NeonService("Scheduler Service", "Manage job", 3)]
+	[NeonService("Scheduler Service", "Manage job", 1)]
 	public class SchedulerService : ISchedulerService
 	{
 		private readonly List<IJobSchedulerTask> _jobs = new List<IJobSchedulerTask>();

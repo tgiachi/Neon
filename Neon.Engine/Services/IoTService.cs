@@ -6,6 +6,7 @@ using Neon.Api.Attributes.Entities;
 using Neon.Api.Attributes.Services;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Data.Config.Services;
+using Neon.Api.Data.Entities;
 using Neon.Api.Interfaces.Entity;
 using Neon.Api.Interfaces.NoSql;
 using Neon.Api.Interfaces.Services;
@@ -16,7 +17,6 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Neon.Api.Data.Entities;
 
 namespace Neon.Engine.Services
 {

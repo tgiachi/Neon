@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Components;
 using Neon.Api.Attributes.Entities;
-using Neon.Api.Data.Components;
 using Neon.Api.Data.Exceptions;
 using Neon.Api.Interfaces.Components;
 using Neon.Api.Interfaces.Entity;
 using Neon.Api.Interfaces.Services;
+using System;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Neon.Api.Impl.Components
 {
@@ -20,14 +16,14 @@ namespace Neon.Api.Impl.Components
 	{
 		protected ILogger Logger { get; }
 
-		private readonly IIoTService _ioTService;
+		protected IIoTService IoTService { get; }
 		protected TConfig Config { get; set; }
 
 		protected AbstractNeonComponent(ILoggerFactory loggerFactory, IIoTService ioTService)
 		{
 			Logger = loggerFactory.CreateLogger(GetType());
 			Config = new TConfig();
-			_ioTService = ioTService;
+			IoTService = ioTService;
 
 		}
 
@@ -60,7 +56,7 @@ namespace Neon.Api.Impl.Components
 
 		protected async void PublishEntity<T>(T entity) where T : INeonIoTEntity
 		{
-			await _ioTService.PersistEntity(entity);
+			await IoTService.PersistEntity(entity);
 		}
 
 		public virtual Task<bool> Start()

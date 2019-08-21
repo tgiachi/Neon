@@ -3,7 +3,10 @@ using Neon.Api.Attributes.Components;
 using Neon.Api.Attributes.Services;
 using Neon.Api.Data.Components;
 using Neon.Api.Data.Config.Root;
+using Neon.Api.Data.Exceptions;
+using Neon.Api.Data.Scheduler;
 using Neon.Api.Interfaces.Components;
+using Neon.Api.Interfaces.Managers;
 using Neon.Api.Interfaces.Services;
 using Neon.Api.Utils;
 using System;
@@ -13,15 +16,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Neon.Api.Data.Exceptions;
-using Neon.Api.Data.Scheduler;
-using Neon.Api.Interfaces.Managers;
 
 namespace Neon.Engine.Services
 {
-	[NeonService("Components Service", "Manage components", int.MaxValue)]
+	[NeonService("Components Service", "Manage components", 6)]
 	public class ComponentsService : IComponentsService
 	{
 		private readonly ILogger _logger;
@@ -159,6 +158,8 @@ namespace Neon.Engine.Services
 
 				await componentObject.Init(componentConfig);
 
+				await componentObject.Start();
+
 				var polls = GetComponentPollAttribute(availableComponent.ComponentType);
 
 				if (polls.Count == 0)
@@ -177,7 +178,7 @@ namespace Neon.Engine.Services
 				}
 
 
-				await componentObject.Start();
+
 
 				cData.Status = ComponentStatusEnum.Started;
 

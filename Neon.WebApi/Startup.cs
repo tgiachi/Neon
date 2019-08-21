@@ -58,7 +58,7 @@ namespace Neon.WebApi
 
 			services.AddMediatR(AssemblyUtils.GetAppAssemblies().ToArray());
 			services.AddHttpClient();
-			
+
 
 			Program.NeonManager.ContainerBuilder.Populate(services);
 

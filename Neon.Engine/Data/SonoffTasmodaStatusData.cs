@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Neon.Engine.Data
 {
@@ -9,13 +6,13 @@ namespace Neon.Engine.Data
 	{
 		public string Time { get; set; }
 
-		public string Uptime { get;set; }
+		public string Uptime { get; set; }
 
-		public int Heap { get;set; }
+		public int Heap { get; set; }
 
 		public string SleepMode { get; set; }
 
-		public int Sleep { get;set; }
+		public int Sleep { get; set; }
 
 		public int LoadAvg { get; set; }
 

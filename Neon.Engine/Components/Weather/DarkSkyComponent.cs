@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using DarkSky.Services;
+﻿using DarkSky.Services;
 using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Components;
 using Neon.Api.Data.Config.Root;
-using Neon.Api.Data.Exceptions;
 using Neon.Api.Impl.Components;
 using Neon.Api.Interfaces.Services;
 using Neon.Engine.Components.Configs;
 using Neon.Engine.Components.Events;
+using System;
+using System.Threading.Tasks;
 
 namespace Neon.Engine.Components.Weather
 {
@@ -54,7 +51,7 @@ namespace Neon.Engine.Components.Weather
 				entity.Summary = forecast.Response.Currently.Summary;
 
 				sunsetEntity.Date = DateTime.Now.Date;
-				
+
 				if (forecast.Response.Currently.Temperature != null)
 					entity.Temperature = forecast.Response.Currently.Temperature.Value;
 
@@ -74,7 +71,7 @@ namespace Neon.Engine.Components.Weather
 			{
 				Logger.LogWarning("Error during get forecast");
 			}
-			
+
 
 			await base.Poll();
 		}

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.Api.Impl.Components;
+﻿using Neon.Api.Impl.Components;
 using YamlDotNet.Serialization;
 
 namespace Neon.Engine.Components.Configs

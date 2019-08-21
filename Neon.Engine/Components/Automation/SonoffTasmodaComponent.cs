@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Components;
 using Neon.Api.Data.Mqtt;
 using Neon.Api.Impl.Components;
@@ -11,6 +7,9 @@ using Neon.Engine.Components.Configs;
 using Neon.Engine.Components.Events;
 using Neon.Engine.Data;
 using Newtonsoft.Json;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neon.Engine.Components.Automation
 {
@@ -37,13 +36,47 @@ namespace Neon.Engine.Components.Automation
 			return base.Start();
 		}
 
-		private async void OnMqttMessage(MqttMessage obj)
+		private void OnMqttMessage(MqttMessage obj)
 		{
 			if (obj.Topic.StartsWith("tele"))
 				ParseTeleStatus(obj.Topic, obj.Payload);
 
+			if (obj.Topic.StartsWith("cmnd"))
+				ParseCmnd(obj.Topic, obj.Payload);
 			//if (obj.Topic.StartsWith("pasquicci"))
 			//	await Toggle("Salotto", 2);
+		}
+
+		private void ParseCmnd(string topic, string message)
+		{
+			var entity = BuildEntity<SonoffTasmodaEvent>();
+			var splittedTele = topic.Split("/");
+
+			entity.Name = splittedTele[1];
+
+			entity = IoTService.GetEntityByType<SonoffTasmodaEvent>(entity.Name, entity.EntityType);
+
+			if (entity != null)
+			{
+				var entry = entity.PowerStatuses.FirstOrDefault(e => e.PowerName == splittedTele[2]);
+
+				if (entry != null)
+				{
+					entry.Status = message;
+				}
+				else
+				{
+					entity.PowerStatuses.Add(new SonoffTasmodaPowerStatus()
+					{
+						PowerName = splittedTele[2],
+						Status = message
+					});
+				}
+
+				entity.PowerCount = entity.PowerStatuses.Count;
+
+				PublishEntity(entity);
+			}
 		}
 
 		private void ParseTeleStatus(string topic, string message)

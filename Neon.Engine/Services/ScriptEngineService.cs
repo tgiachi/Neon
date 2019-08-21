@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Neon.Engine.Services
 {
-	[NeonService("Script Engine", "Script engine", 5)]
+	[NeonService("Script Engine", "Script engine", 9)]
 	public class ScriptEngineService : IScriptEngineService
 	{
 		private const string BootstrapFilename = "bootstrap.lua";

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using GeoCoordinatePortable;
+﻿using GeoCoordinatePortable;
 using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Components;
 using Neon.Api.Data.Config.Root;
@@ -13,6 +9,8 @@ using Neon.Engine.Components.Configs;
 using Neon.Engine.Components.Events;
 using Neon.Engine.Data;
 using Newtonsoft.Json;
+using System;
+using System.Threading.Tasks;
 
 namespace Neon.Engine.Components
 {

@@ -1,8 +1,8 @@
-﻿using Neon.Api.Interfaces.Base;
+﻿using Neon.Api.Data.Entities;
+using Neon.Api.Interfaces.Base;
 using Neon.Api.Interfaces.Entity;
 using System;
 using System.Threading.Tasks;
-using Neon.Api.Data.Entities;
 
 namespace Neon.Api.Interfaces.Services
 {

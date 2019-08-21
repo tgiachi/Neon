@@ -66,7 +66,7 @@ namespace Neon.Engine.NoSqlConnector
 		public TEntity Update<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity
 		{
 			var replaceResult = _mongoDatabase.GetCollection<TEntity>(collectionName).ReplaceOne(entity => entity.Id == obj.Id, obj);
-			
+
 			return obj;
 		}
 

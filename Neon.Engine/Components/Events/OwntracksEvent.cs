@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.Api.Attributes.Entities;
+﻿using Neon.Api.Attributes.Entities;
 using Neon.Api.Data.Entities;
-using Newtonsoft.Json;
 
 namespace Neon.Engine.Components.Events
 {
@@ -25,6 +21,6 @@ namespace Neon.Engine.Components.Events
 
 		public float Pressure { get; set; }
 
-		public double DistanceFromHomeInMeters{ get; set; }
+		public double DistanceFromHomeInMeters { get; set; }
 	}
 }

@@ -1,10 +1,12 @@
 ﻿using Autofac;
 using MediatR;
 using MediatR.Pipeline;
+using Neon.Api.Attributes;
 using Neon.Api.Attributes.Components;
 using Neon.Api.Attributes.NoSql;
 using Neon.Api.Attributes.ScriptEngine;
 using Neon.Api.Attributes.Services;
+using Neon.Api.Data.Commands;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces.Managers;
 using Neon.Api.Utils;
@@ -14,6 +16,7 @@ using Serilog.Formatting.Compact;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -38,6 +41,8 @@ namespace Neon.Api.Core
 		public ContainerBuilder ContainerBuilder => _containerBuilder;
 		public List<Type> AvailableServices { get; }
 		public NeonConfig Config => _configManager.Configuration;
+
+		private readonly List<CommandPreloadData> _commandPreloadData = new List<CommandPreloadData>();
 
 		public bool IsRunningInDocker { get; }
 
@@ -115,6 +120,9 @@ namespace Neon.Api.Core
 
 			ScanTypes();
 
+			_logger.Debug($"Registering Commands preload data");
+			_containerBuilder.Register(n => _commandPreloadData).SingleInstance();
+
 			return true;
 		}
 
@@ -136,9 +144,46 @@ namespace Neon.Api.Core
 			AssemblyUtils.GetAttribute<NeonComponentAttribute>().ForEach(c =>
 			{
 				_containerBuilder.RegisterType(c).As(AssemblyUtils.GetInterfaceOfType(c)).As(c).SingleInstance();
+				ScanForComponentsCommands(c);
 
 			});
 		}
+
+		private void ScanForComponentsCommands(Type componentType)
+		{
+			_logger.Debug($"Scan {componentType.Name} for commands");
+			componentType.GetMethods(BindingFlags.Public | BindingFlags.Instance).ToList().ForEach(m =>
+			{
+				var attr = m.GetCustomAttribute<ComponentCommandAttribute>();
+
+				if (attr != null)
+				{
+					var commandEntry = new CommandPreloadData()
+					{
+						CommandName = attr.Name,
+						HelpText = attr.HelpText,
+						SourceType = componentType,
+						ReturnType = AssemblyUtils.GetGenericTaskGenericType(m.ReturnType).Name,
+						IsAsync = AssemblyUtils.IsGenericTaskType(m.ReturnType),
+						Method = m
+					};
+					foreach (var parameterInfo in m.GetParameters())
+					{
+						commandEntry.Params.Add(new CommandPreloadParam()
+						{
+							Order = parameterInfo.Position,
+							ParamName = parameterInfo.Name,
+							ParamType = parameterInfo.ParameterType.Name
+						});
+					}
+
+					_logger.Debug($"Command name '{attr.Name}' in component {componentType.Name} method: {m.Name}");
+					_commandPreloadData.Add(commandEntry);
+				}
+			});
+		}
+
+
 
 		private void RegisterScriptModules()
 		{

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.Api.Attributes.Entities;
+﻿using Neon.Api.Attributes.Entities;
 using Neon.Api.Data.Entities;
 
 namespace Neon.Engine.Components.Events

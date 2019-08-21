@@ -1,7 +1,7 @@
-﻿using System;
-using Neon.Api.Data.Config.Root;
+﻿using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces.Managers;
 using Serilog;
+using System;
 using System.Diagnostics;
 using System.IO;
 using YamlDotNet.Serialization;

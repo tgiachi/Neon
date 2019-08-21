@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Neon.Api.Utils
 {
@@ -242,6 +243,26 @@ namespace Neon.Api.Utils
 		private static Assembly CurrentDomainOnAssemblyResolve(object sender, ResolveEventArgs args)
 		{
 			return Assembly.LoadFrom(args.Name);
+		}
+
+		public static Type GetGenericTaskGenericType(Type returnType)
+		{
+			if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(Task<>))
+			{
+				return returnType.GetGenericArguments()[0]; // use this...
+			}
+
+			return returnType;
+		}
+
+		public static bool IsGenericTaskType(Type returnType)
+		{
+			if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(Task<>))
+			{
+				return true;
+			}
+
+			return false;
 		}
 
 

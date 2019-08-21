@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace Neon.Engine.Data
 {
@@ -21,7 +18,7 @@ namespace Neon.Engine.Data
 
 		[JsonProperty("acc")]
 		public int AccuracyMeters { get; set; }
-		
+
 		[JsonProperty("p")]
 		public float Pressure { get; set; }
 
