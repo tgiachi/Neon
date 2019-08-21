@@ -53,7 +53,7 @@ namespace Neon.Engine.Services
 				JobsInfo.FirstOrDefault(j => j.JobName == info.Name).LastExecution = info.NextRun.Value;
 			};
 
-			AddPolling(GC.Collect, "GC", SchedulerServicePollingEnum.NormalPolling);
+			//AddPolling(GC.Collect, "GC", SchedulerServicePollingEnum.NormalPolling);
 
 			return Task.FromResult(true);
 		}

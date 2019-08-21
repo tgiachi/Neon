@@ -11,6 +11,8 @@ namespace Neon.Api.Data.Entities
 
 		public string Name { get; set; }
 
+		public string GroupName { get; set; }
+
 		public string EntityType { get; set; }
 
 		[IgnorePropertyCompare]

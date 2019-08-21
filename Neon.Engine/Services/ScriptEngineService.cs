@@ -157,7 +157,7 @@ namespace Neon.Engine.Services
 			}
 			catch (Exception ex)
 			{
-				_logger.LogError($"Error during load script module: {moduleType.Name} - {ex.Message}");
+				_logger.LogError($"Error during load script module: {moduleType.Name} - {ex}");
 			}
 
 		}

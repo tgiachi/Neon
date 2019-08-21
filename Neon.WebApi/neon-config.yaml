@@ -26,11 +26,13 @@ services:
 home:
   name: My Home
   coordinate:
-    latitude: 0.10000000000000001
-    longitude: 0.10000000000000001
-    elevation: 1
+    latitude: 1
+    longitude: 1
+    elevation: 44
 components:
   to_load:
-  - name: test
+  - name: weather_darksky
+  - name: owntracks
+  - name: sonoff_tasmoda
   config_directory:
     name: Components

@@ -2,6 +2,7 @@
 using Neon.Api.Interfaces.Entity;
 using System;
 using System.Threading.Tasks;
+using Neon.Api.Data.Entities;
 
 namespace Neon.Api.Interfaces.Services
 {
@@ -15,6 +16,10 @@ namespace Neon.Api.Interfaces.Services
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
 		IObservable<T> GetEventStream<T>() where T : INeonIoTEntity;
+
+		string GetEntityTypeByName(string name);
+
+		T GetEntityByType<T>(string name, string type) where T : NeonIoTBaseEntity;
 
 	}
 }

@@ -16,6 +16,7 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Neon.Api.Data.Entities;
 
 namespace Neon.Engine.Services
 {
@@ -96,8 +97,6 @@ namespace Neon.Engine.Services
 			return Task.CompletedTask;
 		}
 
-
-
 		public IObservable<T> GetEventStream<T>() where T : INeonIoTEntity
 		{
 			return _iotEntitiesBus.OfType<T>();
@@ -108,7 +107,6 @@ namespace Neon.Engine.Services
 			_logger.LogDebug($"Publishing changes of {@event.GetType().Name}/{@event.Name}");
 			_iotEntitiesBus.OnNext(@event);
 		}
-
 
 		private void PersistEvent<T>(T entity) where T : INeonIoTEntity
 		{
@@ -138,28 +136,29 @@ namespace Neon.Engine.Services
 			if (newEntity == null)
 				return true;
 
-			#region OldCode
-			var properties = oldEntity.GetType().GetProperties();
+			var result = CompareObjects(newEntity, oldEntity);
 
-			foreach (var pi in properties)
-			{
-				if (pi.CustomAttributes.Any(ca => ca.AttributeType == typeof(IgnorePropertyCompareAttribute))) continue;
+			return !result.AreEqual;
+		}
 
-				object oldValue = pi.GetValue(oldEntity), newValue = pi.GetValue(newEntity);
+		public string GetEntityTypeByName(string name)
+		{
+			var entity = _entitiesConnector.Query<NeonIoTBaseEntity>(EntitiesCollectionName).FirstOrDefault(d => d.Name == name);
 
-				if (!Equals(oldValue, newValue)) return true;
-			}
+			return entity?.EntityType;
+		}
 
-			return false;
-			#endregion
-
-			//var result = CompareObjects(newEntity, oldEntity);
-
-			//return !result.AreEqual;
+		public T GetEntityByType<T>(string name, string type) where T : NeonIoTBaseEntity
+		{
+			return _entitiesConnector.Query<T>(EntitiesCollectionName).FirstOrDefault(document =>
+				document.Name == name && document.EntityType == type);
 		}
 
 		private ComparisonResult CompareObjects(object obj, object obj2)
 		{
+			if (!_compareLogic.Config.AttributesToIgnore.Contains(typeof(IgnorePropertyCompareAttribute)))
+				_compareLogic.Config.AttributesToIgnore.Add(typeof(IgnorePropertyCompareAttribute));
+
 			return _compareLogic.Compare(obj, obj2);
 		}
 
