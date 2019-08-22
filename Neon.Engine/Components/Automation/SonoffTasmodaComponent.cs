@@ -29,9 +29,7 @@ namespace Neon.Engine.Components.Automation
 			_mqttService.SubscribeTopic("tele/+/+");
 			_mqttService.SubscribeTopic("stat/+/+");
 			_mqttService.SubscribeTopic("cmnd/+/+");
-			_mqttService.SubscribeTopic("pasquicci/+");
-
-
+			
 			_mqttService.MqttMessageObservable.Subscribe(OnMqttMessage);
 			return base.Start();
 		}
@@ -43,8 +41,6 @@ namespace Neon.Engine.Components.Automation
 
 			if (obj.Topic.StartsWith("cmnd"))
 				ParseCmnd(obj.Topic, obj.Payload);
-			//if (obj.Topic.StartsWith("pasquicci"))
-			//	await Toggle("Salotto", 2);
 		}
 
 		private void ParseCmnd(string topic, string message)

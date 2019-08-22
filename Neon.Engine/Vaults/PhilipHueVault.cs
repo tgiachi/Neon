@@ -12,8 +12,6 @@ namespace Neon.Engine.Vaults
 		[YamlMember(Alias = "token")]
 		public AccessTokenResponse AccessToken { get; set; }
 
-
-		[SecretValue]
 		[YamlMember(Alias = "local_api_key")]
 		public string LocalApiKey { get; set; }
 

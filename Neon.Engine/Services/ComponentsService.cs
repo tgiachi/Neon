@@ -269,7 +269,7 @@ namespace Neon.Engine.Services
 			var fileName = Path.Combine(_neonConfig.ComponentsConfig.ConfigDirectory.DirectoryName,
 				$"{attr.Name}.yaml");
 
-			_fileSystemManager.WriteToFile(fileName, component);
+			_fileSystemManager.WriteToFile(fileName, config);
 		}
 
 		public T LoadVaultConfig<T>(INeonComponent component) where T : new()

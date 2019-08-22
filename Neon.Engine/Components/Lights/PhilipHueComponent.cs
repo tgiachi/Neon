@@ -32,6 +32,7 @@ namespace Neon.Engine.Components.Lights
 		private IRemoteAuthenticationClient _remoteAuthentication;
 		private PhilipHueVault _philipHueVault;
 		private ILocalHueClient _localHueClient;
+		private IRemoteHueClient _remoteHueClient;
 		private bool _linkedButtonPressed = false;
 		private bool _isPhilipConfigured = false;
 		public PhilipHueComponent(ILoggerFactory loggerFactory, IIoTService ioTService, IComponentsService componentsService)
@@ -197,15 +198,23 @@ namespace Neon.Engine.Components.Lights
 			{
 				try
 				{
+					await Task.Delay(10000);
+
 					var key = await _localHueClient.RegisterAsync("Neon", "Neon");
 
+					Logger.LogInformation($"Button pressed");
 					_philipHueVault.LocalApiKey = key;
 
 					SaveVault(_philipHueVault);
 
 					_linkedButtonPressed = true;
 
-					await Task.Delay(10000);
+					Config.LocalConfig.BridgeIpAddress = bridgeIp;
+					SaveConfig();
+
+					_localHueClient = new LocalHueClient(bridgeIp, _philipHueVault.LocalApiKey);
+					_isPhilipConfigured = true;
+					
 				}
 				catch
 				{
@@ -217,7 +226,21 @@ namespace Neon.Engine.Components.Lights
 
 		private void InitToken()
 		{
+			if (_philipHueVault.AccessToken != null)
+			{
+				if (!string.IsNullOrEmpty(_philipHueVault.AccessToken.Access_token))
+				{
+					_remoteHueClient = new RemoteHueClient(async () =>
+					{
+						if (_remoteAuthentication != null)
+							return await _remoteAuthentication.GetValidToken();
+						return _philipHueVault.AccessToken.Access_token;
 
+					});
+
+					
+				}
+			}
 		}
 
 		private void StartRemote()
