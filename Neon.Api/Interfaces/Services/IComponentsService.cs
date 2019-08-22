@@ -3,6 +3,7 @@ using Neon.Api.Interfaces.Base;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Neon.Api.Interfaces.Components;
 
 namespace Neon.Api.Interfaces.Services
 {
@@ -17,5 +18,11 @@ namespace Neon.Api.Interfaces.Services
 		Task<bool> StopComponent(string name);
 
 		Task<bool> RestartComponent(string name);
+
+		void SaveComponentConfig(INeonComponent component, object config);
+
+		void SaveVaultConfig(INeonComponent component, object config);
+
+		T LoadVaultConfig<T>(INeonComponent component) where T : new();
 	}
 }

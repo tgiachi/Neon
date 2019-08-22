@@ -30,8 +30,6 @@ namespace Neon.Engine.Services
 		private readonly IFileSystemManager _fileSystemManager;
 		private readonly INeonManager _neonManager;
 		private readonly Dictionary<Guid, INeonComponent> _runningComponents = new Dictionary<Guid, INeonComponent>();
-
-
 		public ObservableCollection<ComponentData> ComponentsData { get; }
 
 		public List<AvailableComponent> AvailableComponents { get; }
@@ -63,6 +61,7 @@ namespace Neon.Engine.Services
 		private void EnsureComponentsDirectory()
 		{
 			_fileSystemManager.CreateDirectory(_config.ConfigDirectory.DirectoryName);
+			_fileSystemManager.CreateDirectory(_config.VaultConfigDirectory.DirectoryName);
 		}
 
 		private void LoadComponents()
@@ -172,13 +171,15 @@ namespace Neon.Engine.Services
 					polls.ForEach(p =>
 					{
 						if (p.ComponentPollRate.IsEnabled)
-							_schedulerService.AddPolling(() => p.Method.Invoke(componentObject, null),
+							_schedulerService.AddPolling(() =>
+								{
+									p.Method.Invoke(componentObject, null);
+								},
 								$"COMPONENT_{name.ToUpper()}_{p.Method.Name}", p.ComponentPollRate.Rate);
 					});
 				}
 
-
-
+				componentObject.ComponentId = cData.Id.ToString();
 
 				cData.Status = ComponentStatusEnum.Started;
 
@@ -204,6 +205,8 @@ namespace Neon.Engine.Services
 				return false;
 			}
 		}
+
+		
 
 		private static string GetComponentConfigFileName(ComponentData component)
 		{
@@ -249,6 +252,42 @@ namespace Neon.Engine.Services
 		{
 			await StopComponent(name);
 			return await LoadComponent(name);
+		}
+
+		public void SaveVaultConfig(INeonComponent component, object config)
+		{
+			var attr = component.GetType().GetCustomAttribute<NeonComponentAttribute>();
+			var fileName = $"{attr.Name}_vault.yaml";
+
+			_fileSystemManager.WriteToFile(Path.Combine(_config.VaultConfigDirectory.DirectoryName, fileName),
+				config);
+		}
+
+		public void SaveComponentConfig(INeonComponent component, object config)
+		{
+			var attr = component.GetType().GetCustomAttribute<NeonComponentAttribute>();
+			var fileName = Path.Combine(_neonConfig.ComponentsConfig.ConfigDirectory.DirectoryName,
+				$"{attr.Name}.yaml");
+
+			_fileSystemManager.WriteToFile(fileName, component);
+		}
+
+		public T LoadVaultConfig<T>(INeonComponent component) where T : new()
+		{
+			var attr = component.GetType().GetCustomAttribute<NeonComponentAttribute>();
+			var fileName = $"{attr.Name}_vault.yaml";
+
+			var fileObject = _fileSystemManager.ReadFromFile<T>(Path.Combine(_config.VaultConfigDirectory.DirectoryName, fileName));
+
+			if (fileObject == null)
+			{
+				fileObject = new T();
+				SaveVaultConfig(component, fileObject);
+
+				return LoadVaultConfig<T>(component);
+			}
+
+			return fileObject;
 		}
 	}
 }

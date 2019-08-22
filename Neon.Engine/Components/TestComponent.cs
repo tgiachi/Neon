@@ -13,7 +13,7 @@ namespace Neon.Engine.Components
 	[NeonComponent("test", "v1.0", "TEST", typeof(TestComponentConfig))]
 	public class TestComponent : AbstractNeonComponent<TestComponentConfig>
 	{
-		public TestComponent(ILoggerFactory loggerFactory, IIoTService ioTService) : base(loggerFactory, ioTService)
+		public TestComponent(ILoggerFactory loggerFactory, IIoTService ioTService, IComponentsService componentsService) : base(loggerFactory, ioTService, componentsService)
 		{
 
 		}
@@ -31,7 +31,8 @@ namespace Neon.Engine.Components
 
 			PublishEntity(entity);
 
-			return base.Poll();
+			throw new Exception("error");
+	//		return base.Poll();
 		}
 
 		[ComponentCommand("test", "test command dispatcher")]

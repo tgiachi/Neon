@@ -18,7 +18,7 @@ namespace Neon.Engine.Components.Automation
 	{
 		private IMqttService _mqttService;
 
-		public SonoffTasmodaComponent(ILoggerFactory loggerFactory, IIoTService ioTService, IMqttService mqttService) : base(loggerFactory, ioTService)
+		public SonoffTasmodaComponent(ILoggerFactory loggerFactory, IIoTService ioTService, IMqttService mqttService, IComponentsService componentsService) : base(loggerFactory, ioTService, componentsService)
 		{
 			_mqttService = mqttService;
 		}

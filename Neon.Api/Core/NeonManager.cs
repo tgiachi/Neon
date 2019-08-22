@@ -19,6 +19,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Neon.Api.Attributes.OAuth;
+using Neon.Api.Data.OAuth;
 
 
 namespace Neon.Api.Core
@@ -42,7 +44,9 @@ namespace Neon.Api.Core
 		public List<Type> AvailableServices { get; }
 		public NeonConfig Config => _configManager.Configuration;
 
-		private readonly List<CommandPreloadData> _commandPreloadData = new List<CommandPreloadData>();
+		private readonly List<CommandPreloadData> _commandsCacheData = new List<CommandPreloadData>();
+
+		private readonly List<OAuthReceiverData> _oAuthReceiverData;
 
 		public bool IsRunningInDocker { get; }
 
@@ -57,7 +61,7 @@ namespace Neon.Api.Core
 
 			AvailableServices = new List<Type>();
 			IsRunningInDocker = Environment.GetEnvironmentVariables()["DOTNET_RUNNING_IN_CONTAINER"] != null;
-
+			_oAuthReceiverData = new List<OAuthReceiverData>();
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterBuildCallback(container => { _logger.Debug($"Container is ready"); });
 
@@ -118,10 +122,13 @@ namespace Neon.Api.Core
 			_logger.Debug("Registering Components");
 			RegisterComponents();
 
+			_logger.Debug("Registering OAuth providers");
+			RegisterOAuthReceivers();
+
 			ScanTypes();
 
 			_logger.Debug($"Registering Commands preload data");
-			_containerBuilder.Register(n => _commandPreloadData).SingleInstance();
+			_containerBuilder.Register(n => _commandsCacheData).SingleInstance();
 
 			return true;
 		}
@@ -136,6 +143,23 @@ namespace Neon.Api.Core
 				_containerBuilder.RegisterType(s).As(AssemblyUtils.GetInterfaceOfType(s)).SingleInstance();
 				AvailableServices.Add(s);
 			});
+		}
+
+		private void RegisterOAuthReceivers()
+		{
+			_logger.Debug($"Scan for OAuth Receivers");
+			AssemblyUtils.GetAttribute<OAuthReceiverAttribute>().ForEach(r =>
+			{
+				var attr = r.GetCustomAttribute<OAuthReceiverAttribute>();
+				_logger.Debug($"Registering provider {attr.ProviderName}");
+				_oAuthReceiverData.Add(new OAuthReceiverData()
+				{
+					ProviderName = attr.ProviderName,
+					ProviderType = r
+				});
+			});
+
+			_containerBuilder.Register(e => _oAuthReceiverData).SingleInstance();
 		}
 
 		private void RegisterComponents()
@@ -178,7 +202,7 @@ namespace Neon.Api.Core
 					}
 
 					_logger.Debug($"Command name '{attr.Name}' in component {componentType.Name} method: {m.Name}");
-					_commandPreloadData.Add(commandEntry);
+					_commandsCacheData.Add(commandEntry);
 				}
 			});
 		}

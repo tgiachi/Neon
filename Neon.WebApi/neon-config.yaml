@@ -26,13 +26,17 @@ services:
 home:
   name: My Home
   coordinate:
-    latitude: 1
-    longitude: 1
+    latitude: 43.749690000000001
+    longitude: 11.325437000000001
     elevation: 44
 components:
   to_load:
   - name: weather_darksky
   - name: owntracks
   - name: sonoff_tasmoda
+  - name: philip_hue
+  - name: spotify
   config_directory:
     name: Components
+  vault_directory:
+    name: Vault

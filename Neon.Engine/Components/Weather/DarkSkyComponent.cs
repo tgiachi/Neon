@@ -16,7 +16,7 @@ namespace Neon.Engine.Components.Weather
 	{
 		private DarkSkyService _darkSkyService;
 		private HomeConfig _homeConfig;
-		public DarkSkyComponent(ILoggerFactory loggerFactory, IIoTService ioTService, NeonConfig neonConfig) : base(loggerFactory, ioTService)
+		public DarkSkyComponent(ILoggerFactory loggerFactory, IIoTService ioTService, NeonConfig neonConfig, IComponentsService componentsService) : base(loggerFactory, ioTService, componentsService)
 		{
 			_homeConfig = neonConfig.HomeConfig;
 		}

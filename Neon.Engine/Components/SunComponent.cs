@@ -21,7 +21,7 @@ namespace Neon.Engine.Components
 	{
 		private HttpClient _httpClient = new HttpClient();
 		private HomeConfig _homeConfig;
-		public SunComponent(ILoggerFactory loggerFactory, IIoTService ioTService, NeonConfig neonConfig) : base(loggerFactory, ioTService)
+		public SunComponent(ILoggerFactory loggerFactory, IIoTService ioTService, NeonConfig neonConfig, IComponentsService componentsService) : base(loggerFactory, ioTService, componentsService)
 		{
 			_homeConfig = neonConfig.HomeConfig;
 		}

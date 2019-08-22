@@ -15,16 +15,34 @@ namespace Neon.Api.Impl.Components
 	public abstract class AbstractNeonComponent<TConfig> : INeonComponent where TConfig : INeonComponentConfig, new()
 	{
 		protected ILogger Logger { get; }
+		public string ComponentId { get; set; }
 
 		protected IIoTService IoTService { get; }
+
+		protected IComponentsService ComponentsService { get; }
 		protected TConfig Config { get; set; }
 
-		protected AbstractNeonComponent(ILoggerFactory loggerFactory, IIoTService ioTService)
+		protected AbstractNeonComponent(ILoggerFactory loggerFactory, IIoTService ioTService, IComponentsService componentsService)
 		{
 			Logger = loggerFactory.CreateLogger(GetType());
 			Config = new TConfig();
 			IoTService = ioTService;
+			ComponentsService = componentsService;
+		}
 
+		protected void SaveVault(object config)
+		{
+			ComponentsService.SaveVaultConfig(this, config);
+		}
+
+		protected T LoadVault<T>() where T : new()
+		{
+			return ComponentsService.LoadVaultConfig<T>(this);
+		}
+
+		protected void SaveConfig()
+		{
+			ComponentsService.SaveComponentConfig(this, Config);
 		}
 
 		private NeonComponentAttribute GetComponentAttribute()
@@ -47,7 +65,10 @@ namespace Neon.Api.Impl.Components
 			return ex;
 
 		}
-		public Task<bool> Init(object config)
+
+
+
+		public virtual Task<bool> Init(object config)
 		{
 			Config = (TConfig)config;
 

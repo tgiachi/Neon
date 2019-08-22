@@ -37,23 +37,30 @@ namespace Neon.Engine.Services
 		{
 			_logger.LogInformation("Initializing Job Scheduler");
 			JobManager.Initialize(BuildRegistry());
-			JobManager.Start();
+			
 			JobManager.JobStart += info => { _logger.LogDebug($"Starting job {info.Name}"); };
 			JobManager.JobException += info =>
 			{
+				var jobInfo = JobsInfo.FirstOrDefault(j => j.JobName == info.Name);
+				jobInfo.HaveError = true;
+				jobInfo.Exception = info.Exception;
 				_logger.LogError($"Error during execute job {info.Name} => {info.Exception}");
 			};
 			JobManager.JobStart += info =>
 			{
-				JobsInfo.FirstOrDefault(j => j.JobName == info.Name).LastExecution = info.StartTime;
+				var jobInfo = JobsInfo.FirstOrDefault(j => j.JobName == info.Name);
+				jobInfo.LastExecution = info.StartTime;
 			};
 
 			JobManager.JobEnd += info =>
 			{
-				JobsInfo.FirstOrDefault(j => j.JobName == info.Name).LastExecution = info.NextRun.Value;
+				var jobInfo = JobsInfo.FirstOrDefault(j => j.JobName == info.Name);
+				jobInfo.LastExecution = info.NextRun.Value;
 			};
 
-			//AddPolling(GC.Collect, "GC", SchedulerServicePollingEnum.NormalPolling);
+			JobManager.Start();
+
+			AddPolling(GC.Collect, "GC", SchedulerServicePollingEnum.NormalPolling);
 
 			return Task.FromResult(true);
 		}
@@ -110,7 +117,6 @@ namespace Neon.Engine.Services
 		public Task<bool> Stop()
 		{
 			JobManager.StopAndBlock();
-
 			_jobs.ForEach(j => { j.Dispose(); });
 
 			return Task.FromResult(true);

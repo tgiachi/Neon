@@ -11,6 +11,7 @@ using Neon.Api.Interfaces.Entity;
 using Neon.Api.Interfaces.NoSql;
 using Neon.Api.Interfaces.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -152,6 +153,12 @@ namespace Neon.Engine.Services
 		{
 			return _entitiesConnector.Query<T>(EntitiesCollectionName).FirstOrDefault(document =>
 				document.Name == name && document.EntityType == type);
+		}
+
+		public List<T> GetEntitiesByType<T>() where T: INeonIoTEntity
+		{
+			return _entitiesConnector.Query<T>(EntitiesCollectionName).Where(e => e.EntityType == typeof(T).FullName)
+				.ToList();
 		}
 
 		private ComparisonResult CompareObjects(object obj, object obj2)

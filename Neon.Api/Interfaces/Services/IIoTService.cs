@@ -2,6 +2,7 @@
 using Neon.Api.Interfaces.Base;
 using Neon.Api.Interfaces.Entity;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Neon.Api.Interfaces.Services
@@ -20,6 +21,9 @@ namespace Neon.Api.Interfaces.Services
 		string GetEntityTypeByName(string name);
 
 		T GetEntityByType<T>(string name, string type) where T : NeonIoTBaseEntity;
+
+
+		List<T> GetEntitiesByType<T>() where T : INeonIoTEntity;
 
 	}
 }

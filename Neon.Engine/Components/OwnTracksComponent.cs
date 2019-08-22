@@ -19,7 +19,7 @@ namespace Neon.Engine.Components
 	{
 		private readonly NeonConfig _config;
 		private readonly IMqttService _mqttService;
-		public OwnTracksComponent(ILoggerFactory loggerFactory, IIoTService ioTService, IMqttService mqttService, NeonConfig neonConfig) : base(loggerFactory, ioTService)
+		public OwnTracksComponent(ILoggerFactory loggerFactory, IIoTService ioTService, IMqttService mqttService, NeonConfig neonConfig, IComponentsService componentsService) : base(loggerFactory, ioTService, componentsService)
 		{
 			_mqttService = mqttService;
 			_config = neonConfig;
