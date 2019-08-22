@@ -17,7 +17,8 @@ namespace Neon.Engine.Components.Configs.Music
 		{
 			ClientSecret = new ClientSecretConfig()
 			{
-				ClientId = "change_me"
+				ClientId = "change_me",
+				ClientSecret = "change_me"
 			};
 		}
 	}
