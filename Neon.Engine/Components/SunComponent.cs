@@ -50,7 +50,7 @@ namespace Neon.Engine.Components
 			var entity = BuildEntity<SunEvent>();
 			var parsedEntity = JsonConvert.DeserializeObject<SunSetData>(content);
 
-			entity.Date = DateTime.Today.AtMidnight();
+			entity.Date = DateTime.Now.Date.ToShortDateString();
 			entity.SunRise = DateTime.ParseExact(parsedEntity.Results.Sunrise, "h:mm:ss tt", CultureInfo.InvariantCulture);
 			entity.SunSet = DateTime.ParseExact(parsedEntity.Results.Sunset, "h:mm:ss tt", CultureInfo.InvariantCulture);
 			entity.DayLength = DateTime

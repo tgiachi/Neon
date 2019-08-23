@@ -4,10 +4,13 @@ engine:
   logger:
     log_level: Info
   secret_key: gS!vU@grMQ@$NhCJvsKsbDS_6uS#hhG@
+  time_zone: Europe/Berlin
+  unit_system: metric
+  language: it
 services:
   mqtt:
     client:
-      hostname: mqtt.anaconda.net-freaks.com
+      hostname: test.mosquitto.org
       port: 1883
     embedded_server_port: 1883
   script_engine:
@@ -26,11 +29,12 @@ services:
 home:
   name: My Home
   coordinate:
-    latitude: 43.749690000000001
-    longitude: 11.325437000000001
-    elevation: 44
+    latitude: 10
+    longitude: 10
+    elevation: 10
 components:
   to_load:
+  - name: sunset
   - name: weather_darksky
   - name: owntracks
   - name: sonoff_tasmoda

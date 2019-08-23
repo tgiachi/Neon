@@ -4,7 +4,8 @@ using Serilog;
 using System;
 using System.Diagnostics;
 using System.IO;
-using YamlDotNet.Serialization;
+using Neon.Api.Utils;
+
 
 namespace Neon.Api.Core
 {
@@ -14,8 +15,6 @@ namespace Neon.Api.Core
 
 		private readonly ILogger _logger;
 		private readonly string _rootDirectory;
-		private readonly Serializer _serializer = new Serializer();
-		private readonly Deserializer _deserializer = new Deserializer();
 		private readonly ISecretKeyManager _secretKeyManager;
 
 		public FileSystemManager(ILogger logger, NeonConfig neonConfig, ISecretKeyManager secretKeyManager)
@@ -66,7 +65,7 @@ namespace Neon.Api.Core
 		public bool WriteToFile<T>(string filename, T obj)
 		{
 			obj = _secretKeyManager.ProcessSave(obj);
-			File.WriteAllText(Path.Combine(_rootDirectory, filename), _serializer.Serialize(obj));
+			File.WriteAllText(Path.Combine(_rootDirectory, filename), obj.ToYaml());
 			return true;
 		}
 
@@ -80,7 +79,7 @@ namespace Neon.Api.Core
 		{
 			if (!File.Exists(Path.Combine(_rootDirectory, filename))) return default(T);
 
-			var obj = _deserializer.Deserialize<T>(File.ReadAllText(Path.Combine(_rootDirectory, filename)));
+			var obj = File.ReadAllText(Path.Combine(_rootDirectory, filename)).FromYaml<T>();
 
 			obj = _secretKeyManager.ProcessLoad(obj);
 			return obj;
@@ -89,8 +88,7 @@ namespace Neon.Api.Core
 		public object ReadFromFile(string filename, Type type)
 		{
 			if (!File.Exists(Path.Combine(_rootDirectory, filename))) return null;
-
-			var obj = _deserializer.Deserialize(File.ReadAllText(Path.Combine(_rootDirectory, filename)), type);
+			var obj = File.ReadAllText(Path.Combine(_rootDirectory, filename)).FromYaml(type);
 
 			obj = _secretKeyManager.ProcessLoad(obj);
 			return obj;

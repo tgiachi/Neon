@@ -14,5 +14,9 @@ namespace Neon.Api.Interfaces.Services
 		bool IncrementState(string name, int count = 1);
 
 		bool DecrementState(string name, int count = 1);
+
+		bool SetBooleanState(string name, bool state);
+
+		bool GetBooleanState(string name);
 	}
 }

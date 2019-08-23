@@ -2,6 +2,7 @@
 using Neon.Api.Interfaces.Base;
 using Neon.Api.Interfaces.Entity;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Neon.Api.Interfaces.Services
@@ -29,5 +30,8 @@ namespace Neon.Api.Interfaces.Services
 		/// Get all rules
 		/// </summary>
 		ObservableCollection<RuleData> Rules { get; }
+
+
+		List<RuleInfo> RulesExecutionInfo { get; }
 	}
 }

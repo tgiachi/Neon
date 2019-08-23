@@ -16,5 +16,6 @@ namespace Neon.Api.Data.Rules
 		public RuleTypeEnum RuleType { get; set; }
 
 		public bool IsEnabled { get; set; }
+
 	}
 }

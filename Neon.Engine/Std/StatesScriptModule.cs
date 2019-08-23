@@ -35,9 +35,21 @@ namespace Neon.Engine.Std
 		}
 
 		[ScriptFunction("get_state", "Get state")]
-		public object DecrementState(string name)
+		public object GetState(string name)
 		{
 			return _stateService.GetState(name);
+		}
+
+		[ScriptFunction("get_boolean_state", "Get Boolean state")]
+		public bool GetBooleanState(string name)
+		{
+			return _stateService.GetBooleanState(name);
+		}
+
+		[ScriptFunction("set_boolean_state", "Set boolean state")]
+		public void SetBooleanState(string name, bool value)
+		{
+			_stateService.SetBooleanState(name, value);
 		}
 	}
 }

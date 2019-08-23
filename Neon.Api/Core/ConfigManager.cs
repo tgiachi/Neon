@@ -8,6 +8,7 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Neon.Api.Utils;
 using YamlDotNet.Serialization;
 
 namespace Neon.Api.Core
@@ -109,12 +110,12 @@ namespace Neon.Api.Core
 
 		private void DeserializeConfig()
 		{
-			_config = new Deserializer().Deserialize<NeonConfig>(File.ReadAllText(_configFullPath));
+			_config = File.ReadAllText(_configFullPath).FromYaml<NeonConfig>();
 		}
 
 		private void SaveConfig()
 		{
-			File.WriteAllText(_configFullPath, new Serializer().Serialize(_config));
+			File.WriteAllText(_configFullPath, _config.ToYaml());
 		}
 
 	}

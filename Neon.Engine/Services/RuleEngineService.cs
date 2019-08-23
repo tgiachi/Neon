@@ -19,6 +19,7 @@ namespace Neon.Engine.Services
 		private readonly ILogger _logger;
 		private readonly IIoTService _ioTService;
 
+		public List<RuleInfo> RulesExecutionInfo { get; }
 		public ObservableCollection<RuleData> Rules { get; }
 
 		public RuleEngineService(ILogger<IRuleEngineService> logger, IIoTService ioTService)
@@ -26,6 +27,7 @@ namespace Neon.Engine.Services
 			_logger = logger;
 			_ioTService = ioTService;
 			Rules = new ObservableCollection<RuleData>();
+			RulesExecutionInfo = new List<RuleInfo>();
 		}
 
 		public Task<bool> Start()
@@ -71,6 +73,7 @@ namespace Neon.Engine.Services
 
 		private void ExecuteCSharpRule(RuleData rule, INeonIoTEntity entity)
 		{
+
 			var func = (Func<INeonIoTEntity, bool>)rule.RuleCondition;
 
 			if (func.Invoke(entity))
@@ -81,41 +84,59 @@ namespace Neon.Engine.Services
 
 		public void AddRule(string ruleName, Type entityType, string condition, Action<INeonIoTEntity> action)
 		{
-			Rules.Add(new RuleData()
-			{
-				IsEnabled = true,
-				EntityType = entityType,
-				Action = action,
-				RuleCondition = condition,
-				RuleName = ruleName,
-				RuleType = RuleTypeEnum.Lambda
-			});
+			AddRuleData(ruleName, entityType, condition, action, RuleTypeEnum.Lambda);
 		}
 
 		public void AddRule(string ruleName, Type entityType, Func<INeonIoTEntity, bool> condition, Action<INeonIoTEntity> action)
 		{
-			Rules.Add(new RuleData()
-			{
-				IsEnabled = true,
-				EntityType = entityType,
-				Action = action,
-				RuleCondition = condition,
-				RuleName = ruleName,
-				RuleType = RuleTypeEnum.CSharp
-			});
+			AddRuleData(ruleName, entityType, condition, action, RuleTypeEnum.CSharp);
 		}
 
 		public void AddRule(string ruleName, Type entityType, string condition, LuaFunction action)
 		{
-			Rules.Add(new RuleData()
+			AddRuleData(ruleName, entityType, condition, action, RuleTypeEnum.Lambda);
+		}
+
+		private void AddRuleData(string ruleName, Type entityType, object condition, object action, RuleTypeEnum type)
+		{
+			var ruleData = new RuleData()
 			{
 				IsEnabled = true,
 				EntityType = entityType,
-				Action = entity => { action.Call(entity); },
 				RuleCondition = condition,
 				RuleName = ruleName,
-				RuleType = RuleTypeEnum.Lua
-			});
+				RuleType = type
+			};
+
+			if (action is LuaFunction)
+			{
+				ruleData.Action = entity => { ((LuaFunction)action).Call(entity); };
+			}
+
+			if (action is Action<INeonIoTEntity> action1)
+			{
+				ruleData.Action = action1;
+			}
+
+			_logger.LogInformation($"Adding rule {ruleName} for entity {entityType.Name} [Type: {type}]");
+
+			Rules.Add(ruleData);
+
+			AddRuleExecution(ruleData);
+
+		}
+
+		private void AddRuleExecution(RuleData data)
+		{
+			var ruleData = RulesExecutionInfo.FirstOrDefault(r => r.RuleName == data.RuleName);
+
+			if (ruleData == null)
+				ruleData = new RuleInfo();
+
+			ruleData.RuleName = data.RuleName;
+			ruleData.LastExecutionDateTime = DateTime.MinValue;
+			ruleData.RuleExecutionCount = 0;
+
 		}
 
 		public Task<bool> Stop()

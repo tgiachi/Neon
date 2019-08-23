@@ -128,7 +128,7 @@ namespace Neon.Engine.Services
 			return false;
 		}
 
-		public async Task<bool> SendMessage(MqttMessage message)
+		public Task<bool> SendMessage(MqttMessage message)
 		{
 			if (_mqttClient.IsConnected)
 			{
@@ -142,11 +142,12 @@ namespace Neon.Engine.Services
 					.WithRetainFlag()
 					.Build();
 
-				await _mqttClient.PublishAsync(msg);
-				return true;
+				_ = Task.Factory.StartNew(async () => { await _mqttClient.PublishAsync(msg); });
+
+				return Task.FromResult<bool>(true);
 			}
 
-			return false;
+			return Task.FromResult(false);
 		}
 	}
 }

@@ -47,7 +47,7 @@ namespace Neon.Engine.Components
 			{
 				var entity = BuildEntity<OwnTracksEvent>();
 				var data = JsonConvert.DeserializeObject<OwnTracksData>(jsonMessage);
-				Logger.LogInformation($"Received location from ID: {data.Id}");
+			
 				entity.Name = data.Id;
 				entity.TrackerId = data.Id;
 				entity.AccuracyMeters = data.AccuracyMeters;
@@ -57,6 +57,7 @@ namespace Neon.Engine.Components
 				entity.Latitude = data.Latitude;
 				entity.Longitude = data.Longitude;
 				entity.DistanceFromHomeInMeters = GetDistance(data.Latitude, data.Longitude);
+				Logger.LogInformation($"Received location from ID: {data.Id} far from home {entity.DistanceFromHomeInMeters} meters");
 
 				PublishEntity(entity);
 

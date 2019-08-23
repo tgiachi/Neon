@@ -45,12 +45,9 @@ namespace Neon.Engine.Components.Weather
 			if (forecast.IsSuccessStatus)
 			{
 				var entity = BuildEntity<WeatherEvent>();
-				var sunsetEntity = BuildEntity<SunEvent>();
-
+				
 				entity.Icon = forecast.Response.Currently.Icon.ToString();
 				entity.Summary = forecast.Response.Currently.Summary;
-
-				sunsetEntity.Date = DateTime.Now.Date;
 
 				if (forecast.Response.Currently.Temperature != null)
 					entity.Temperature = forecast.Response.Currently.Temperature.Value;
@@ -65,7 +62,6 @@ namespace Neon.Engine.Components.Weather
 					entity.PrecipProbability = forecast.Response.Currently.PrecipProbability.Value * 100;
 
 				PublishEntity(entity);
-				PublishEntity(sunsetEntity);
 			}
 			else
 			{

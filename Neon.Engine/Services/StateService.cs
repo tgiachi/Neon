@@ -40,10 +40,7 @@ namespace Neon.Engine.Services
 
 			if (_states == null)
 			{
-				lock (_states)
-				{
-					_states = new StateData();
-				}
+				_states = new StateData();
 
 				SaveStates();
 			}
@@ -113,11 +110,11 @@ namespace Neon.Engine.Services
 				{
 					if (entry.StateValue is int)
 					{
-						entry.StateValue = ((int) entry.StateValue) + count;
+						entry.StateValue = ((int)entry.StateValue) + count;
 					}
 					else
 					{
-						var isInt = int.TryParse((string) entry.StateValue, out var outInt);
+						var isInt = int.TryParse((string)entry.StateValue, out var outInt);
 
 						if (isInt)
 						{
@@ -161,7 +158,7 @@ namespace Neon.Engine.Services
 				{
 					if (entry.StateValue is int)
 					{
-						entry.StateValue = ((int) entry.StateValue) - count;
+						entry.StateValue = ((int)entry.StateValue) - count;
 					}
 					else
 					{
@@ -196,6 +193,24 @@ namespace Neon.Engine.Services
 			}
 
 			return false;
+		}
+
+		public bool SetBooleanState(string name, bool state)
+		{
+			SetState(name, state);
+			return state;
+		}
+
+		public bool GetBooleanState(string name)
+		{
+			if (GetState(name) == null)
+				return false;
+
+			if (GetState(name) is string)
+				return bool.Parse((string)GetState(name));
+
+			return (bool) GetState(name);
+
 		}
 	}
 }

@@ -46,6 +46,7 @@ namespace Neon.Api.Core
 					if (result.Status == ServiceStatus.Error)
 					{
 						_logger.LogError($"Error during starting service {service.Name}: {result.Error.Message}");
+						_logger.LogError(result.Error, "Error");
 					}
 				}
 			}

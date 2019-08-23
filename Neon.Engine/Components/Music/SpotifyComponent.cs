@@ -61,7 +61,7 @@ namespace Neon.Engine.Components.Music
 
 		}
 
-		public override async Task<bool> Start()
+		public override Task<bool> Start()
 		{
 			if (Config.ClientSecret.ClientSecret == "change_me" && Config.ClientSecret.ClientId == "change_me")
 				throw ThrowComponentNeedConfiguration("ClientId", "ClientSecret");
@@ -72,7 +72,8 @@ namespace Neon.Engine.Components.Music
 			}
 			else if (_spotifyVault.AccessToken.ExpireOn < DateTime.Now)
 			{
-				await RefreshToken();
+				Logger.LogInformation($"Token expired");
+				BuildUserTokenRequest();
 			}
 			else
 			{
@@ -80,7 +81,7 @@ namespace Neon.Engine.Components.Music
 				RefreshTokenJob();
 			}
 
-			return true;
+			return Task.FromResult(true);
 		}
 
 		private void RefreshTokenJob()

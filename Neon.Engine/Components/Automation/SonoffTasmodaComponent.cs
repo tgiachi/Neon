@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Neon.Api.Attributes;
 
 namespace Neon.Engine.Components.Automation
 {
@@ -85,6 +86,7 @@ namespace Neon.Engine.Components.Automation
 			if (splittedTele[2] == "LWT")
 			{
 				entity.Status = message;
+				entity.Status = "Online";
 			}
 			else if (splittedTele[2] == "STATE")
 			{
@@ -102,6 +104,8 @@ namespace Neon.Engine.Components.Automation
 				if (!string.IsNullOrEmpty(sonoffStatus.Power4))
 					entity.PowerStatuses.Add(new SonoffTasmodaPowerStatus() { PowerName = "POWER4", Status = sonoffStatus.Power1 });
 
+
+				entity.Status = "Online";
 				entity.PowerCount = entity.PowerStatuses.Count;
 			}
 
@@ -117,11 +121,13 @@ namespace Neon.Engine.Components.Automation
 			});
 		}
 
-		public async Task<bool> Toggle(string deviceName, int channel)
+		[ComponentCommand("TOGGLE_SONOFF_DEVICE", "Toggle sonoff device")]
+		public async Task<bool> Toggle(string deviceName, string channel)
 		{
-			await SetStatus(deviceName, channel, true);
+			int channelId = int.Parse(channel);
+			await SetStatus(deviceName, channelId, true);
 			await Task.Delay(2000);
-			await SetStatus(deviceName, channel, false);
+			await SetStatus(deviceName, channelId, false);
 			return true;
 		}
 

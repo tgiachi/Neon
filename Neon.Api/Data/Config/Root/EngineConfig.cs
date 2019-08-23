@@ -1,4 +1,6 @@
-﻿using Neon.Api.Data.Config.Common;
+﻿using System;
+using System.Globalization;
+using Neon.Api.Data.Config.Common;
 using Neon.Api.Utils;
 using YamlDotNet.Serialization;
 
@@ -18,12 +20,24 @@ namespace Neon.Api.Data.Config.Root
 		[YamlMember(Alias = "secret_key")]
 		public string SecretKey { get; set; }
 
+		[YamlMember(Alias = "time_zone")]
+		public string TimeZone { get; set; }
+
+		[YamlMember(Alias = "unit_system")]
+		public string UnitSystem { get; set; }
+
+		[YamlMember(Alias = "language")]
+		public string Language { get; set; }
+
 		public EngineConfig()
 		{
 			HomeDirectory = "./Neon";
 			Logger = new LoggerConfig();
 			UseSwagger = true;
 			SecretKey = RandomStringUtils.RandomString(32);
+			TimeZone = TimeZoneUtils.ToTzdb(TimeZoneInfo.Local);
+			UnitSystem = "metric";
+			Language = CultureInfo.CurrentCulture.TwoLetterISOLanguageName;
 		}
 	}
 }

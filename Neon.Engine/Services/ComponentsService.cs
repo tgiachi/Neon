@@ -163,7 +163,10 @@ namespace Neon.Engine.Services
 
 				if (polls.Count == 0)
 				{
-					_schedulerService.AddPolling(async () => await componentObject.Poll(),
+					_schedulerService.AddPolling(async () =>
+						{
+							await componentObject.Poll();
+						},
 						$"COMPONENT_{name.ToUpper()}", SchedulerServicePollingEnum.NormalPolling);
 				}
 				else

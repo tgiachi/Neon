@@ -81,6 +81,7 @@ namespace Neon.Engine.Services
 
 			if (obj == null)
 			{
+				_logger.LogDebug($"Inserting new entity type {entity.GetType().Namespace} - {entity.Name} {entity.GroupName}");
 				entity = _entitiesConnector.Insert(EntitiesCollectionName, entity);
 			}
 			else
@@ -139,6 +140,10 @@ namespace Neon.Engine.Services
 
 			var result = CompareObjects(newEntity, oldEntity);
 
+			if (!result.AreEqual)
+				_logger.LogDebug($"Object {oldEntity} differences: {result.DifferencesString}");
+
+
 			return !result.AreEqual;
 		}
 
@@ -155,7 +160,7 @@ namespace Neon.Engine.Services
 				document.Name == name && document.EntityType == type);
 		}
 
-		public List<T> GetEntitiesByType<T>() where T: INeonIoTEntity
+		public List<T> GetEntitiesByType<T>() where T : INeonIoTEntity
 		{
 			return _entitiesConnector.Query<T>(EntitiesCollectionName).Where(e => e.EntityType == typeof(T).FullName)
 				.ToList();
