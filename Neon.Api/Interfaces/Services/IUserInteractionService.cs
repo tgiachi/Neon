@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Neon.Api.Data.UserInteraction;
+﻿using Neon.Api.Data.UserInteraction;
 using Neon.Api.Interfaces.Base;
+using System;
+using System.Collections.Generic;
 
 namespace Neon.Api.Interfaces.Services
 {

@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Components;
 using Neon.Api.Attributes.OAuth;
 using Neon.Api.Data.OAuth;
-using Neon.Api.Data.Scheduler;
 using Neon.Api.Data.UserInteraction;
 using Neon.Api.Impl.Components;
 using Neon.Api.Interfaces.Oauth;
@@ -18,6 +11,11 @@ using Neon.Engine.Components.Configs.Music;
 using Neon.Engine.Components.Events;
 using Neon.Engine.Vaults;
 using SpotifyAPI.Web;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Neon.Engine.Components.Music
 {
@@ -141,8 +139,16 @@ namespace Neon.Engine.Components.Music
 
 		public override async Task Poll()
 		{
-			await GetDevices();
-			await GetCurrentPlayback();
+			if (_spotifyWebApi != null)
+			{
+				await GetDevices();
+				await GetCurrentPlayback();
+			}
+			else
+			{
+				Logger.LogWarning($"Spotify client is null");
+			}
+
 			await base.Poll();
 		}
 

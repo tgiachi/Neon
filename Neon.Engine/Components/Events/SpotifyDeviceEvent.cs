@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.Api.Attributes.Entities;
+﻿using Neon.Api.Attributes.Entities;
 using Neon.Api.Data.Entities;
 
 namespace Neon.Engine.Components.Events
@@ -11,7 +8,7 @@ namespace Neon.Engine.Components.Events
 	public class SpotifyDeviceEvent : NeonIoTBaseEntity
 	{
 		public string DeviceId { get; set; }
-		
+
 		public int VolumePercent { get; set; }
 
 		public string DeviceType { get; set; }

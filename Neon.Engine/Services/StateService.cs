@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Neon.Api.Attributes.Components;
+﻿using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Services;
 using Neon.Api.Data.States;
 using Neon.Api.Interfaces.Managers;
 using Neon.Api.Interfaces.Services;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Neon.Engine.Services
 {
@@ -209,7 +204,7 @@ namespace Neon.Engine.Services
 			if (GetState(name) is string)
 				return bool.Parse((string)GetState(name));
 
-			return (bool) GetState(name);
+			return (bool)GetState(name);
 
 		}
 	}

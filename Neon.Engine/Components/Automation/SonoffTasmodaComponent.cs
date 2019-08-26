@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Neon.Api.Attributes;
 using Neon.Api.Attributes.Components;
 using Neon.Api.Data.Mqtt;
 using Neon.Api.Impl.Components;
@@ -10,7 +11,6 @@ using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Neon.Api.Attributes;
 
 namespace Neon.Engine.Components.Automation
 {
@@ -30,7 +30,7 @@ namespace Neon.Engine.Components.Automation
 			_mqttService.SubscribeTopic("tele/+/+");
 			_mqttService.SubscribeTopic("stat/+/+");
 			_mqttService.SubscribeTopic("cmnd/+/+");
-			
+
 			_mqttService.MqttMessageObservable.Subscribe(OnMqttMessage);
 			return base.Start();
 		}

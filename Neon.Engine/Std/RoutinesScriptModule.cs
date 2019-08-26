@@ -26,7 +26,7 @@ namespace Neon.Engine.Std
 
 		[ScriptFunction("exec_routine", "Exec routine")]
 		public void ExecuteRoutine(string name)
-		{	
+		{
 			_logger.LogDebug($"Executing Routine {name}");
 			_routineService.ExecuteRoutine(name);
 		}

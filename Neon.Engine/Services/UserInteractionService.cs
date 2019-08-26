@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Neon.Api.Attributes.Services;
+using Neon.Api.Data.UserInteraction;
+using Neon.Api.Interfaces.Services;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Neon.Api.Attributes.Services;
-using Neon.Api.Interfaces.Services;
 using System.Threading.Tasks;
-using Neon.Api.Data.UserInteraction;
 
 namespace Neon.Engine.Services
 {
@@ -24,7 +24,7 @@ namespace Neon.Engine.Services
 			UserInteractionData = new ObservableCollection<UserInteractionData>();
 		}
 
-		
+
 		public Task<bool> Start()
 		{
 			return Task.FromResult(true);

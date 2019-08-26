@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -53,7 +54,9 @@ namespace Neon.WebApi
 				c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
 			});
 
-			services.AddMvc();
+
+			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddControllersAsServices();
+
 			services.AddSingleton(typeof(ILogger<>), typeof(LoggerEx<>));
 
 			services.AddMediatR(AssemblyUtils.GetAppAssemblies().ToArray());
@@ -86,7 +89,7 @@ namespace Neon.WebApi
 			}
 
 			app.UseCors(options => options.AllowAnyOrigin());
-			app.UseHttpsRedirection();
+			//app.UseHttpsRedirection();
 
 			if (_config.EngineConfig.UseSwagger)
 			{

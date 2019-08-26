@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.Api.Data.OAuth;
+﻿using Neon.Api.Data.OAuth;
 
 namespace Neon.Api.Interfaces.Oauth
 {

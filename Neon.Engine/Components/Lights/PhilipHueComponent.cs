@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using JeffWilcox.Utilities.Silverlight;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes;
 using Neon.Api.Attributes.Components;
 using Neon.Api.Attributes.OAuth;
@@ -19,8 +12,11 @@ using Neon.Engine.Components.Events;
 using Neon.Engine.Vaults;
 using Q42.HueApi;
 using Q42.HueApi.Interfaces;
-using Q42.HueApi.Models;
 using Q42.HueApi.Models.Groups;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace Neon.Engine.Components.Lights
@@ -214,7 +210,7 @@ namespace Neon.Engine.Components.Lights
 
 					_localHueClient = new LocalHueClient(bridgeIp, _philipHueVault.LocalApiKey);
 					_isPhilipConfigured = true;
-					
+
 				}
 				catch
 				{
@@ -238,7 +234,7 @@ namespace Neon.Engine.Components.Lights
 
 					});
 
-					
+
 				}
 			}
 		}

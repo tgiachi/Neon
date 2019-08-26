@@ -37,7 +37,7 @@ namespace Neon.Engine.Services
 		{
 			_logger.LogInformation("Initializing Job Scheduler");
 			JobManager.Initialize(BuildRegistry());
-			
+
 			JobManager.JobStart += info => { _logger.LogDebug($"Starting job {info.Name}"); };
 			JobManager.JobException += info =>
 			{

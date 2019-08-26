@@ -7,5 +7,7 @@ namespace Neon.Api.Interfaces.Managers
 		NeonConfig Configuration { get; }
 
 		bool LoadConfig();
+
+		void SaveConfig();
 	}
 }

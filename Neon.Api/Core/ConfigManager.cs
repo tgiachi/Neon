@@ -2,14 +2,13 @@
 using Neon.Api.Attributes.Config;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces.Managers;
+using Neon.Api.Utils;
 using Serilog;
 using System;
 using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Neon.Api.Utils;
-using YamlDotNet.Serialization;
 
 namespace Neon.Api.Core
 {
@@ -113,7 +112,7 @@ namespace Neon.Api.Core
 			_config = File.ReadAllText(_configFullPath).FromYaml<NeonConfig>();
 		}
 
-		private void SaveConfig()
+		public void SaveConfig()
 		{
 			File.WriteAllText(_configFullPath, _config.ToYaml());
 		}

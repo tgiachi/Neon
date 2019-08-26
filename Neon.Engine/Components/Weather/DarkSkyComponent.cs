@@ -6,7 +6,6 @@ using Neon.Api.Impl.Components;
 using Neon.Api.Interfaces.Services;
 using Neon.Engine.Components.Configs;
 using Neon.Engine.Components.Events;
-using System;
 using System.Threading.Tasks;
 
 namespace Neon.Engine.Components.Weather
@@ -45,7 +44,7 @@ namespace Neon.Engine.Components.Weather
 			if (forecast.IsSuccessStatus)
 			{
 				var entity = BuildEntity<WeatherEvent>();
-				
+
 				entity.Icon = forecast.Response.Currently.Icon.ToString();
 				entity.Summary = forecast.Response.Currently.Summary;
 

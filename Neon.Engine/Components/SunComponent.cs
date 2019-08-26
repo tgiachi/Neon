@@ -1,7 +1,7 @@
-﻿using Humanizer;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Components;
 using Neon.Api.Data.Config.Root;
+using Neon.Api.Data.Scheduler;
 using Neon.Api.Impl.Components;
 using Neon.Api.Interfaces.Services;
 using Neon.Engine.Components.Configs;
@@ -27,7 +27,7 @@ namespace Neon.Engine.Components
 		}
 
 
-		[ComponentPollRate(30)]
+		[ComponentPollRate((int)SchedulerServicePollingEnum.VeryLongPolling)]
 		public override async Task Poll()
 		{
 			var lat = _homeConfig.CoordinateConfig.Latitude.ToString(CultureInfo.InvariantCulture).Replace(",", ".");

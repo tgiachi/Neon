@@ -1,9 +1,9 @@
 ﻿using Neon.Api.Data.Components;
 using Neon.Api.Interfaces.Base;
+using Neon.Api.Interfaces.Components;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Neon.Api.Interfaces.Components;
 
 namespace Neon.Api.Interfaces.Services
 {

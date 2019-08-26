@@ -1,7 +1,7 @@
-﻿using System;
-using System.Globalization;
-using Neon.Api.Data.Config.Common;
+﻿using Neon.Api.Data.Config.Common;
 using Neon.Api.Utils;
+using System;
+using System.Globalization;
 using YamlDotNet.Serialization;
 
 namespace Neon.Api.Data.Config.Root

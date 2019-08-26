@@ -32,7 +32,7 @@ namespace Neon.Engine.Components
 			PublishEntity(entity);
 
 			throw new Exception("error");
-	//		return base.Poll();
+			//		return base.Poll();
 		}
 
 		[ComponentCommand("test", "test command dispatcher")]

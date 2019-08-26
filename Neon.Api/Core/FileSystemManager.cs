@@ -1,10 +1,10 @@
 ﻿using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces.Managers;
+using Neon.Api.Utils;
 using Serilog;
 using System;
 using System.Diagnostics;
 using System.IO;
-using Neon.Api.Utils;
 
 
 namespace Neon.Api.Core

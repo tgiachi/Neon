@@ -90,7 +90,7 @@ namespace Neon.Engine.Services
 				_entitiesConnector.Update(EntitiesCollectionName, entity);
 			}
 
-			if (EntityHaveChanges(entity, obj))
+			if (EntityHaveChanges(obj, entity))
 			{
 				PersistEvent(entity);
 				Publish(entity);
@@ -142,6 +142,7 @@ namespace Neon.Engine.Services
 
 			if (!result.AreEqual)
 				_logger.LogDebug($"Object {oldEntity} differences: {result.DifferencesString}");
+
 
 
 			return !result.AreEqual;

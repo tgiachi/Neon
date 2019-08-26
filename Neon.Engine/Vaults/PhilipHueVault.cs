@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.Api.Attributes.SecretKey;
-using Q42.HueApi.Models;
+﻿using Q42.HueApi.Models;
 using YamlDotNet.Serialization;
 
 namespace Neon.Engine.Vaults
@@ -15,6 +11,6 @@ namespace Neon.Engine.Vaults
 		[YamlMember(Alias = "local_api_key")]
 		public string LocalApiKey { get; set; }
 
-		
+
 	}
 }

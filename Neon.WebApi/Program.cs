@@ -32,9 +32,11 @@ namespace Neon.WebApi
 				.UseStartup<Startup>()
 				.UseLibuv()
 				.UseIISIntegration()
-				.UseSerilog().Build();
+				.UseSerilog();
 
-			return host;
+			host = host.UseUrls("http://0.0.0.0:5000", "https://0.0.0.0:5001", "http://::5000", "https://::5001");
+
+			return host.Build();
 		}
 
 

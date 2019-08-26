@@ -4,10 +4,14 @@ using MediatR.Pipeline;
 using Neon.Api.Attributes;
 using Neon.Api.Attributes.Components;
 using Neon.Api.Attributes.NoSql;
+using Neon.Api.Attributes.OAuth;
 using Neon.Api.Attributes.ScriptEngine;
 using Neon.Api.Attributes.Services;
+using Neon.Api.Attributes.WebHook;
 using Neon.Api.Data.Commands;
 using Neon.Api.Data.Config.Root;
+using Neon.Api.Data.OAuth;
+using Neon.Api.Data.WebHook;
 using Neon.Api.Interfaces.Managers;
 using Neon.Api.Utils;
 using Serilog;
@@ -19,8 +23,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Neon.Api.Attributes.OAuth;
-using Neon.Api.Data.OAuth;
 
 
 namespace Neon.Api.Core
@@ -48,6 +50,8 @@ namespace Neon.Api.Core
 
 		private readonly List<OAuthReceiverData> _oAuthReceiverData;
 
+		private readonly List<WebHookReceiverData> _webHookReceiverData;
+
 		public bool IsRunningInDocker { get; }
 
 
@@ -62,6 +66,7 @@ namespace Neon.Api.Core
 			AvailableServices = new List<Type>();
 			IsRunningInDocker = Environment.GetEnvironmentVariables()["DOTNET_RUNNING_IN_CONTAINER"] != null;
 			_oAuthReceiverData = new List<OAuthReceiverData>();
+			_webHookReceiverData = new List<WebHookReceiverData>();
 			_containerBuilder = new ContainerBuilder();
 			_containerBuilder.RegisterBuildCallback(container => { _logger.Debug($"Container is ready"); });
 
@@ -125,6 +130,8 @@ namespace Neon.Api.Core
 			_logger.Debug("Registering OAuth providers");
 			RegisterOAuthReceivers();
 
+			_logger.Debug("Registering Web Hooks provider");
+			RegisterWebHooks();
 			ScanTypes();
 
 			_logger.Debug($"Registering Commands preload data");
@@ -160,6 +167,23 @@ namespace Neon.Api.Core
 			});
 
 			_containerBuilder.Register(e => _oAuthReceiverData).SingleInstance();
+		}
+
+		private void RegisterWebHooks()
+		{
+			_logger.Debug($"Scan for Web Hooks Receivers");
+			AssemblyUtils.GetAttribute<WebHookReceiverAttribute>().ForEach(r =>
+			{
+				var attr = r.GetCustomAttribute<WebHookReceiverAttribute>();
+				_logger.Debug($"Registering provider {attr.ProviderName}");
+				_webHookReceiverData.Add(new WebHookReceiverData()
+				{
+					ProviderName = attr.ProviderName,
+					ProviderType = r
+				});
+			});
+
+			_containerBuilder.Register(e => _webHookReceiverData).SingleInstance();
 		}
 
 		private void RegisterComponents()

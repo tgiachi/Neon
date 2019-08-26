@@ -11,4 +11,5 @@
 		LongPolling = 300,
 		VeryLongPolling = 3600
 	}
+
 }

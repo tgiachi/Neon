@@ -47,7 +47,7 @@ namespace Neon.Engine.Components
 			{
 				var entity = BuildEntity<OwnTracksEvent>();
 				var data = JsonConvert.DeserializeObject<OwnTracksData>(jsonMessage);
-			
+
 				entity.Name = data.Id;
 				entity.TrackerId = data.Id;
 				entity.AccuracyMeters = data.AccuracyMeters;

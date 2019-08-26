@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Neon.Api.Data.OAuth;
 using Neon.Api.Interfaces.Managers;
 using Neon.Api.Interfaces.Oauth;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Neon.WebApi.Controllers
 {
 	[ApiController]
-	[Route("[controller]/[action]")]
+	[Route("api/[controller]/[action]")]
 	public class AuthController : ControllerBase
 	{
 		private readonly ILogger _logger;
@@ -30,10 +25,10 @@ namespace Neon.WebApi.Controllers
 
 		[HttpGet]
 		[HttpPost]
-		[Route("/{provider}/auth")]
+		[Route("oauth/{provider}/auth")]
 		public ActionResult OAuth(string provider)
 		{
-			var providerData =  _oAuthReceiverData.FirstOrDefault(r => r.ProviderName == provider);
+			var providerData = _oAuthReceiverData.FirstOrDefault(r => r.ProviderName == provider);
 
 			if (providerData != null)
 			{
@@ -41,7 +36,7 @@ namespace Neon.WebApi.Controllers
 				oAuthResult.RequestUrl = HttpContext.Request.Path + HttpContext.Request.QueryString;
 				var oauthReceiver = _neonManager.Resolve(providerData.ProviderType) as IOAuthReceiver;
 
-				
+
 				if (!string.IsNullOrEmpty(HttpContext.Request.Query["code"]))
 					oAuthResult.Code = HttpContext.Request.Query["code"];
 
@@ -49,10 +44,9 @@ namespace Neon.WebApi.Controllers
 					oAuthResult.Token = HttpContext.Request.Query["token"];
 
 				if (!string.IsNullOrEmpty(HttpContext.Request.Query["status"]))
-					oAuthResult.Status= HttpContext.Request.Query["status"];
+					oAuthResult.Status = HttpContext.Request.Query["status"];
 
 				oauthReceiver?.OnOAuthReceived(providerData.ProviderName, oAuthResult);
-
 				return Ok();
 			}
 

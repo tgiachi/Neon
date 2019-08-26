@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Services;
 using Neon.Api.Interfaces.Services;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Neon.Engine.Services
@@ -10,6 +11,7 @@ namespace Neon.Engine.Services
 	[NeonService("Notification Service", "Manager for notifications")]
 	public class NotificationService : INotificationService
 	{
+		private readonly Dictionary<string, List<Action<object>>> _apiControllerListeners = new Dictionary<string, List<Action<object>>>();
 		private readonly ILogger _logger;
 		private readonly IMediator _mediator;
 

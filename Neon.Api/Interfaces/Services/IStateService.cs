@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.Api.Interfaces.Base;
+﻿using Neon.Api.Interfaces.Base;
 
 namespace Neon.Api.Interfaces.Services
 {
-	public  interface IStateService : INeonService
+	public interface IStateService : INeonService
 	{
 		void SetState(string name, object value);
 
