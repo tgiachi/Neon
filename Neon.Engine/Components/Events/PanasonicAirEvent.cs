@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.Api.Attributes.Entities;
+﻿using Neon.Api.Attributes.Entities;
 using Neon.Api.Data.Entities;
 using Neon.Engine.Components.AirCo.Model;
 
@@ -19,12 +16,12 @@ namespace Neon.Engine.Components.Events
 
 		public bool IsOn { get; set; }
 
-		public PanasonicAirModeEnum DeviceMode  { get; set; }
+		public PanasonicAirModeEnum DeviceMode { get; set; }
 
 		public FanSpeedType FanSpeed { get; set; }
 		public decimal Temperature { get; set; }
 		public AirSwingUDType AirSwingUD { get; set; }
-		public  AirswingLRType AirSwingLR { get; set; }
+		public AirswingLRType AirSwingLR { get; set; }
 	}
 
 	public enum PanasonicAirModeEnum

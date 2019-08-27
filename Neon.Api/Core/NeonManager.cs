@@ -3,6 +3,7 @@ using MediatR;
 using MediatR.Pipeline;
 using Neon.Api.Attributes;
 using Neon.Api.Attributes.Components;
+using Neon.Api.Attributes.Discovery;
 using Neon.Api.Attributes.NoSql;
 using Neon.Api.Attributes.OAuth;
 using Neon.Api.Attributes.ScriptEngine;
@@ -10,6 +11,7 @@ using Neon.Api.Attributes.Services;
 using Neon.Api.Attributes.WebHook;
 using Neon.Api.Data.Commands;
 using Neon.Api.Data.Config.Root;
+using Neon.Api.Data.Discovery;
 using Neon.Api.Data.OAuth;
 using Neon.Api.Data.WebHook;
 using Neon.Api.Interfaces.Managers;
@@ -23,8 +25,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Neon.Api.Attributes.Discovery;
-using Neon.Api.Data.Discovery;
 
 
 namespace Neon.Api.Core

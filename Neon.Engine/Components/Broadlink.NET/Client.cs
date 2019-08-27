@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Neon.Engine.Components.Broadcom.NET
+namespace Neon.Engine.Components.Broadlink.NET
 {
 	public class Client
 	{

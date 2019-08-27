@@ -188,6 +188,8 @@ namespace Neon.Engine.Services
 
 				_runningComponents.Add(cData.Id, componentObject);
 
+				SaveComponentConfig(componentObject, componentConfig);
+
 				return true;
 			}
 			catch (ComponentNeedConfigException ex)

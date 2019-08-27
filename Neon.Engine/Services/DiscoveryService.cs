@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Makaretu.Dns;
+﻿using Makaretu.Dns;
 using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Services;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Data.Config.Services;
 using Neon.Api.Data.Discovery;
+using Neon.Api.Data.Scheduler;
+using Neon.Api.Interfaces.Discovery;
+using Neon.Api.Interfaces.Managers;
 using Neon.Api.Interfaces.Services;
 using Neon.Api.Utils;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using Zeroconf;
 
 namespace Neon.Engine.Services
@@ -22,16 +25,19 @@ namespace Neon.Engine.Services
 		private readonly ILogger _logger;
 		private readonly DiscoveryConfig _discoveryConfig;
 		private readonly ISchedulerService _schedulerService;
+		private readonly INeonManager _neonManager;
 		private readonly List<DiscoveryListenerData> _discoveryListeneres;
-		private List<DiscoveryDevice> _discoveredDevices = new List<DiscoveryDevice>();
+		public ObservableCollection<DiscoveryDevice> DiscoveredDevices { get; }
 		private readonly ServiceDiscovery _serviceAdvertiser = new ServiceDiscovery();
-		public DiscoveryService(ILogger<DiscoveryService> logger, NeonConfig neonConfig, ISchedulerService schedulerService, List<DiscoveryListenerData> discoveryListeners)
+		public DiscoveryService(ILogger<DiscoveryService> logger, NeonConfig neonConfig, ISchedulerService schedulerService, List<DiscoveryListenerData> discoveryListeners, INeonManager neonManager)
 		{
+			_neonManager = neonManager;
 			_uuid = neonConfig.EngineConfig.Uuid;
 			_discoveryListeneres = discoveryListeners;
 			_discoveryConfig = neonConfig.ServicesConfig.DiscoveryConfig;
 			_schedulerService = schedulerService;
 			_logger = logger;
+			DiscoveredDevices = new ObservableCollection<DiscoveryDevice>();
 		}
 
 		public Task<bool> Start()
@@ -40,8 +46,33 @@ namespace Neon.Engine.Services
 
 			StartAdvertiser();
 
-			_schedulerService.AddJob(StartDiscovery, 300, true);
+			_schedulerService.AddPolling(StartDiscovery, "NETWORK_DISCOVERY", SchedulerServicePollingEnum.NormalPolling);
+			DiscoveredDevices.CollectionChanged += (sender, args) =>
+			{
+				foreach (var item in args.NewItems)
+				{
+					var discoveredDevice = (DiscoveryDevice)item;
+
+					_logger.LogDebug($"{discoveredDevice.Service} - {discoveredDevice.IpAddress}:{discoveredDevice.Port}");
+
+					NotifyListener(discoveredDevice);
+				}
+
+			};
+
 			return Task.FromResult(true);
+		}
+
+		private void NotifyListener(DiscoveryDevice serviceDevice)
+		{
+			var listener = _discoveryListeneres.FirstOrDefault(s => s.ServiceName == serviceDevice.Name);
+
+			if (listener != null)
+			{
+				var listenerService = _neonManager.Resolve(listener.TypeName) as IDiscoveryDevice;
+
+				listenerService?.OnDeviceDiscovered(serviceDevice);
+			}
 		}
 
 		private void StartAdvertiser()
@@ -83,11 +114,18 @@ namespace Neon.Engine.Services
 						}
 					});
 
-					_discoveredDevices.Add(service);
+					var existService = DiscoveredDevices.FirstOrDefault(srvc =>
+						srvc.IpAddress == service.IpAddress && srvc.Name == service.Name);
+
+					if (existService == null)
+					{
+						DiscoveredDevices.Add(service);
+					}
 				});
 			});
 
-			_discoveredDevices = _discoveredDevices.OrderBy(device => device.Name).ToList();
+
+			_logger.LogInformation($"Found {DiscoveredDevices.Count} services on network");
 		}
 
 		public Task<bool> Stop()

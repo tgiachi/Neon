@@ -62,7 +62,7 @@ namespace Neon.Engine.Components.Music
 		public override Task<bool> Start()
 		{
 			if (Config.ClientSecret.ClientSecret == "change_me" && Config.ClientSecret.ClientId == "change_me")
-				throw ThrowComponentNeedConfiguration("ClientId", "ClientSecret");
+				ThrowComponentNeedConfiguration("ClientId", "ClientSecret");
 
 			if (string.IsNullOrEmpty(_spotifyVault.AccessToken.AccessToken) && string.IsNullOrEmpty(_spotifyVault.AccessToken.RefreshToken))
 			{

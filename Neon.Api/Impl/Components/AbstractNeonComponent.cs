@@ -50,7 +50,7 @@ namespace Neon.Api.Impl.Components
 			return this.GetType().GetCustomAttribute<NeonComponentAttribute>();
 		}
 
-		protected ComponentNeedConfigException ThrowComponentNeedConfiguration(params string[] proprieties)
+		protected void ThrowComponentNeedConfiguration(params string[] proprieties)
 		{
 			var ex = new ComponentNeedConfigException()
 			{
@@ -62,7 +62,7 @@ namespace Neon.Api.Impl.Components
 				ex.ConfigKeys.Add(p);
 			});
 
-			return ex;
+			throw ex;
 
 		}
 

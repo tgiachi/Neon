@@ -23,7 +23,7 @@ namespace Neon.Engine.Components.Weather
 		public override Task<bool> Start()
 		{
 			if (string.IsNullOrEmpty(Config.ApiConfig.ApiKey) || Config.ApiConfig.ApiKey == "none")
-				throw ThrowComponentNeedConfiguration(nameof(Config.ApiConfig.ApiKey));
+				ThrowComponentNeedConfiguration(nameof(Config.ApiConfig.ApiKey));
 
 			_darkSkyService = new DarkSkyService(Config.ApiConfig.ApiKey);
 

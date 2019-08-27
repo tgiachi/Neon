@@ -1,9 +1,9 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
-using Neon.Engine.Components.AirCo.Model;
+﻿using Neon.Engine.Components.AirCo.Model;
 using Neon.Engine.Components.AirCo.Model.Request;
 using Neon.Engine.Components.AirCo.Model.Response;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Web;
 namespace Neon.Engine.Components.AirCo
 {
 	public class AircoManager

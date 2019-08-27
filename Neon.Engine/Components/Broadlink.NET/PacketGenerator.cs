@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 
-namespace Neon.Engine.Components.Broadcom.NET
+namespace Neon.Engine.Components.Broadlink.NET
 {
 	public static class PacketGenerator
 	{

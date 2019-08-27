@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Neon.Engine.Components.Broadcom.NET
+namespace Neon.Engine.Components.Broadlink.NET
 {
 	/// <summary>
 	/// Represents a remote control (IR/RF) device

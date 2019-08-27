@@ -1,4 +1,5 @@
 ﻿using LiteDB;
+using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.NoSql;
 using Neon.Api.Interfaces.Entity;
 using Neon.Api.Interfaces.Managers;
@@ -17,10 +18,12 @@ namespace Neon.Engine.NoSqlConnector
 		private readonly IFileSystemManager _fileSystemManager;
 		private readonly object _databaseLock = new object();
 		private LiteDatabase _liteDatabase;
+		private ILogger _logger;
 
-		public LiteDbConnector(IFileSystemManager fileSystemManager)
+		public LiteDbConnector(IFileSystemManager fileSystemManager, ILogger<LiteDbConnector> logger)
 		{
 			_fileSystemManager = fileSystemManager;
+			_logger = logger;
 		}
 
 		public Task<bool> Start()
@@ -94,7 +97,10 @@ namespace Neon.Engine.NoSqlConnector
 		{
 			lock (_databaseLock)
 			{
-				_liteDatabase.GetCollection<TEntity>().Update(obj);
+				var updated = _liteDatabase.GetCollection<TEntity>().Update(obj.Id, obj);
+
+				_logger.LogDebug($"Entity {obj.EntityType} updated: {updated}");
+
 				return obj;
 			}
 		}

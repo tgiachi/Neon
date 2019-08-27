@@ -22,6 +22,8 @@
     <PackageReference Include="NLua" Version="1.4.21" />
     <PackageReference Include="NReco.LambdaParser" Version="1.0.10" />
     <PackageReference Include="Q42.HueApi" Version="3.10.1" />
+    <PackageReference Include="RadarrSharp" Version="1.0.30" />
+    <PackageReference Include="SonarrSharp" Version="1.2.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.Reactive" Version="4.1.6" />
      <PackageReference Include="SpotifyAPI.Web" Version="4.2.1" />

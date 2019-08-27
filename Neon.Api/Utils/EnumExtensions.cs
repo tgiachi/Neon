@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Neon.Api.Data.Scheduler;
+﻿using Neon.Api.Data.Scheduler;
 
 namespace Neon.Api.Utils
 {
@@ -10,8 +7,8 @@ namespace Neon.Api.Utils
 
 		public static int Value(this SchedulerServicePollingEnum value)
 		{
-			return (int) value;
+			return (int)value;
 		}
-	
+
 	}
 }

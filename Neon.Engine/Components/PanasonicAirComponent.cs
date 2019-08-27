@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Components;
 using Neon.Api.Data.Scheduler;
 using Neon.Api.Impl.Components;
@@ -12,6 +9,9 @@ using Neon.Engine.Components.AirCo.Model.Response;
 using Neon.Engine.Components.Configs.AirConditioned;
 using Neon.Engine.Components.Events;
 using Neon.Engine.Vaults;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Neon.Engine.Components
 {
@@ -121,7 +121,7 @@ namespace Neon.Engine.Components
 			{
 				if (string.IsNullOrEmpty(_panasonicAirVault.AccessToken))
 				{
-					var result = await _aircoManager.Login("en", Config.Username, Config.Password);
+					var result = await _aircoManager.Login("0", Config.Username, Config.Password);
 
 					_panasonicAirVault.AccessToken = result.UToken;
 					SaveVault(_panasonicAirVault);

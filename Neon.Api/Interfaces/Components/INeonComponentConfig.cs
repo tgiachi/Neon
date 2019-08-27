@@ -2,6 +2,8 @@
 {
 	public interface INeonComponentConfig
 	{
+		int PollingSeconds { get; set; }
+
 		bool IsEnabled { get; set; }
 	}
 }
