@@ -23,6 +23,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Neon.Api.Attributes.Discovery;
+using Neon.Api.Data.Discovery;
 
 
 namespace Neon.Api.Core
@@ -35,12 +37,12 @@ namespace Neon.Api.Core
 	{
 		private readonly ILogger _logger;
 		private IContainer _container;
-		private ContainerBuilder _containerBuilder;
+		private readonly ContainerBuilder _containerBuilder;
 
 		private IServicesManager _servicesManager;
-		private IConfigManager _configManager;
-		private IFileSystemManager _fileSystemManager;
-		private ISecretKeyManager _secretKeyManager;
+		private readonly IConfigManager _configManager;
+		private readonly IFileSystemManager _fileSystemManager;
+		private readonly ISecretKeyManager _secretKeyManager;
 
 		public ContainerBuilder ContainerBuilder => _containerBuilder;
 		public List<Type> AvailableServices { get; }
@@ -51,6 +53,8 @@ namespace Neon.Api.Core
 		private readonly List<OAuthReceiverData> _oAuthReceiverData;
 
 		private readonly List<WebHookReceiverData> _webHookReceiverData;
+
+		private readonly List<DiscoveryListenerData> _deviceDiscoveryListeners = new List<DiscoveryListenerData>();
 
 		public bool IsRunningInDocker { get; }
 
@@ -132,6 +136,10 @@ namespace Neon.Api.Core
 
 			_logger.Debug("Registering Web Hooks provider");
 			RegisterWebHooks();
+
+			_logger.Debug("Registering Device Discovery Listeners");
+			RegisterDeviceDiscovery();
+
 			ScanTypes();
 
 			_logger.Debug($"Registering Commands preload data");
@@ -184,6 +192,24 @@ namespace Neon.Api.Core
 			});
 
 			_containerBuilder.Register(e => _webHookReceiverData).SingleInstance();
+		}
+
+		private void RegisterDeviceDiscovery()
+		{
+			_logger.Debug("Scan for Device discovery services");
+			AssemblyUtils.GetAttribute<DiscoveryServiceAttribute>().ForEach(a =>
+			{
+				var attr = a.GetCustomAttribute<DiscoveryServiceAttribute>();
+				_logger.Debug($"Registering device discovery listener");
+
+				_deviceDiscoveryListeners.Add(new DiscoveryListenerData()
+				{
+					ServiceName = attr.ServiceName,
+					TypeName = a
+				});
+			});
+
+			_containerBuilder.Register(context => _deviceDiscoveryListeners).SingleInstance();
 		}
 
 		private void RegisterComponents()

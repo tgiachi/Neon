@@ -7,6 +7,7 @@
 	{
 		EverySecondPolling = 1,
 		ShortPolling = 10,
+		HalfNormalPolling = 60,
 		NormalPolling = 60,
 		LongPolling = 300,
 		VeryLongPolling = 3600

@@ -29,8 +29,12 @@ namespace Neon.Api.Data.Config.Root
 		[YamlMember(Alias = "language")]
 		public string Language { get; set; }
 
+		[YamlMember(Alias = "uuid")]
+		public string Uuid { get; set; }
+
 		public EngineConfig()
 		{
+			Uuid = Guid.NewGuid().ToString();
 			HomeDirectory = "./Neon";
 			Logger = new LoggerConfig();
 			UseSwagger = true;

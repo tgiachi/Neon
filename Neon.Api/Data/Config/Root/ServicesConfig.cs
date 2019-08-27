@@ -14,10 +14,15 @@ namespace Neon.Api.Data.Config.Root
 		[YamlMember(Alias = "iot")]
 		public IoTConfig IoTConfig { get; set; }
 
+
+		[YamlMember(Alias = "discovery")]
+		public DiscoveryConfig DiscoveryConfig { get; set; }
+
 		public ServicesConfig()
 		{
 			MqttConfig = new MqttConfig();
 			IoTConfig = new IoTConfig();
+			DiscoveryConfig = new DiscoveryConfig();
 			ScriptEngineConfig = new ScriptEngineConfig();
 		}
 	}
