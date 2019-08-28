@@ -8,7 +8,7 @@ using System.Linq;
 namespace Neon.WebApi.Controllers
 {
 	[ApiController]
-	[Route("api/[controller]/[action]")]
+	[Route("/hooks")]
 	public class HooksController : ControllerBase
 	{
 
@@ -21,7 +21,7 @@ namespace Neon.WebApi.Controllers
 		}
 		[HttpGet]
 		[HttpPost]
-		[Route("/hook/{provider}")]
+		[Route("{provider}")]
 		public ActionResult OAuth(string provider, [FromForm] string payload)
 		{
 			var providerData = _webHookReceiverData.FirstOrDefault(r => r.ProviderName == provider);

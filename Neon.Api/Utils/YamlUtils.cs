@@ -1,4 +1,5 @@
 ﻿using System;
+using Neon.Api.Utils.Serializer;
 using YamlDotNet.Serialization;
 
 namespace Neon.Api.Utils

@@ -19,7 +19,7 @@ namespace Neon.Api.Core
 
 		public FileSystemManager(ILogger logger, NeonConfig neonConfig, ISecretKeyManager secretKeyManager)
 		{
-			_logger = logger;
+			_logger = logger.ForContext<FileSystemManager>();
 			_rootDirectory = neonConfig.EngineConfig.HomeDirectory;
 			_secretKeyManager = secretKeyManager;
 		}

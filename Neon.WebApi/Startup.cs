@@ -12,6 +12,8 @@ using Neon.Api.Logger;
 using Neon.Api.Utils;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using App.Metrics;
+using Neon.WebApi.Utils;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Neon.WebApi
@@ -40,7 +42,6 @@ namespace Neon.WebApi
 
 			_config = Program.NeonManager.Config;
 
-
 			if (_config.EngineConfig.UseSwagger)
 			{
 				services.AddSwaggerGen(c =>
@@ -55,7 +56,11 @@ namespace Neon.WebApi
 			});
 
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddControllersAsServices();
+			services.AddMvc().AddMetrics()
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+				.AddControllersAsServices();
+
+	
 
 			services.AddSingleton(typeof(ILogger<>), typeof(LoggerEx<>));
 

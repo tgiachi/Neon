@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using App.Metrics.AspNetCore;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Neon.Api.Core;
 using Neon.Api.Interfaces.Managers;
@@ -31,6 +32,7 @@ namespace Neon.WebApi
 			var host = WebHost.CreateDefaultBuilder(args)
 				.UseStartup<Startup>()
 				.UseLibuv()
+				.UseMetrics()
 				.UseIISIntegration()
 				.UseSerilog();
 

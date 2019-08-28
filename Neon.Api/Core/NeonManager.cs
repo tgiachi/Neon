@@ -43,7 +43,7 @@ namespace Neon.Api.Core
 		private readonly IConfigManager _configManager;
 		private readonly IFileSystemManager _fileSystemManager;
 		private readonly ISecretKeyManager _secretKeyManager;
-
+		private readonly IPluginsManager _pluginsManager;
 		public ContainerBuilder ContainerBuilder => _containerBuilder;
 		public List<Type> AvailableServices { get; }
 		public NeonConfig Config => _configManager.Configuration;
@@ -78,9 +78,12 @@ namespace Neon.Api.Core
 			_configManager.LoadConfig();
 
 			_secretKeyManager = new SecretKeyManager(Config.EngineConfig.SecretKey);
-
+			
 			_fileSystemManager = new FileSystemManager(_logger, Config, _secretKeyManager);
+			_fileSystemManager.Start();
 
+			_pluginsManager = new PluginsManager(_logger, _fileSystemManager, Config);
+			_pluginsManager.Start();
 		}
 
 		private void ConfigureLogger()
@@ -118,6 +121,9 @@ namespace Neon.Api.Core
 
 			_logger.Debug($"Registering Services Manager");
 			_containerBuilder.RegisterType<ServicesManager>().As<IServicesManager>().SingleInstance();
+
+			_logger.Debug("Registering Plugin Manager");
+			_containerBuilder.Register(n => _pluginsManager).As<IPluginsManager>().SingleInstance();
 
 			_logger.Debug($"Registering Mediator");
 			RegisterMediator();
@@ -306,7 +312,6 @@ namespace Neon.Api.Core
 
 		public async Task Start()
 		{
-			_fileSystemManager.Start();
 
 			await _servicesManager.Start();
 		}
@@ -317,6 +322,7 @@ namespace Neon.Api.Core
 		/// <returns></returns>
 		public IContainer Build()
 		{
+
 			_container = _containerBuilder.Build();
 
 			_servicesManager = _container.Resolve<IServicesManager>();

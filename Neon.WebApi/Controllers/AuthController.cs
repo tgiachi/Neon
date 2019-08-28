@@ -10,7 +10,7 @@ using System.Linq;
 namespace Neon.WebApi.Controllers
 {
 	[ApiController]
-	[Route("api/[controller]/[action]")]
+	[Route("oauth")]
 	public class AuthController : ControllerBase
 	{
 		private readonly ILogger _logger;
@@ -25,7 +25,7 @@ namespace Neon.WebApi.Controllers
 
 		[HttpGet]
 		[HttpPost]
-		[Route("oauth/{provider}/auth")]
+		[Route("{provider}/auth")]
 		public ActionResult OAuth(string provider)
 		{
 			var providerData = _oAuthReceiverData.FirstOrDefault(r => r.ProviderName == provider);

@@ -14,9 +14,12 @@ namespace Neon.Api.Data.Config.Root
 		[YamlMember(Alias = "iot")]
 		public IoTConfig IoTConfig { get; set; }
 
-
 		[YamlMember(Alias = "discovery")]
 		public DiscoveryConfig DiscoveryConfig { get; set; }
+
+
+		[YamlMember(Alias = "plugins")]
+		public PluginsConfig PluginsConfig { get; set; }
 
 		public ServicesConfig()
 		{
@@ -24,6 +27,7 @@ namespace Neon.Api.Data.Config.Root
 			IoTConfig = new IoTConfig();
 			DiscoveryConfig = new DiscoveryConfig();
 			ScriptEngineConfig = new ScriptEngineConfig();
+			PluginsConfig = new PluginsConfig();
 		}
 	}
 }
