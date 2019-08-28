@@ -14,7 +14,8 @@ namespace Neon.Api.Data.Config.Common
 
 		public LoggerConfig()
 		{
-			Level = LogLevelEnum.Info;
+			Level = LogLevelEnum.Debug;
+			LogDirectory = "Logs";
 		}
 	}
 
@@ -22,6 +23,7 @@ namespace Neon.Api.Data.Config.Common
 	{
 		Debug,
 		Info,
-		Warning
+		Warning,
+		Error
 	}
 }

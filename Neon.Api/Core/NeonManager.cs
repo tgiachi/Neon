@@ -22,9 +22,11 @@ using Serilog.Formatting.Compact;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Neon.Api.Data.Config.Common;
 
 
 namespace Neon.Api.Core
@@ -61,7 +63,7 @@ namespace Neon.Api.Core
 
 		public NeonManager()
 		{
-			ConfigureLogger();
+			ConfigureLogger(null);
 
 			_logger = Log.Logger;
 			_logger.Debug($"Pre-loading assemblies");
@@ -78,28 +80,71 @@ namespace Neon.Api.Core
 			_configManager.LoadConfig();
 
 			_secretKeyManager = new SecretKeyManager(Config.EngineConfig.SecretKey);
-			
+
 			_fileSystemManager = new FileSystemManager(_logger, Config, _secretKeyManager);
 			_fileSystemManager.Start();
+
+			ConfigureLogger(_configManager);
+
+		
+			
+			
 
 			_pluginsManager = new PluginsManager(_logger, _fileSystemManager, Config);
 			_pluginsManager.Start();
 		}
 
-		private void ConfigureLogger()
+		private void ConfigureLogger(IConfigManager configManager)
 		{
-			Log.Logger = new LoggerConfiguration()
-				.Filter.ByExcluding(Matching.FromSource("Microsoft"))
-				.Filter
-				.ByExcluding(Matching.FromSource("System"))
-				.Enrich.FromLogContext()
-				.MinimumLevel.Debug()
-				.WriteTo.File(new CompactJsonFormatter(), "logs/Neon.log",
-					rollingInterval: RollingInterval.Day)
-				.WriteTo.Console(
-					theme: AnsiConsoleTheme.Literate,
-					outputTemplate: "{Timestamp:HH:mm:ss} [{Level}] [{SourceContext:u3}] {Message}{NewLine}{Exception}")
-				.CreateLogger();
+			if (_configManager == null)
+			{
+				Log.Logger = new LoggerConfiguration()
+					.Filter.ByExcluding(Matching.FromSource("Microsoft"))
+					.Filter
+					.ByExcluding(Matching.FromSource("System"))
+					.Enrich.FromLogContext()
+					.MinimumLevel.Debug()
+					.WriteTo.File(new CompactJsonFormatter(), "logs/Neon.log",
+						rollingInterval: RollingInterval.Day)
+					.WriteTo.Console(
+						theme: AnsiConsoleTheme.Literate,
+						outputTemplate:
+						"{Timestamp:HH:mm:ss} [{Level}] [{SourceContext:u3}] {Message}{NewLine}{Exception}")
+					.CreateLogger();
+			}
+			else
+			{
+				var logConfiguration = new LoggerConfiguration()
+					.Filter.ByExcluding(Matching.FromSource("Microsoft"))
+					.Filter
+					.ByExcluding(Matching.FromSource("System"))
+					.Enrich.FromLogContext();
+
+				if (_configManager.Configuration.EngineConfig.Logger.Level == LogLevelEnum.Debug)
+					logConfiguration = logConfiguration.MinimumLevel.Debug();
+
+				if (_configManager.Configuration.EngineConfig.Logger.Level == LogLevelEnum.Info)
+					logConfiguration = logConfiguration.MinimumLevel.Information();
+
+				if (_configManager.Configuration.EngineConfig.Logger.Level == LogLevelEnum.Warning)
+					logConfiguration = logConfiguration.MinimumLevel.Warning();
+
+				if (_configManager.Configuration.EngineConfig.Logger.Level == LogLevelEnum.Error)
+					logConfiguration = logConfiguration.MinimumLevel.Error();
+
+				if (!string.IsNullOrEmpty(_configManager.Configuration.EngineConfig.Logger.LogDirectory))
+					logConfiguration = logConfiguration.WriteTo.File(new CompactJsonFormatter(), _fileSystemManager.BuildFilePath(Path.Combine(_configManager.Configuration.EngineConfig.Logger.LogDirectory, "Neon.log")),
+						rollingInterval: RollingInterval.Day);
+
+				logConfiguration = logConfiguration.WriteTo.Console(
+					theme: AnsiConsoleTheme.Code,
+					outputTemplate:
+					"{Timestamp:HH:mm:ss} [{Level}] [{SourceContext:u3}] {Message}{NewLine}{Exception}");
+
+				Log.Logger = logConfiguration.CreateLogger();
+
+
+			}
 		}
 
 		public bool Init()
