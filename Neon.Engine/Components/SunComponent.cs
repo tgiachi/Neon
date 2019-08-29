@@ -19,15 +19,17 @@ namespace Neon.Engine.Components
 	[NeonComponent("sunset", "v1.0.0.0", "SUN", typeof(SunSetConfig))]
 	public class SunComponent : AbstractNeonComponent<SunSetConfig>
 	{
-		private HttpClient _httpClient = new HttpClient();
-		private HomeConfig _homeConfig;
-		public SunComponent(ILoggerFactory loggerFactory, IIoTService ioTService, NeonConfig neonConfig, IComponentsService componentsService) : base(loggerFactory, ioTService, componentsService)
+		private readonly HttpClient _httpClient;
+		private readonly HomeConfig _homeConfig;
+		public SunComponent(ILoggerFactory loggerFactory, IIoTService ioTService, NeonConfig neonConfig, IComponentsService componentsService, IHttpClientFactory httpClientFactory) : base(loggerFactory, ioTService, componentsService)
 		{
 			_homeConfig = neonConfig.HomeConfig;
+			_httpClient = httpClientFactory.CreateClient();
+
 		}
 
 
-		[ComponentPollRate((int)SchedulerServicePollingEnum.VeryLongPolling)]
+		[ComponentPollRate((int)SchedulerServicePollingEnum.HalfNormalPolling)]
 		public override async Task Poll()
 		{
 			var lat = _homeConfig.CoordinateConfig.Latitude.ToString(CultureInfo.InvariantCulture).Replace(",", ".");
@@ -35,6 +37,8 @@ namespace Neon.Engine.Components
 
 			var rs = await _httpClient.GetAsync(
 				$"https://api.sunrise-sunset.org/json?lat={lat}&lng=-{lon}=today");
+
+			
 
 			if (rs.IsSuccessStatusCode)
 			{
@@ -55,6 +59,9 @@ namespace Neon.Engine.Components
 			entity.SunSet = DateTime.ParseExact(parsedEntity.Results.Sunset, "h:mm:ss tt", CultureInfo.InvariantCulture);
 			entity.DayLength = DateTime
 				.ParseExact(parsedEntity.Results.DayLength, "HH:mm:ss", CultureInfo.InvariantCulture).TimeOfDay;
+
+			entity.IsDayTime = DateTime.Now.Hour > 5 && DateTime.Now.Hour < 19;
+			entity.IsNight = !entity.IsDayTime;
 
 			PublishEntity(entity);
 		}

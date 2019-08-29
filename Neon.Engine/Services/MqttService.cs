@@ -77,9 +77,13 @@ namespace Neon.Engine.Services
 
 				if (_clientConnectionRetryNum <= 3)
 				{
-					await _mqttClient.ConnectAsync(options);
-					_logger.LogInformation($"Reconnected to server...");
-					_clientConnectionRetryNum++;
+					if (_mqttClient != null)
+					{
+						await _mqttClient.ConnectAsync(options);
+						_logger.LogInformation($"Reconnected to server...");
+						_clientConnectionRetryNum++;
+					}
+
 				}
 			});
 

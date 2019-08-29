@@ -13,5 +13,8 @@ namespace Neon.Engine.Components.Events
 		public DateTime SunRise { get; set; }
 		public TimeSpan DayLength { get; set; }
 
+		public bool IsNight { get; set; }
+
+		public bool IsDayTime { get; set; }
 	}
 }

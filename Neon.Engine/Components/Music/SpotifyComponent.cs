@@ -24,7 +24,7 @@ namespace Neon.Engine.Components.Music
 	public class SpotifyComponent : AbstractNeonComponent<SpotifyConfig>, IOAuthReceiver
 	{
 		private const string TokenAuthUrl = "https://accounts.spotify.com/api/token";
-		private const string RedirectUrl = "https://localhost:5001/spotify/auth";
+		private const string RedirectUrl = "http://localhost:5000/oauth/spotify/auth";
 		private const string AuthorizeUrl = "https://accounts.spotify.com/authorize";
 
 		private readonly IUserInteractionService _userInteractionService;

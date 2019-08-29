@@ -7,11 +7,15 @@ using Neon.Engine.Components.Configs;
 using Neon.Engine.Components.Events;
 using System.Linq;
 using System.Threading.Tasks;
+using Neon.Api.Attributes.Discovery;
+using Neon.Api.Data.Discovery;
+using Neon.Api.Interfaces.Discovery;
 
 namespace Neon.Engine.Components.Streaming
 {
+	[DiscoveryService("_googlecast")]
 	[NeonComponent("chromecast", "v1.0.0.0", "STREAMING", typeof(ChromecastConfig))]
-	public class ChromecastComponent : AbstractNeonComponent<ChromecastConfig>
+	public class ChromecastComponent : AbstractNeonComponent<ChromecastConfig>, IDiscoveryDevice
 	{
 		private bool _devicesFound;
 
@@ -45,14 +49,25 @@ namespace Neon.Engine.Components.Streaming
 				Logger.LogInformation($"Found {devices.Count()} found!");
 				foreach (var receiver in devices.ToList())
 				{
-					var entity = BuildEntity<ChromecastEvent>();
-					entity.DeviceId = receiver.Id;
-					entity.IpAddress = receiver.IPEndPoint.ToString();
-					entity.Name = receiver.FriendlyName;
-
-					PublishEntity(entity);
+					AddDevice(receiver.Id, receiver.IPEndPoint.ToString(), receiver.FriendlyName);
 				}
 			}
+		}
+
+		public void OnDeviceDiscovered(DiscoveryDevice device)
+		{
+			AddDevice(device.Properties["id"], $"{device.IpAddress}:{device.Port}", device.Properties["fn"] );
+			
+		}
+
+		private void AddDevice(string id, string ipAddress, string name)
+		{
+			var entity = BuildEntity<ChromecastEvent>();
+			entity.DeviceId = id;
+			entity.IpAddress = ipAddress;
+			entity.Name = name;
+
+			PublishEntity(entity);
 		}
 	}
 }

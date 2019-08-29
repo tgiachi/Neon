@@ -75,9 +75,9 @@ namespace Neon.Engine.Services
 				entity.Id = Guid.NewGuid();
 
 			if (string.IsNullOrEmpty(entity.Name))
-				obj = _entitiesConnector.Query<T>(EntitiesCollectionName).FirstOrDefault(e => e.EntityType == typeof(T).FullName);
+				obj = _entitiesConnector.Query<T>(EntitiesCollectionName).FirstOrDefault(e => e.EntityType == typeof(T).FullName && e.GroupName == entity.GroupName);
 			else
-				obj = _entitiesConnector.Query<T>(EntitiesCollectionName).FirstOrDefault(e => e.Name == entity.Name);
+				obj = _entitiesConnector.Query<T>(EntitiesCollectionName).FirstOrDefault(e => e.Name == entity.Name && e.GroupName == entity.GroupName);
 
 			if (obj == null)
 			{

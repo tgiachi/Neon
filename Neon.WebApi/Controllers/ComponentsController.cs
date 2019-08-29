@@ -33,5 +33,12 @@ namespace Neon.WebApi.Controllers
 			return Ok(_componentsService.ComponentsData.ToList());
 		}
 
+		[HttpPost]
+		[Route("/start/{name}")]
+		public async Task<ActionResult<bool>> StartComponent(string name)
+		{
+			return	Ok(await _componentsService.LoadComponent(name));
+		}
+
 	}
 }

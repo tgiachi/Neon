@@ -26,14 +26,14 @@ namespace Neon.Engine.Services
 		private readonly DiscoveryConfig _discoveryConfig;
 		private readonly ISchedulerService _schedulerService;
 		private readonly INeonManager _neonManager;
-		private readonly List<DiscoveryListenerData> _discoveryListeneres;
+		private readonly List<DiscoveryListenerData> _discoveryListeners;
 		public ObservableCollection<DiscoveryDevice> DiscoveredDevices { get; }
 		private readonly ServiceDiscovery _serviceAdvertiser = new ServiceDiscovery();
 		public DiscoveryService(ILogger<DiscoveryService> logger, NeonConfig neonConfig, ISchedulerService schedulerService, List<DiscoveryListenerData> discoveryListeners, INeonManager neonManager)
 		{
 			_neonManager = neonManager;
 			_uuid = neonConfig.EngineConfig.Uuid;
-			_discoveryListeneres = discoveryListeners;
+			_discoveryListeners = discoveryListeners;
 			_discoveryConfig = neonConfig.ServicesConfig.DiscoveryConfig;
 			_schedulerService = schedulerService;
 			_logger = logger;
@@ -46,7 +46,7 @@ namespace Neon.Engine.Services
 
 			StartAdvertiser();
 
-			_schedulerService.AddPolling(StartDiscovery, "NETWORK_DISCOVERY", SchedulerServicePollingEnum.NormalPolling);
+			_schedulerService.AddPolling(StartDiscovery, "NETWORK_DISCOVERY", SchedulerServicePollingEnum.HalfNormalPolling);
 			DiscoveredDevices.CollectionChanged += (sender, args) =>
 			{
 				foreach (var item in args.NewItems)
@@ -65,7 +65,7 @@ namespace Neon.Engine.Services
 
 		private void NotifyListener(DiscoveryDevice serviceDevice)
 		{
-			var listener = _discoveryListeneres.FirstOrDefault(s => s.ServiceName == serviceDevice.Name);
+			var listener = _discoveryListeners.FirstOrDefault(s => s.ServiceName == serviceDevice.Service);
 
 			if (listener != null)
 			{

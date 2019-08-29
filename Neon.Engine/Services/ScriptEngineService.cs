@@ -56,7 +56,7 @@ namespace Neon.Engine.Services
 		public async Task<bool> Start()
 		{
 
-			_logger.LogInformation($"Initialize LUA Scripting engine");
+			_logger.LogInformation($"Initialize JS Scripting engine");
 
 			await LoadJs();
 			ScanScriptsModules();

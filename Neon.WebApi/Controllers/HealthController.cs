@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Routing;
 namespace Neon.WebApi.Controllers
 {
 
-	[Route("api/heath")]
+	[Route("api/health")]
 	[ApiController]
 	public class HealthController : ControllerBase
 	{
