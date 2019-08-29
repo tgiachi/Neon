@@ -12,8 +12,11 @@ using Neon.Api.Logger;
 using Neon.Api.Utils;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using System.Reflection;
 using App.Metrics;
+using Neon.Api.Attributes.Websocket;
 using Neon.WebApi.Utils;
+using WebSocketManager;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace Neon.WebApi
@@ -35,8 +38,6 @@ namespace Neon.WebApi
 			_logger = _loggerFactory.CreateLogger<Startup>();
 		}
 
-
-		// This method gets called by the runtime. Use this method to add services to the container.
 		public IServiceProvider ConfigureServices(IServiceCollection services)
 		{
 
@@ -60,12 +61,15 @@ namespace Neon.WebApi
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
 				.AddControllersAsServices();
 
-	
+
+
+
 
 			services.AddSingleton(typeof(ILogger<>), typeof(LoggerEx<>));
 
 			services.AddMediatR(AssemblyUtils.GetAppAssemblies().ToArray());
 			services.AddHttpClient();
+			services.AddWebSocketManager();
 
 
 			Program.NeonManager.ContainerBuilder.Populate(services);
@@ -105,6 +109,16 @@ namespace Neon.WebApi
 					c.SwaggerEndpoint("/swagger/v1/swagger.json", "Neon v1");
 				});
 			}
+
+			app.UseWebSockets();
+
+			AssemblyUtils.GetAttribute<WebSocketHubAttribute>().ForEach(t =>
+			{
+				var wsAttr = t.GetCustomAttribute<WebSocketHubAttribute>();
+				_logger.LogInformation($"Registering websocket path {wsAttr.Path} to {t.Name}");
+
+				app.MapWebSocketManager(wsAttr.Path, ApplicationContainer.Resolve(t) as WebSocketHandler);
+			});
 
 			app.UseMvc();
 

@@ -26,6 +26,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Neon.Api.Attributes.Websocket;
 using Neon.Api.Data.Config.Common;
 
 
@@ -188,6 +189,9 @@ namespace Neon.Api.Core
 			_logger.Debug("Registering Web Hooks provider");
 			RegisterWebHooks();
 
+			_logger.Debug("Registering WebSocket hubs");
+			RegisterWebSockets();
+
 			_logger.Debug("Registering Device Discovery Listeners");
 			RegisterDeviceDiscovery();
 
@@ -211,6 +215,15 @@ namespace Neon.Api.Core
 			});
 		}
 
+		private void RegisterWebSockets()
+		{
+			_logger.Debug($"Scan for WebSockets hub");
+			AssemblyUtils.GetAttribute<WebSocketHubAttribute>().ForEach(w =>
+			{
+				_logger.Debug($"Registering WebSocket {w.Name}");
+				_containerBuilder.RegisterType(w).SingleInstance();
+			});
+		}
 		private void RegisterOAuthReceivers()
 		{
 			_logger.Debug($"Scan for OAuth Receivers");
