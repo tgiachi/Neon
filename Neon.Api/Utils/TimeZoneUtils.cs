@@ -1,6 +1,7 @@
 ﻿using NodaTime.TimeZones;
 using System;
 using System.Linq;
+using TimeZoneConverter;
 
 namespace Neon.Api.Utils
 {
@@ -8,19 +9,16 @@ namespace Neon.Api.Utils
 	{
 		public static TimeZoneInfo GetTimeZoneInfoForTzdbId(string tzdbId)
 		{
-			var mappings = TzdbDateTimeZoneSource.Default.WindowsMapping.MapZones;
-			var map = mappings.FirstOrDefault(x =>
-				x.TzdbIds.Any(z => z.Equals(tzdbId, StringComparison.OrdinalIgnoreCase)));
-			return map == null ? null : TimeZoneInfo.FindSystemTimeZoneById(map.WindowsId);
+			return TimeZoneInfo.FindSystemTimeZoneById(TZConvert.IanaToWindows(tzdbId)); 
 		}
 
 		public static string ToTzdb(TimeZoneInfo timeZoneInfo)
 		{
-			var item = TzdbDateTimeZoneSource.Default.WindowsMapping.MapZones.FirstOrDefault(m =>
-				m.WindowsId == timeZoneInfo.Id);
+			if (timeZoneInfo.Id.Contains("/")) return timeZoneInfo.Id;
 
+			var item = TZConvert.WindowsToIana(timeZoneInfo.Id);
 
-			return item.TzdbIds.First();
+			return item;
 
 		}
 	}

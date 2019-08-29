@@ -10,10 +10,10 @@ using Microsoft.Extensions.Logging;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Logger;
 using Neon.Api.Utils;
-using Swashbuckle.AspNetCore.Swagger;
 using System;
 using System.Reflection;
 using App.Metrics;
+using Microsoft.AspNetCore.HttpOverrides;
 using Neon.Api.Attributes.Websocket;
 using Neon.WebApi.Utils;
 using WebSocketManager;
@@ -23,19 +23,15 @@ namespace Neon.WebApi
 {
 	public class Startup
 	{
-		public IContainer ApplicationContainer { get; set; }
-		public IConfiguration Configuration { get; }
+		private IContainer ApplicationContainer { get; set; }
 
-		private readonly ILoggerFactory _loggerFactory;
 		private readonly ILogger _logger;
 
 		private NeonConfig _config;
 
 		public Startup(IConfiguration configuration, ILoggerFactory loggerFactory)
 		{
-			Configuration = configuration;
-			_loggerFactory = loggerFactory;
-			_logger = _loggerFactory.CreateLogger<Startup>();
+			_logger = loggerFactory.CreateLogger<Startup>();
 		}
 
 		public IServiceProvider ConfigureServices(IServiceCollection services)
@@ -43,13 +39,7 @@ namespace Neon.WebApi
 
 			_config = Program.NeonManager.Config;
 
-			if (_config.EngineConfig.UseSwagger)
-			{
-				services.AddSwaggerGen(c =>
-				{
-					c.SwaggerDoc("v1", new Info() { Title = "Neon", Version = "v1" });
-				});
-			}
+			services.AddOpenApiDocument();
 
 			services.AddCors(c =>
 			{
@@ -61,21 +51,15 @@ namespace Neon.WebApi
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
 				.AddControllersAsServices();
 
-
-
-
-
 			services.AddSingleton(typeof(ILogger<>), typeof(LoggerEx<>));
 
 			services.AddMediatR(AssemblyUtils.GetAppAssemblies().ToArray());
 			services.AddHttpClient();
 			services.AddWebSocketManager();
-
-
+			
 			Program.NeonManager.ContainerBuilder.Populate(services);
 
 			Program.NeonManager.Init();
-
 
 			ApplicationContainer = Program.NeonManager.Build();
 
@@ -97,18 +81,24 @@ namespace Neon.WebApi
 				app.UseHsts();
 			}
 
+			app.UseForwardedHeaders(new ForwardedHeadersOptions
+			{
+				ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+			});
+
 			app.UseCors(options => options.AllowAnyOrigin());
 			//app.UseHttpsRedirection();
 
 			if (_config.EngineConfig.UseSwagger)
 			{
 				_logger.LogInformation($"Configuring Swagger on /swagger/ endpoint");
-				app.UseSwagger();
-				app.UseSwaggerUI(c =>
-				{
-					c.SwaggerEndpoint("/swagger/v1/swagger.json", "Neon v1");
-				});
+				_logger.LogInformation($"Configuring ReDoc on /redoc/ endpoint");
+
+				app.UseOpenApi(); // serve OpenAPI/Swagger documents
+				app.UseSwaggerUi3(settings => settings.Path = "/swagger");
+				app.UseReDoc(settings => settings.Path = "/redoc");
 			}
+
 
 			app.UseWebSockets();
 

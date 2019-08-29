@@ -1,0 +1,25 @@
+sudo: required
+dist: trusty
+services:
+  - docker
+env:
+  - IMAGE_NAME=tgiachi/neon
+  - REGISTRY_USER=tgiachi
+  # REGISTRY_PASS=...
+
+install: []
+before_script:
+  - docker pull "${IMAGE_NAME}:dev" || true
+script:
+  - docker build --pull --cache-from "${IMAGE_NAME}:develop" --tag "$IMAGE_NAME" .
+
+before_deploy:
+  - docker login -u "$REGISTRY_USER" -p "$REGISTRY_PASS"
+  - git_sha="$(git rev-parse --short HEAD)"
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:develop"
+  - docker tag "$IMAGE_NAME" "${IMAGE_NAME}:${git_sha}-develop"
+deploy:
+  provider: script
+  script: docker push "${IMAGE_NAME}:develop" && docker push "${IMAGE_NAME}:${git_sha}-develop"
+  on:
+    branch: develop

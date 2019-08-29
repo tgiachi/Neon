@@ -1,6 +1,7 @@
 ﻿using App.Metrics.AspNetCore;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Neon.Api.Core;
 using Neon.Api.Interfaces.Managers;
 using Serilog;
@@ -30,13 +31,15 @@ namespace Neon.WebApi
 			NeonManager = new NeonManager();
 
 			var host = WebHost.CreateDefaultBuilder(args)
+				.ConfigureKestrel(opts =>
+				{
+					opts.ListenAnyIP(5000, options => options.Protocols = HttpProtocols.Http1AndHttp2);
+				})
 				.UseStartup<Startup>()
 				.UseLibuv()
 				.UseMetrics()
 				.UseIISIntegration()
 				.UseSerilog();
-
-			host = host.UseUrls("http://0.0.0.0:5000", "https://0.0.0.0:5001", "http://::5000", "https://::5001");
 
 			return host.Build();
 		}

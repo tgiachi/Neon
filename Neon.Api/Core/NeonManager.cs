@@ -370,7 +370,6 @@ namespace Neon.Api.Core
 
 		public async Task Start()
 		{
-
 			await _servicesManager.Start();
 		}
 

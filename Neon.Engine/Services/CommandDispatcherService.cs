@@ -14,7 +14,7 @@ namespace Neon.Engine.Services
 	public class CommandDispatcherService : ICommandDispatcherService
 	{
 		private readonly ILogger _logger;
-		private readonly List<CommandPreloadData> _commandPreload;
+		public List<CommandPreloadData> CommandPreload { get; }
 		private readonly INeonManager _neonManager;
 
 		private Dictionary<string, CommandPreloadData> _commands = new Dictionary<string, CommandPreloadData>();
@@ -24,8 +24,8 @@ namespace Neon.Engine.Services
 		{
 			_logger = logger;
 			_neonManager = neonManager;
-			_commandPreload = commandPreloadData;
-			_commandPreload.ForEach(c =>
+			CommandPreload = commandPreloadData;
+			CommandPreload.ForEach(c =>
 			{
 				_commands.Add(c.CommandName, c);
 			});
@@ -41,6 +41,8 @@ namespace Neon.Engine.Services
 		{
 			return Task.FromResult(true);
 		}
+
+		
 
 		public object Dispatch(string commandName, params object[] args)
 		{
