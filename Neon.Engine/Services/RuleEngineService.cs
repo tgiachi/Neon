@@ -3,7 +3,6 @@ using Neon.Api.Attributes.Services;
 using Neon.Api.Data.Rules;
 using Neon.Api.Interfaces.Entity;
 using Neon.Api.Interfaces.Services;
-using NLua;
 using NReco.Linq;
 using System;
 using System.Collections.Generic;
@@ -92,10 +91,10 @@ namespace Neon.Engine.Services
 			AddRuleData(ruleName, entityType, condition, action, RuleTypeEnum.CSharp);
 		}
 
-		public void AddRule(string ruleName, Type entityType, string condition, LuaFunction action)
-		{
-			AddRuleData(ruleName, entityType, condition, action, RuleTypeEnum.Lambda);
-		}
+		//public void AddRule(string ruleName, Type entityType, string condition, LuaFunction action)
+		//{
+		//	AddRuleData(ruleName, entityType, condition, action, RuleTypeEnum.Lambda);
+		//}
 
 		private void AddRuleData(string ruleName, Type entityType, object condition, object action, RuleTypeEnum type)
 		{
@@ -108,10 +107,10 @@ namespace Neon.Engine.Services
 				RuleType = type
 			};
 
-			if (action is LuaFunction)
-			{
-				ruleData.Action = entity => { ((LuaFunction)action).Call(entity); };
-			}
+			//if (action is LuaFunction)
+			//{
+			//	ruleData.Action = entity => { ((LuaFunction)action).Call(entity); };
+			//}
 
 			if (action is Action<INeonIoTEntity> action1)
 			{

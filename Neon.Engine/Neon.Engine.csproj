@@ -19,7 +19,6 @@
     <PackageReference Include="MongoDB.Driver" Version="2.9.1" />
     <PackageReference Include="MQTTnet" Version="3.0.8" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
-    <PackageReference Include="NLua" Version="1.4.21" />
     <PackageReference Include="NReco.LambdaParser" Version="1.0.10" />
     <PackageReference Include="Q42.HueApi" Version="3.10.1" />
     <PackageReference Include="RadarrSharp" Version="1.0.30" />

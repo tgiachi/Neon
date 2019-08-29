@@ -1,7 +1,7 @@
-﻿using Neon.Api.Attributes.ScriptEngine;
+﻿using System;
+using Neon.Api.Attributes.ScriptEngine;
 using Neon.Api.Data.ScriptEngine;
 using Neon.Api.Interfaces.Services;
-using NLua;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,9 +25,9 @@ namespace Neon.Engine.Std
 		}
 
 		[ScriptFunction("execute_task", "Execute task with callback")]
-		public void ExecuteTask(string taskName, LuaFunction function, LuaFunction callback)
+		public void ExecuteTask(string taskName, Delegate function, Delegate callback)
 		{
-			Task.Factory.StartNew(() => function.Call()).ContinueWith(task => callback.Call(taskName));
+			Task.Factory.StartNew(() => function.DynamicInvoke()).ContinueWith(task => callback.DynamicInvoke(taskName));
 		}
 	}
 }

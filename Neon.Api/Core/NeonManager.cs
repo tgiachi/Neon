@@ -87,10 +87,6 @@ namespace Neon.Api.Core
 
 			ConfigureLogger(_configManager);
 
-		
-			
-			
-
 			_pluginsManager = new PluginsManager(_logger, _fileSystemManager, Config);
 			_pluginsManager.Start();
 		}

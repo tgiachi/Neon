@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.ScriptEngine;
 using Neon.Api.Interfaces.Services;
 using Neon.Engine.Services;
-using NLua;
 
 namespace Neon.Engine.Std
 {
@@ -18,10 +18,17 @@ namespace Neon.Engine.Std
 		}
 
 		[ScriptFunction("add_routine", "Add routine")]
-		public bool AddRoutines(string name, LuaFunction function, params object[] args)
+		public bool AddRoutines(string name, Action<object[]> function, params object[] args)
 		{
-			_logger.LogDebug($"Adding Routine {name} params count {args.Length}");
-			return _routineService.AddRoutine(name, () => { function.Call(args); });
+
+			_logger.LogDebug($"Adding Routine {name} params count {args.Length} - delegate params count {function.Method.GetParameters().Length}");
+			return _routineService.AddRoutine(name, () =>
+			{
+				//		if (args.Length > 0)
+				//function.Method.Invoke(function.Target, args);
+				//			else
+				function.Invoke(args);
+			});
 		}
 
 		[ScriptFunction("exec_routine", "Exec routine")]
