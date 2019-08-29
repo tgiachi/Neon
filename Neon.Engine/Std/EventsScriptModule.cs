@@ -2,7 +2,6 @@
 using Neon.Api.Interfaces.Entity;
 using Neon.Api.Interfaces.Services;
 using Neon.Api.Utils;
-using NLua;
 using System;
 
 namespace Neon.Engine.Std
@@ -29,40 +28,40 @@ namespace Neon.Engine.Std
 		}
 
 		[ScriptFunction("add_rule", "Add rule to rule engine")]
-		public void AddRule(string ruleName, string entityName, string condition, LuaFunction function)
+		public void AddRule(string ruleName, string entityName, string condition, Delegate function)
 		{
 			_ruleEngineService.AddRule(ruleName, AssemblyUtils.GetType(_commonScriptModule.GetEntityType(entityName)), condition,
-				entity => { function.Call(entity); });
+				entity => { function.DynamicInvoke(entity); });
 		}
 
 		[ScriptFunction("add_alarm", "Add new alarm")]
-		public void AddAlarm(string name, int hours, int minutes, LuaFunction function)
+		public void AddAlarm(string name, int hours, int minutes, Delegate function)
 		{
-			_schedulerService.AddJob(() => { function.Call(); }, name, hours, minutes);
+			_schedulerService.AddJob(() => { function.DynamicInvoke(); }, name, hours, minutes);
 		}
 
 		[ScriptFunction("add_timer", "Add timer in seconds")]
-		public void AddTimer(string name, int seconds, LuaFunction function)
+		public void AddTimer(string name, int seconds, Delegate function)
 		{
-			_schedulerService.AddJob(() => { function.Call(); }, name, seconds, false);
+			_schedulerService.AddJob(() => { function.DynamicInvoke(); }, name, seconds, false);
 		}
 
 
 		[ScriptFunction("on_event_type", "Subscribe on event")]
-		public void OnEventType(string eventType, LuaFunction function)
+		public void OnEventType(string eventType, Delegate function)
 		{
 
 			_ioTService.GetEventStream<INeonIoTEntity>().Subscribe(entity =>
 			{
 				if (string.Equals(Type.GetType(entity.EntityType).Name, eventType, StringComparison.CurrentCultureIgnoreCase))
 				{
-					function.Call(entity);
+					function.DynamicInvoke(entity);
 				}
 			});
 		}
 
 		[ScriptFunction("on_event_name", "Subscribe on event")]
-		public void OnEventName(string entityName, LuaFunction function)
+		public void OnEventName(string entityName, Delegate function)
 		{
 			_ioTService.GetEventStream<INeonIoTEntity>().Subscribe(entity =>
 			{
@@ -70,7 +69,7 @@ namespace Neon.Engine.Std
 				{
 					try
 					{
-						function.Call(entity);
+						function.DynamicInvoke(entity);
 					}
 					catch (Exception ex)
 					{

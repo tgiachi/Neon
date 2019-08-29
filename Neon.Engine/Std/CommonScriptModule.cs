@@ -22,7 +22,7 @@ namespace Neon.Engine.Std
 			return _ioTService.GetEntityTypeByName(name);
 		}
 
-		[ScriptFunction("cast_entity", "Transform entity to Generic entity")]
+		//[ScriptFunction("cast_entity", "Transform entity to Generic entity")]
 		public T GetEntityType<T>(object entity) where T : class
 		{
 			var castedEntity = ((INeonIoTEntity)entity);

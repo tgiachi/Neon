@@ -7,32 +7,36 @@ using Neon.Api.Data.ScriptEngine;
 using Neon.Api.Interfaces.Managers;
 using Neon.Api.Interfaces.Services;
 using Neon.Api.Utils;
-using NLua;
-using NLua.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Jint.Runtime;
+using Jint.Runtime.Interop;
 
 namespace Neon.Engine.Services
 {
 	[NeonService("Script Engine", "Script engine", 9)]
 	public class ScriptEngineService : IScriptEngineService
 	{
-		private const string BootstrapFilename = "bootstrap.lua";
-
+		private const string BootstrapFilename = "bootstrap.js";
 		public List<ScriptFunctionData> Functions { get; }
 		public List<ScriptEngineVariable> Variables { get; }
 
 		private readonly IFileSystemManager _fileSystemManager;
+		private readonly Dictionary<string, string> _filesContents = new Dictionary<string, string>();
 		private readonly INeonManager _neonManager;
 		private readonly ILogger _logger;
 		private readonly ScriptEngineConfig _config;
 		private readonly NeonConfig _neonConfig;
-		private readonly Lua _luaEngine = new Lua();
-		private readonly List<LuaFunction> _functions = new List<LuaFunction>();
+		private Jint.Engine _engine;
+
+
 
 		public ScriptEngineService(ILogger<ScriptEngineService> logger,
 			INeonManager neonManager,
@@ -46,6 +50,7 @@ namespace Neon.Engine.Services
 			_config = neonConfig.ServicesConfig.ScriptEngineConfig;
 			Functions = new List<ScriptFunctionData>();
 			Variables = new List<ScriptEngineVariable>();
+
 		}
 
 		public async Task<bool> Start()
@@ -53,7 +58,7 @@ namespace Neon.Engine.Services
 
 			_logger.LogInformation($"Initialize LUA Scripting engine");
 
-			await LoadLua();
+			await LoadJs();
 			ScanScriptsModules();
 
 			_fileSystemManager.CreateDirectory(_config.ScriptsDirectory.DirectoryName);
@@ -98,10 +103,6 @@ namespace Neon.Engine.Services
 				fullModulesDirectory = fullModulesDirectory.Replace(@"\", @"\\");
 			}
 
-			_luaEngine.DoString($@"
-			-- Update the search path
-			local module_folder = '{fullModulesDirectory}'
-			package.path = module_folder .. '?.lua;' .. package.path");
 		}
 
 		private void LoadBootstrap()
@@ -162,33 +163,16 @@ namespace Neon.Engine.Services
 
 		}
 
-		private Task LoadLua()
+		private Task LoadJs()
 		{
-			_luaEngine.State.Encoding = Encoding.UTF8;
-			_luaEngine.LoadCLRPackage();
-
-			_luaEngine.HookException += _luaEngine_HookException;
-
+			_engine = new Jint.Engine(options =>
+			{
+				options.Culture(CultureInfo.CurrentCulture);
+				options.DebugMode();
+			});
+				
 			return Task.CompletedTask;
 
-		}
-
-		private void _luaEngine_HookException(object sender, NLua.Event.HookExceptionEventArgs args)
-		{
-			if (args.Exception is LuaException luaException)
-			{
-				_logger.LogError($"Error during execute LUA =>\n {FormatException(luaException)}");
-			}
-			else
-			{
-				_logger.LogError($"Error during execute LUA =>\n {args.Exception}");
-			}
-		}
-
-		private string FormatException(LuaException e)
-		{
-			var source = (string.IsNullOrEmpty(e.Source)) ? "<no source>" : e.Source.Substring(0, e.Source.Length - 2);
-			return string.Format("{0}\nLua (at {2})", e.Message, string.Empty, source);
 		}
 
 		public void LoadFile(string fileName, bool immediateExecute)
@@ -196,11 +180,9 @@ namespace Neon.Engine.Services
 			try
 			{
 				_logger.LogInformation($"Loading file {fileName}...");
-				var func = _luaEngine.LoadFile(fileName);
-
-				_functions.Add(func);
+				_filesContents.Add(fileName, File.ReadAllText(fileName));
 				if (immediateExecute)
-					func.Call();
+					_engine.Execute(_filesContents[fileName]);
 			}
 			catch (Exception ex)
 			{
@@ -210,32 +192,51 @@ namespace Neon.Engine.Services
 
 		public void RegisterFunction(string functionName, object obj, MethodInfo method)
 		{
-			_luaEngine.RegisterFunction(functionName, obj, method);
+			_engine.SetValue(functionName, CreateJsEngineDelegate(obj, method));
+		}
+
+		private Delegate CreateJsEngineDelegate(object obj, MethodInfo method)
+		{
+			return method.CreateDelegate(Expression.GetDelegateType(
+				(from parameter in method.GetParameters() select parameter.ParameterType)
+				.Concat(new[] { method.ReturnType })
+				.ToArray()), obj);
 		}
 
 		public object ExecuteCode(string code)
 		{
-			return _luaEngine.DoString(code);
+			try
+			{
+				return _engine.Execute(code);
+			}
+			catch (JavaScriptException ex)
+			{
+				_logger.LogError($"Error during execute code '{code.Substring(0, code.Length / 2)}' line: {ex.LineNumber} column: {ex.Column} error: {ex.Error} ");
+
+				throw;
+			}
 		}
 
 		public Task<bool> Build()
 		{
-			_functions.ForEach(f => { f.Call(); });
+			foreach (var s in _filesContents.Values.ToList())
+			{
+				ExecuteCode(s);
+			}
 
 			return Task.FromResult(true);
 		}
 
 		public void AddVariable(string variable, object value)
 		{
-			_luaEngine[variable] = value;
+			_engine.SetValue(variable, value);
 			Variables.Add(new ScriptEngineVariable() { Key = variable, Value = value });
 		}
 
 
 		public Task<bool> Stop()
 		{
-			_functions.ForEach(f => f.Dispose());
-			_luaEngine?.Dispose();
+			_engine = null;
 			return Task.FromResult(true);
 
 		}
