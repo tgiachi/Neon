@@ -135,7 +135,6 @@ namespace Neon.Engine.Services
 			ruleData.RuleName = data.RuleName;
 			ruleData.LastExecutionDateTime = DateTime.MinValue;
 			ruleData.RuleExecutionCount = 0;
-
 		}
 
 		public Task<bool> Stop()

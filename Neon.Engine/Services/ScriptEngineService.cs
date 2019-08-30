@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Jint.Runtime;
+using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.ScriptEngine;
 using Neon.Api.Attributes.Services;
 using Neon.Api.Data.Config.Root;
@@ -14,10 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using Jint.Runtime;
-using Jint.Runtime.Interop;
 
 namespace Neon.Engine.Services
 {
@@ -170,7 +168,7 @@ namespace Neon.Engine.Services
 				options.Culture(CultureInfo.CurrentCulture);
 				options.DebugMode();
 			});
-				
+
 			return Task.CompletedTask;
 
 		}

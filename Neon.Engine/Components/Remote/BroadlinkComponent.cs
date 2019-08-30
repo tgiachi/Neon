@@ -76,7 +76,7 @@ namespace Neon.Engine.Components.Remote
 			{
 				Logger.LogError($"Error during discovery: {e.Message}");
 			}
-			
+
 		}
 
 		[ComponentPollRate((int)SchedulerServicePollingEnum.LongPolling)]
