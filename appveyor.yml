@@ -3,19 +3,6 @@ image:
 - Visual Studio 2019
 - Ubuntu
 
-environment:
-  matrix:
-    - ARCH: arm
-    - ARCH: arm64
-    - ARCH: amd64
-
-matrix:
-  exclude:
-    - image: Visual Studio 2019
-      ARCH: arm
-    - image: Visual Studio 2019
-      ARCH: arm64
-
 build_script:
   - ps: ./build.ps1
 
