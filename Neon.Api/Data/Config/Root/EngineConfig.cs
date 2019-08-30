@@ -35,7 +35,7 @@ namespace Neon.Api.Data.Config.Root
 		public EngineConfig()
 		{
 			Uuid = Guid.NewGuid().ToString();
-			HomeDirectory = "./Neon";
+			HomeDirectory = "./neon";
 			Logger = new LoggerConfig();
 			UseSwagger = true;
 			SecretKey = RandomStringUtils.RandomString(32);
