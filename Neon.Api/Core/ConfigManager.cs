@@ -42,15 +42,16 @@ namespace Neon.Api.Core
 				_isConfigFound = true;
 			}
 
-			if (File.Exists(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + configFileName))
+			
+			if (File.Exists(Path.Combine(Directory.GetCurrentDirectory(),configFileName)))
 			{
-				_configFullPath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + configFileName;
+				_configFullPath = Path.Combine(Directory.GetCurrentDirectory(), configFileName);
 				_isConfigFound = true;
 			}
 
 			if (!_isConfigFound)
 			{
-				_configFullPath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + configFileName;
+				_configFullPath = Path.Combine(Directory.GetCurrentDirectory(), configFileName);
 			}
 
 			if (_neonManager.IsRunningInDocker)

@@ -55,7 +55,7 @@ namespace Neon.Engine.Services
 
 		private async Task ConnectToServer()
 		{
-			var clientOptions = new MqttClientOptionsBuilder().WithClientId("Neon-Server");
+			var clientOptions = new MqttClientOptionsBuilder().WithClientId($"Neon-Server-{Guid.NewGuid().ToString()}");
 			if (_config.UseEmbeddedServer)
 			{
 				clientOptions = clientOptions.WithTcpServer("127.0.0.1", _config.EmbeddedServerPort);

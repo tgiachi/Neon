@@ -22,12 +22,12 @@ namespace Neon.Api.Data.Config.Services
 		{
 			ScriptsDirectory = new DirectoryConfig()
 			{
-				DirectoryName = "Scripts"
+				DirectoryName = "scripts"
 			};
 
 			ModulesDirectory = new DirectoryConfig()
 			{
-				DirectoryName = "Modules"
+				DirectoryName = "modules"
 			};
 
 			WriteOnConsoleOutput = false;

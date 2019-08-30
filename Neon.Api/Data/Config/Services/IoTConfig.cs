@@ -17,13 +17,13 @@ namespace Neon.Api.Data.Config.Services
 			EntitiesDb = new NoSqlConnectorConfig()
 			{
 				Name = "lite_db",
-				ConnectionString = Path.Combine("DB", "entities.db")
+				ConnectionString = Path.Combine("db", "entities.db")
 			};
 
 			EventsDb = new NoSqlConnectorConfig()
 			{
 				Name = "lite_db",
-				ConnectionString = Path.Combine("DB", "events.db")
+				ConnectionString = Path.Combine("db", "events.db")
 			};
 		}
 	}

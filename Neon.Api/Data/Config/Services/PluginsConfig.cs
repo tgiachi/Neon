@@ -16,7 +16,7 @@ namespace Neon.Api.Data.Config.Services
 		{
 			Directory = new DirectoryConfig()
 			{
-				DirectoryName = "Plugins"
+				DirectoryName = "plugins"
 			};
 		}
 	}

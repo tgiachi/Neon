@@ -21,12 +21,12 @@ namespace Neon.Api.Data.Config.Root
 			ComponentsToLoad = new List<ComponentConfig>();
 			ConfigDirectory = new DirectoryConfig()
 			{
-				DirectoryName = "Components"
+				DirectoryName = "components"
 			};
 
 			VaultConfigDirectory = new DirectoryConfig()
 			{
-				DirectoryName = "Vault"
+				DirectoryName = "vault"
 			};
 		}
 	}
