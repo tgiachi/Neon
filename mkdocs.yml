@@ -1,4 +1,5 @@
 site_name: Neon Home Control
+markdown_extensions: [meta, toc, tables, fenced_code]
 pages:
 - Overview: index.md
 theme: readthedocs
