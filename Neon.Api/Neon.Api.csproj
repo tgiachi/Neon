@@ -2,11 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <UpdateAssemblyInfo>true</UpdateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.9.4" />
+    <PackageReference Include="GitInfo" Version="2.0.20">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Jint" Version="2.11.58" />
     <PackageReference Include="MediatR" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />

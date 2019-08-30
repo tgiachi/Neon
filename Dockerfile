@@ -5,13 +5,7 @@ EXPOSE 1883
 
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
 WORKDIR /src
-#COPY .git/ ./.git/
-COPY global.json ./
-COPY Neon.sln ./
-COPY Neon.Api/*.csproj ./Neon.Api/
-COPY Neon.Engine/*.csproj ./Neon.Engine/
-COPY Neon.WebApi/*.csproj ./Neon.WebApi/
-
+RUN git clone https://github.com/tgiachi/Neon.git /src
 RUN dotnet restore  
 COPY . .
 WORKDIR /src/Neon.WebApi

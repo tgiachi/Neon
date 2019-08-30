@@ -57,7 +57,7 @@ I'm looking for people to help me with the project, please contact me!
 
 ```shell
 docker pull tgiachi/neon:dev
-docker run -it --name neon --restart always -p 5000:5000 -v /home/user/neonhome:/neon tgiachi/neon:dev  
+docker run -it --rm  -p 5000:5000 -v /home/user/neon:/neon tgiachi/neon:dev
 ```
 
 ## Default config file

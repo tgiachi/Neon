@@ -65,7 +65,7 @@ namespace Neon.Api.Core
 		public NeonManager()
 		{
 			ConfigureLogger(null);
-
+			PrintHeader();
 			_logger = Log.Logger;
 			_logger.Debug($"Pre-loading assemblies");
 			AssemblyUtils.GetAppAssemblies();
@@ -91,6 +91,20 @@ namespace Neon.Api.Core
 			_pluginsManager.Start();
 		}
 
+		private void PrintHeader()
+		{
+			Console.WriteLine(@" 
+ _   _                  
+| \ | |                 
+|  \| | ___  ___  _ __  
+| . ` |/ _ \/ _ \| '_ \ 
+| |\  |  __/ (_) | | | |
+\_| \_/\___|\___/|_| |_|                       
+                        ");
+			Console.WriteLine($"Starting Neon (branch {ThisAssembly.Git.Branch}) {ThisAssembly.Git.Commit} sha: {ThisAssembly.Git.Sha}");
+
+
+		}
 		private void ConfigureLogger(IConfigManager configManager)
 		{
 			if (_configManager == null)

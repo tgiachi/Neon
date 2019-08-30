@@ -75,6 +75,10 @@ namespace Neon.Api.Core
 
 			CheckEnvVariables();
 
+			if (_neonManager.IsRunningInDocker)
+			{
+				_config.EngineConfig.HomeDirectory = "/neon";
+			}
 
 			_containerBuilder.RegisterInstance(_config);
 			SaveConfig();
