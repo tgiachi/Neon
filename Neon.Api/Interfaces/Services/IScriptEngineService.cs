@@ -18,6 +18,8 @@ namespace Neon.Api.Interfaces.Services
 
 		object ExecuteCode(string code);
 
+		object StatementToObject(string code);
+
 		Task<bool> Build();
 
 		void AddVariable(string variable, object value);

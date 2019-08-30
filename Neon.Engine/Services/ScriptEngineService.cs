@@ -16,6 +16,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Jint.Parser;
 using Jint.Runtime;
 using Jint.Runtime.Interop;
 
@@ -35,8 +36,6 @@ namespace Neon.Engine.Services
 		private readonly ScriptEngineConfig _config;
 		private readonly NeonConfig _neonConfig;
 		private Jint.Engine _engine;
-
-
 
 		public ScriptEngineService(ILogger<ScriptEngineService> logger,
 			INeonManager neonManager,
@@ -203,11 +202,17 @@ namespace Neon.Engine.Services
 				.ToArray()), obj);
 		}
 
+		public object StatementToObject(string code)
+		{
+			return _engine.Execute(code).GetCompletionValue().ToObject();
+		}
+
 		public object ExecuteCode(string code)
 		{
 			try
 			{
-				return _engine.Execute(code);
+				return _engine.Execute(code).GetCompletionValue().ToObject();
+
 			}
 			catch (JavaScriptException ex)
 			{
