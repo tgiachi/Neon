@@ -66,7 +66,7 @@ namespace Neon.Api.Core
 		{
 			ConfigureLogger(null);
 			PrintHeader();
-			_logger = Log.Logger;
+			_logger = Log.Logger.ForContext<NeonManager>();
 			_logger.Debug($"Pre-loading assemblies");
 			AssemblyUtils.GetAppAssemblies();
 
@@ -102,8 +102,6 @@ namespace Neon.Api.Core
 \_| \_/\___|\___/|_| |_|                       
                         ");
 			Console.WriteLine($"Starting Neon (branch {ThisAssembly.Git.Branch}) {ThisAssembly.Git.Commit} sha: {ThisAssembly.Git.Sha}");
-
-
 		}
 		private void ConfigureLogger(IConfigManager configManager)
 		{
@@ -153,8 +151,6 @@ namespace Neon.Api.Core
 					"{Timestamp:HH:mm:ss} [{Level}] [{SourceContext:u3}] {Message}{NewLine}{Exception}");
 
 				Log.Logger = logConfiguration.CreateLogger();
-
-
 			}
 		}
 
