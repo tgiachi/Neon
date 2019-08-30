@@ -1,12 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Components;
 using Neon.Api.Impl.Components;
 using Neon.Api.Interfaces.Services;
 using Neon.Engine.Components.Configs.Streaming;
+using Neon.Engine.Components.Events;
 using RadarrSharp;
-using System.Threading.Tasks;
 
-namespace Neon.Engine.Components.Events
+namespace Neon.Engine.Components
 {
 	[NeonComponent("radarr", "v1.0.0.0", "STREAMING", typeof(RadarrConfig))]
 	public class RadarrComponent : AbstractNeonComponent<RadarrConfig>
