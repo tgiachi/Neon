@@ -51,10 +51,19 @@ namespace Neon.Api.Core
 			if (!_isConfigFound)
 			{
 				_configFullPath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + configFileName;
+			}
 
+			if (_neonManager.IsRunningInDocker)
+			{
+
+				_configFullPath = Path.Combine("/neon", configFileName);
+
+				if (File.Exists(_configFullPath))
+					_isConfigFound = true;
 			}
 
 			_logger.Information($"Loading config [is Docker = {_neonManager.IsRunningInDocker}]  config found: {_isConfigFound}");
+
 
 			if (!_isConfigFound)
 			{

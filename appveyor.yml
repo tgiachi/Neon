@@ -1,13 +1,18 @@
 version: 1.0.{build}
-image:
-- Visual Studio 2019
-- Ubuntu
+image: Visual Studio 2019
+
+environment:
+  DOCKER_USER:
+    secure: tgiachi
+install:
+  - docker version
 
 build_script:
-  - ps: ./.appveyor/build.ps1
+  - docker build -t tgiachi/neon:dev .
 
 test_script:
-  - ps: ./test.ps1
+  - docker run tgiachi:/neon
 
 deploy_script:
-  - ps: ./.appveyor/deploy.ps1
+  - docker login -u="$env:DOCKER_USER" -p="$env:DOCKER_PASS"
+  - docker push tgiachi/neon:dev
