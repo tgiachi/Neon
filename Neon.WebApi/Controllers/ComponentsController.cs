@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Neon.Api.Data.Components;
+using Neon.Api.Interfaces.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Neon.Api.Data.Components;
-using Neon.Api.Interfaces.Services;
 
 namespace Neon.WebApi.Controllers
 {
@@ -37,7 +36,7 @@ namespace Neon.WebApi.Controllers
 		[Route("/start/{name}")]
 		public async Task<ActionResult<bool>> StartComponent(string name)
 		{
-			return	Ok(await _componentsService.LoadComponent(name));
+			return Ok(await _componentsService.LoadComponent(name));
 		}
 
 	}

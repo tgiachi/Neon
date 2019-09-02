@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Neon.Api.Data.Commands;
+﻿using Neon.Api.Data.Commands;
 using Neon.Api.Interfaces.Base;
+using System.Collections.Generic;
 
 namespace Neon.Api.Interfaces.Services
 {

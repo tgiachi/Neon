@@ -9,7 +9,9 @@ using Neon.Api.Attributes.OAuth;
 using Neon.Api.Attributes.ScriptEngine;
 using Neon.Api.Attributes.Services;
 using Neon.Api.Attributes.WebHook;
+using Neon.Api.Attributes.Websocket;
 using Neon.Api.Data.Commands;
+using Neon.Api.Data.Config.Common;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Data.Discovery;
 using Neon.Api.Data.OAuth;
@@ -26,8 +28,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Neon.Api.Attributes.Websocket;
-using Neon.Api.Data.Config.Common;
 
 
 namespace Neon.Api.Core
