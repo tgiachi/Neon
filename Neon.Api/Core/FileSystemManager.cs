@@ -80,6 +80,7 @@ namespace Neon.Api.Core
 			if (!File.Exists(Path.Combine(_rootDirectory, filename))) return default(T);
 
 			var obj = File.ReadAllText(Path.Combine(_rootDirectory, filename)).FromYaml<T>();
+			if (obj == null) return default(T);
 
 			obj = _secretKeyManager.ProcessLoad(obj);
 			return obj;
