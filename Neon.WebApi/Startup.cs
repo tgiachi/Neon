@@ -3,19 +3,17 @@ using Autofac.Extensions.DependencyInjection;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Neon.Api.Attributes.Websocket;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Logger;
 using Neon.Api.Utils;
 using System;
 using System.Reflection;
-using App.Metrics;
-using Microsoft.AspNetCore.HttpOverrides;
-using Neon.Api.Attributes.Websocket;
-using Neon.WebApi.Utils;
 using WebSocketManager;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -56,7 +54,7 @@ namespace Neon.WebApi
 			services.AddMediatR(AssemblyUtils.GetAppAssemblies().ToArray());
 			services.AddHttpClient();
 			services.AddWebSocketManager();
-			
+
 			Program.NeonManager.ContainerBuilder.Populate(services);
 
 			Program.NeonManager.Init();

@@ -38,7 +38,7 @@ namespace Neon.Engine.Components
 			var rs = await _httpClient.GetAsync(
 				$"https://api.sunrise-sunset.org/json?lat={lat}&lng=-{lon}=today");
 
-			
+
 
 			if (rs.IsSuccessStatusCode)
 			{

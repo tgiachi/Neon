@@ -1,6 +1,4 @@
-﻿using NodaTime.TimeZones;
-using System;
-using System.Linq;
+﻿using System;
 using TimeZoneConverter;
 
 namespace Neon.Api.Utils
@@ -9,7 +7,7 @@ namespace Neon.Api.Utils
 	{
 		public static TimeZoneInfo GetTimeZoneInfoForTzdbId(string tzdbId)
 		{
-			return TimeZoneInfo.FindSystemTimeZoneById(TZConvert.IanaToWindows(tzdbId)); 
+			return TimeZoneInfo.FindSystemTimeZoneById(TZConvert.IanaToWindows(tzdbId));
 		}
 
 		public static string ToTzdb(TimeZoneInfo timeZoneInfo)

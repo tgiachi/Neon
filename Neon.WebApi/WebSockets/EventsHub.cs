@@ -1,8 +1,8 @@
-﻿using System;
-using Neon.Api.Attributes.Websocket;
+﻿using Neon.Api.Attributes.Websocket;
 using Neon.Api.Interfaces.Entity;
 using Neon.Api.Interfaces.Services;
 using Neon.Api.Utils;
+using System;
 using WebSocketManager;
 using WebSocketManager.Common;
 

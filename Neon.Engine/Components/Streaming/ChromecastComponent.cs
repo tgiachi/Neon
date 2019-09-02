@@ -1,15 +1,15 @@
 ﻿using GoogleCast;
 using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Components;
+using Neon.Api.Attributes.Discovery;
+using Neon.Api.Data.Discovery;
 using Neon.Api.Impl.Components;
+using Neon.Api.Interfaces.Discovery;
 using Neon.Api.Interfaces.Services;
 using Neon.Engine.Components.Configs;
 using Neon.Engine.Components.Events;
 using System.Linq;
 using System.Threading.Tasks;
-using Neon.Api.Attributes.Discovery;
-using Neon.Api.Data.Discovery;
-using Neon.Api.Interfaces.Discovery;
 
 namespace Neon.Engine.Components.Streaming
 {
@@ -56,8 +56,8 @@ namespace Neon.Engine.Components.Streaming
 
 		public void OnDeviceDiscovered(DiscoveryDevice device)
 		{
-			AddDevice(device.Properties["id"], $"{device.IpAddress}:{device.Port}", device.Properties["fn"] );
-			
+			AddDevice(device.Properties["id"], $"{device.IpAddress}:{device.Port}", device.Properties["fn"]);
+
 		}
 
 		private void AddDevice(string id, string ipAddress, string name)

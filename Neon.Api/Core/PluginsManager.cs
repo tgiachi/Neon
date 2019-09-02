@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using Neon.Api.Data.Config.Plugins;
+﻿using Neon.Api.Data.Config.Plugins;
 using Neon.Api.Data.Config.Root;
 using Neon.Api.Interfaces.Managers;
 using Neon.Api.Utils;
 using Serilog;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace Neon.Api.Core
 {
 	public class PluginsManager : IPluginsManager
 	{
 		private readonly ILogger _logger;
-		private readonly IFileSystemManager _fileSystemManager; 
+		private readonly IFileSystemManager _fileSystemManager;
 		private readonly string _pluginsDirectory;
 		private string _fullPluginDirectory;
 
@@ -48,7 +47,7 @@ namespace Neon.Api.Core
 
 			foreach (var file in files)
 			{
-				LoadPlugin(file);		
+				LoadPlugin(file);
 			}
 		}
 
