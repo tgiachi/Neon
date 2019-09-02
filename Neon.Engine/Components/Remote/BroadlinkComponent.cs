@@ -34,7 +34,7 @@ namespace Neon.Engine.Components.Remote
 			if (_broadlinkVault.Devices.Count == 0)
 			{
 				Logger.LogInformation($"Starting Broadlink discovery");
-				await StartDiscovery();
+				//await StartDiscovery();
 			}
 			return await base.Start();
 		}
@@ -49,25 +49,55 @@ namespace Neon.Engine.Components.Remote
 				devices.ForEach(async d =>
 				{
 					var rmDevice = d as RMDevice;
-					var entity = BuildEntity<BroadlinkDeviceEvent>();
 
-					Logger.LogDebug($"Found Broadlink {d.DeviceId}");
-
-					await rmDevice.AuthorizeAsync();
-
-					var vaultConfig = new BroadlinkDeviceData()
+					if (rmDevice != null)
 					{
-						MacAddress = BitConverter.ToString(rmDevice.MacAddress),
-						DeviceId = BitConverter.ToString(rmDevice.DeviceId),
-						IpAddress = d.LocalIPEndPoint.ToString(),
-						EncryptKey = BitConverter.ToString(rmDevice.EncryptionKey)
-					};
+						var entity = BuildEntity<BroadlinkDeviceEvent>();
 
-					entity.DeviceType = rmDevice.DeviceType;
-					entity.MacAddress = vaultConfig.MacAddress;
-					entity.Name = $"Broadlink_{entity.MacAddress}";
+						Logger.LogDebug($"Found Broadlink {d.DeviceId}");
 
-					PublishEntity(entity);
+						await rmDevice.AuthorizeAsync();
+
+						var vaultConfig = new BroadlinkDeviceData()
+						{
+							MacAddress = BitConverter.ToString(rmDevice.MacAddress),
+							DeviceId = BitConverter.ToString(rmDevice.DeviceId),
+							IpAddress = d.LocalIPEndPoint.ToString(),
+							EncryptKey = BitConverter.ToString(rmDevice.EncryptionKey)
+						};
+
+						entity.DeviceType = rmDevice.DeviceType;
+						entity.MacAddress = vaultConfig.MacAddress;
+						entity.Name = $"Broadlink_{entity.MacAddress}";
+
+						PublishEntity(entity);
+					}
+					else
+					{
+						var broadDevice = d as BroadlinkDevice;
+
+						var entity = BuildEntity<BroadlinkDeviceEvent>();
+
+						Logger.LogDebug($"Found Broadlink {d.DeviceId}");
+
+						await broadDevice.AuthorizeAsync();
+
+						var vaultConfig = new BroadlinkDeviceData()
+						{
+							MacAddress = BitConverter.ToString(broadDevice.MacAddress),
+							DeviceId = BitConverter.ToString(broadDevice.DeviceId),
+							IpAddress = d.LocalIPEndPoint.ToString(),
+							EncryptKey = BitConverter.ToString(broadDevice.EncryptionKey)
+						};
+
+						entity.DeviceType = broadDevice.DeviceType;
+						entity.MacAddress = vaultConfig.MacAddress;
+						entity.Name = $"Broadlink_{entity.MacAddress}";
+
+						PublishEntity(entity);
+						
+					}
+
 				});
 
 				SaveVault(_broadlinkVault);
@@ -76,7 +106,7 @@ namespace Neon.Engine.Components.Remote
 			{
 				Logger.LogError($"Error during discovery: {e.Message}");
 			}
-			
+
 		}
 
 		[ComponentPollRate((int)SchedulerServicePollingEnum.LongPolling)]
