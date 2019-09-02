@@ -16,7 +16,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using Jint.Parser;
+
 using Jint.Runtime;
 using Jint.Runtime.Interop;
 
