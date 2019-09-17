@@ -16,12 +16,16 @@ namespace Neon.Api.Data.Config.Root
 		[YamlMember(Alias = "components")]
 		public ComponentsConfig ComponentsConfig { get; set; }
 
+		[YamlMember(Alias = "notifiers")]
+		public NotifierConfig NotifierConfig { get; set; }
+
 		public NeonConfig()
 		{
 			EngineConfig = new EngineConfig();
 			ServicesConfig = new ServicesConfig();
 			HomeConfig = new HomeConfig();
 			ComponentsConfig = new ComponentsConfig();
+			NotifierConfig = new NotifierConfig();
 		}
 	}
 }

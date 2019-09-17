@@ -3,10 +3,8 @@ using System;
 
 namespace Neon.Api.Interfaces.Entity
 {
-	public interface INeonIoTEntity : INotification
+	public interface INeonIoTEntity : INotification, INeonEntity
 	{
-		Guid Id { get; set; }
-
 		string GroupName { get; set; }
 		string Name { get; set; }
 		string EntityType { get; set; }

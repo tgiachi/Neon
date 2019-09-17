@@ -67,7 +67,7 @@ namespace Neon.Engine.NoSqlConnector
 
 		}
 
-		public List<TEntity> List<TEntity>(string collectionName) where TEntity : INeonIoTEntity
+		public List<TEntity> List<TEntity>(string collectionName) where TEntity :class, INeonEntity
 		{
 			lock (_databaseLock)
 			{
@@ -76,7 +76,7 @@ namespace Neon.Engine.NoSqlConnector
 
 		}
 
-		public IQueryable<TEntity> Query<TEntity>(string collectionName) where TEntity : INeonIoTEntity
+		public IQueryable<TEntity> Query<TEntity>(string collectionName) where TEntity : class,INeonEntity
 		{
 			lock (_databaseLock)
 			{
@@ -84,7 +84,7 @@ namespace Neon.Engine.NoSqlConnector
 			}
 		}
 
-		public TEntity Insert<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity
+		public TEntity Insert<TEntity>(string collectionName, TEntity obj) where TEntity :class, INeonEntity
 		{
 			lock (_databaseLock)
 			{
@@ -93,19 +93,19 @@ namespace Neon.Engine.NoSqlConnector
 			}
 		}
 
-		public TEntity Update<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity
+		public TEntity Update<TEntity>(string collectionName, TEntity obj) where TEntity :class, INeonEntity
 		{
 			lock (_databaseLock)
 			{
 				var updated = _liteDatabase.GetCollection<TEntity>().Update(obj.Id, obj);
 
-				_logger.LogDebug($"Entity {obj.EntityType} updated: {updated}");
+				_logger.LogDebug($"Entity {obj.GetType().Name} updated: {updated}");
 
 				return obj;
 			}
 		}
 
-		public bool Delete<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity
+		public bool Delete<TEntity>(string collectionName, TEntity obj) where TEntity : class, INeonEntity
 		{
 			lock (_databaseLock)
 			{
