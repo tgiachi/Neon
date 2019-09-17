@@ -28,6 +28,8 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Neon.Api.Attributes.Notifiers;
+using Neon.Api.Data;
 
 
 namespace Neon.Api.Core
@@ -58,6 +60,8 @@ namespace Neon.Api.Core
 		private readonly List<WebHookReceiverData> _webHookReceiverData;
 
 		private readonly List<DiscoveryListenerData> _deviceDiscoveryListeners = new List<DiscoveryListenerData>();
+
+		private readonly List<NotifierData> _notifierData = new List<NotifierData>();
 
 		public bool IsRunningInDocker { get; }
 
@@ -201,6 +205,9 @@ namespace Neon.Api.Core
 			_logger.Debug("Registering Device Discovery Listeners");
 			RegisterDeviceDiscovery();
 
+			_logger.Debug("Registering Notifiers");
+			RegisterNotifiers();
+
 			ScanTypes();
 
 			_logger.Debug($"Registering Commands preload data");
@@ -219,6 +226,27 @@ namespace Neon.Api.Core
 				_containerBuilder.RegisterType(s).As(AssemblyUtils.GetInterfaceOfType(s)).SingleInstance();
 				AvailableServices.Add(s);
 			});
+		}
+
+		private void RegisterNotifiers()
+		{
+			_logger.Debug("Scan for Notifiers");
+			AssemblyUtils.GetAttribute<NotifierAttribute>().ForEach(n =>
+			{
+				var attr = n.GetCustomAttribute<NotifierAttribute>();
+
+				_logger.Debug($"Registering Notifier name {attr.Name} => {n.Name}");
+				_containerBuilder.RegisterType(n).SingleInstance();
+				_notifierData.Add(new NotifierData()
+				{
+					Name = attr.Name,
+					NotifierType = n,
+					NotifierConfigType = attr.ConfigType
+
+				});
+			});
+
+			_containerBuilder.Register(e => _notifierData).SingleInstance();
 		}
 
 		private void RegisterWebSockets()

@@ -7,7 +7,7 @@ namespace Neon.Api.Data.Entities
 	public class NeonIoTBaseEntity : INeonIoTEntity
 	{
 		[IgnorePropertyCompare]
-		public Guid Id { get; set; }
+		public string Id { get; set; }
 
 		public string Name { get; set; }
 
