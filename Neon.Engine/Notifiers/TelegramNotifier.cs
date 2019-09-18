@@ -24,15 +24,17 @@ namespace Neon.Engine.Notifiers
 	{
 		private TelegramNotifierConfig _telegramConfig;
 		private ITelegramBotClient _telegramBotClient;
-		private HttpClient _httpClient;
+		private readonly HttpClient _httpClient;
 		private readonly INoSqlService _noSqlService;
 		private INoSqlConnector _persistenceConnector;
-		private NeonConfig _neonConfig;
+		private IScriptEngineService _scriptEngineService;
+		private readonly NeonConfig _neonConfig;
 
 		private readonly ILogger _logger;
-		public TelegramNotifier(ILogger<TelegramNotifier> logger, INoSqlService noSqlService, NeonConfig neonConfig)
+		public TelegramNotifier(ILogger<TelegramNotifier> logger, INoSqlService noSqlService, NeonConfig neonConfig, IScriptEngineService scriptEngineService)
 		{
 			_logger = logger;
+			_scriptEngineService = scriptEngineService;
 			_neonConfig = neonConfig;
 			_noSqlService = noSqlService;
 			_httpClient = new HttpClient();
@@ -90,6 +92,9 @@ namespace Neon.Engine.Notifiers
 						if (args.Message.Text.ToLower() == "/myip")
 							await SendMyIp(args.Message.Chat.Id);
 
+						if (args.Message.Text.ToLower().StartsWith("/exec"))
+							await ExecuteCode(args.Message.Chat.Id, args.Message.Text);
+
 						if (args.Message.Text.ToLower() == "/enable_notify")
 							await EnableNotification(args.Message.Chat.Id);
 					}
@@ -105,6 +110,25 @@ namespace Neon.Engine.Notifiers
 			await _telegramBotClient.SendTextMessageAsync(chat, $"Neon v{AssemblyUtils.GetVersion()}");
 		}
 
+		private async Task ExecuteCode(ChatId chat, string message)
+		{
+			message = message.Replace("/exec", "");
+
+			try
+			{
+				var obj = _scriptEngineService.ExecuteCode(message);
+
+				await _telegramBotClient.SendTextMessageAsync(chat, $"{obj}",
+					ParseMode.Markdown);
+
+			}
+			catch (Exception ex)
+			{
+				await _telegramBotClient.SendTextMessageAsync(chat, $"Error during execute code: *{ex.Message}*",
+					ParseMode.Markdown);
+			}
+		}
+
 		private async Task SendMyIp(ChatId chat)
 		{
 			try
@@ -112,7 +136,6 @@ namespace Neon.Engine.Notifiers
 				var ipAddress = await _httpClient.GetStringAsync("https://api.ipify.org");
 				await _telegramBotClient.SendTextMessageAsync(chat, $"Ip Address is: *{ipAddress}*",
 					ParseMode.Markdown);
-
 			}
 			catch (Exception ex)
 			{
