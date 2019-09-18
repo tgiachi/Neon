@@ -16,7 +16,7 @@ namespace Neon.Api.Data.Config.Root
 		{
 			DirectoryConfig = new DirectoryConfig()
 			{
-				DirectoryName = "Notifiers"
+				DirectoryName = "notifiers"
 			};
 		}
 	}

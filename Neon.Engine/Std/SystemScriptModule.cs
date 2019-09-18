@@ -3,7 +3,9 @@ using Neon.Api.Data.ScriptEngine;
 using Neon.Api.Interfaces.Services;
 using System;
 using System.Linq;
+
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace Neon.Engine.Std
 {
@@ -28,6 +30,24 @@ namespace Neon.Engine.Std
 		public void ExecuteTask(string taskName, Delegate function, Delegate callback)
 		{
 			Task.Factory.StartNew(() => function.DynamicInvoke()).ContinueWith(task => callback.DynamicInvoke(taskName));
+		}
+
+		[ScriptFunction("setTimeout", "Set timeout")]
+		public void SetTimeout(Action function, int delay)
+		{
+			var timer = new Timer(delay) { AutoReset = false };
+			timer.Elapsed += (sender, args) => function.Invoke();
+			timer.Enabled = true;
+			timer.Start();
+		}
+
+		[ScriptFunction("setInterval", "Set interval")]
+		public void SetInterval(Action function, int delay)
+		{
+			var timer = new Timer(delay) { AutoReset = true };
+			timer.Elapsed += (sender, args) => function.Invoke();
+			timer.Enabled = true;
+			timer.Start();
 		}
 	}
 }

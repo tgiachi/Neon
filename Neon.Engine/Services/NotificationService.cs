@@ -23,7 +23,6 @@ namespace Neon.Engine.Services
 		private readonly IFileSystemManager _fileSystemManager;
 		private readonly INeonManager _neonManager;
 		private readonly List<NotifierData> _notifierData;
-		private readonly NeonConfig _neonConfig;
 		private readonly string _notifierConfigDirectory;
 		private readonly Dictionary<string, INotifier> _runningNotifiers = new Dictionary<string, INotifier>();
 
@@ -34,13 +33,15 @@ namespace Neon.Engine.Services
 			_mediator = mediator;
 			_neonManager = neonManager;
 			_notifierData = notifierData;
-			_neonConfig = neonConfig;
 			_notifierConfigDirectory = neonConfig.NotifierConfig.DirectoryConfig.DirectoryName;
 		}
 
 		public void NotifyConnector(string connectorName, string text, params object[] args)
 		{
-
+			if (_runningNotifiers.ContainsKey(connectorName))
+			{
+				_runningNotifiers[connectorName].Notify(text, args);
+			}
 		}
 
 		public async void Broadcast<T>(object obj) where T : INotification
@@ -65,7 +66,6 @@ namespace Neon.Engine.Services
 		private void EnsureComponentsDirectory()
 		{
 			_fileSystemManager.CreateDirectory(_notifierConfigDirectory);
-
 		}
 
 		public async Task<bool> Start()
@@ -76,11 +76,12 @@ namespace Neon.Engine.Services
 
 		}
 
-		private Task StartNotifiers()
+		private async Task StartNotifiers()
 		{
-			_notifierData.ForEach(async n => await StartNotifier(n));
-
-			return Task.CompletedTask;
+			foreach (var notifierData in _notifierData)
+			{
+				await StartNotifier(notifierData);
+			}
 
 		}
 
