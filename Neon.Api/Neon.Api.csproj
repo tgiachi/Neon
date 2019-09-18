@@ -7,6 +7,16 @@
     <AssemblyVersion>0.0.5.0</AssemblyVersion>
     <FileVersion>0.0.5.0</FileVersion>
     <Version>0.5.0</Version>
+    <Authors>@tgiachi</Authors>
+    <Company>@tgiachi</Company>
+    <Product />
+    <Description></Description>
+    <Copyright />
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/tgiachi/Neon</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/tgiachi/Neon</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>neon neonApi homeControl home-automation</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,7 +25,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Jint" Version="3.0.0-beta-1598" />
     <PackageReference Include="MediatR" Version="7.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />

@@ -15,9 +15,9 @@ services:
     embedded_server_port: 1883
   script_engine:
     scripts_directory:
-      name: Scripts
+      name: scripts
     modules_directory:
-      name: Modules
+      name: modules
     write_output_on_log: true
   iot:
     entities_database:
@@ -41,6 +41,9 @@ components:
   - name: philip_hue
   - name: spotify
   config_directory:
-    name: Components
+    name: components
   vault_directory:
-    name: Vault
+    name: vault
+notifiers:
+  notifier_config_directory:
+    name: notifiers

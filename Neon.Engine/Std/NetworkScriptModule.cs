@@ -10,7 +10,7 @@ namespace Neon.Engine.Std
 	[ScriptModule]
 	public class NetworkScriptModule
 	{
-		[ScriptFunction("wakeup_on_lan", "Send magic packet for wake up")]
+		[ScriptFunction("wake_on_lan", "Send magic packet for wake up")]
 		public void WakeUpLan(string macAddress)
 		{
 			NetworkUtils.SendWakeUpOnLanPackage(macAddress);
