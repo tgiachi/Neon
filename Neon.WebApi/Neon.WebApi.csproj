@@ -33,9 +33,6 @@
     <PackageReference Include="WebSocketManager" Version="1.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Neon.Api\Neon.Api.csproj" />
