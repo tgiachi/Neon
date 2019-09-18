@@ -18,13 +18,14 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Neon.Api.Utils;
 
 namespace Neon.Engine.Services
 {
 	[NeonService("IoT Service", "Manage IoT entities", 2)]
 	public class IoTService : IIoTService, INotificationHandler<INeonIoTEntity>
 	{
-		private static string EntitiesCollectionName = "entities";
+		private static readonly string EntitiesCollectionName = "entities";
 
 		private readonly IoTConfig _config;
 		private readonly INoSqlService _noSqlService;
@@ -67,12 +68,12 @@ namespace Neon.Engine.Services
 
 		public Task PersistEntity<T>(T entity) where T : class, INeonIoTEntity
 		{
-			T obj = default;
+			T obj = default(T);
 			entity.EventDateTime = DateTime.Now;
 			entity.EntityType = entity.GetType().FullName;
 
 			if (string.IsNullOrEmpty(entity.Id))
-				entity.Id = Guid.NewGuid().ToString();
+				entity.Id = EntitiesUtils.GenerateId();
 
 			if (string.IsNullOrEmpty(entity.Name))
 				obj = _entitiesConnector.Query<T>(EntitiesCollectionName).FirstOrDefault(e => e.EntityType == typeof(T).FullName && e.GroupName == entity.GroupName);
@@ -117,7 +118,7 @@ namespace Neon.Engine.Services
 			if (attr != null)
 				collectionName = attr.CollectionName;
 
-			entity.Id = Guid.NewGuid().ToString();
+			entity.Id = EntitiesUtils.GenerateId();
 
 			_eventsConnector.Insert(collectionName, entity);
 		}

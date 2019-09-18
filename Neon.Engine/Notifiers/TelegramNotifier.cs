@@ -38,9 +38,16 @@ namespace Neon.Engine.Notifiers
 			_httpClient = new HttpClient();
 		}
 
-		public Task<bool> Notify(string text, params object[] args)
+		public async Task<bool> Notify(string text, params object[] args)
 		{
-			return Task.FromResult(true);
+			var toNotify = _persistenceConnector.Query<TelegramNotifierEntity>("notifiers").Where(e => e.IsEnabled).ToList();
+
+			foreach (var entity in toNotify)
+			{
+				await _telegramBotClient.SendTextMessageAsync(entity.ChatId, text, ParseMode.Markdown);
+			}
+
+			return true;
 		}
 
 		public Task<bool> Init(object config)
@@ -161,7 +168,7 @@ namespace Neon.Engine.Notifiers
 		public void Dispose()
 		{
 			_httpClient?.Dispose();
-			_telegramBotClient.StopReceiving();
+			_telegramBotClient?.StopReceiving();
 		}
 	}
 }
