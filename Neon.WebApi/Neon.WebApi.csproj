@@ -34,10 +34,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Neon.Api\Neon.Api.csproj" />
     <ProjectReference Include="..\Neon.Engine\Neon.Engine.csproj" />
   </ItemGroup>
