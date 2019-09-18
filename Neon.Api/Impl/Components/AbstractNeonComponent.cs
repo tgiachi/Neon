@@ -75,7 +75,7 @@ namespace Neon.Api.Impl.Components
 			return Task.FromResult(true);
 		}
 
-		protected async void PublishEntity<T>(T entity) where T : INeonIoTEntity
+		protected async void PublishEntity<T>(T entity) where T : class, INeonIoTEntity
 		{
 			await IoTService.PersistEntity(entity);
 		}
@@ -97,7 +97,7 @@ namespace Neon.Api.Impl.Components
 			{
 				GroupName = attribute == null ? typeof(TEntity).Name.ToUpper() : attribute.Group,
 				Name = attribute?.Name ?? typeof(TEntity).Name.ToUpper(),
-				Id = Guid.NewGuid(),
+				Id = Guid.NewGuid().ToString(),
 				EventDateTime = DateTime.Now,
 				EntityType = typeof(TEntity).FullName
 			};

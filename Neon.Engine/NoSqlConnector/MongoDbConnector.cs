@@ -47,30 +47,30 @@ namespace Neon.Engine.NoSqlConnector
 			return Task.FromResult(true);
 		}
 
-		public List<TEntity> List<TEntity>(string collectionName) where TEntity : INeonIoTEntity
+		public List<TEntity> List<TEntity>(string collectionName) where TEntity : class, INeonEntity
 		{
 			return _mongoDatabase.GetCollection<TEntity>(collectionName).FindSync(entity => true).ToList();
 		}
 
-		public IQueryable<TEntity> Query<TEntity>(string collectionName) where TEntity : INeonIoTEntity
+		public IQueryable<TEntity> Query<TEntity>(string collectionName) where TEntity : class, INeonEntity
 		{
 			return _mongoDatabase.GetCollection<TEntity>(collectionName).AsQueryable();
 		}
 
-		public TEntity Insert<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity
+		public TEntity Insert<TEntity>(string collectionName, TEntity obj) where TEntity : class, INeonEntity
 		{
 			_mongoDatabase.GetCollection<TEntity>(collectionName).InsertOne(obj);
 			return obj;
 		}
 
-		public TEntity Update<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity
+		public TEntity Update<TEntity>(string collectionName, TEntity obj) where TEntity : class, INeonEntity
 		{
 			var replaceResult = _mongoDatabase.GetCollection<TEntity>(collectionName).ReplaceOne(entity => entity.Id == obj.Id, obj);
 
 			return obj;
 		}
 
-		public bool Delete<TEntity>(string collectionName, TEntity obj) where TEntity : INeonIoTEntity
+		public bool Delete<TEntity>(string collectionName, TEntity obj) where TEntity : class, INeonEntity
 		{
 			var result = _mongoDatabase.GetCollection<TEntity>(collectionName).DeleteOne(entity => entity.Id == obj.Id);
 

@@ -18,13 +18,14 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Neon.Api.Utils;
 
 namespace Neon.Engine.Services
 {
 	[NeonService("IoT Service", "Manage IoT entities", 2)]
 	public class IoTService : IIoTService, INotificationHandler<INeonIoTEntity>
 	{
-		private static string EntitiesCollectionName = "entities";
+		private static readonly string EntitiesCollectionName = "entities";
 
 		private readonly IoTConfig _config;
 		private readonly INoSqlService _noSqlService;
@@ -65,14 +66,14 @@ namespace Neon.Engine.Services
 			await _eventsConnector.Start();
 		}
 
-		public Task PersistEntity<T>(T entity) where T : INeonIoTEntity
+		public Task PersistEntity<T>(T entity) where T : class, INeonIoTEntity
 		{
-			T obj = default;
+			T obj = default(T);
 			entity.EventDateTime = DateTime.Now;
 			entity.EntityType = entity.GetType().FullName;
 
-			if (entity.Id == Guid.Empty)
-				entity.Id = Guid.NewGuid();
+			if (string.IsNullOrEmpty(entity.Id))
+				entity.Id = EntitiesUtils.GenerateId();
 
 			if (string.IsNullOrEmpty(entity.Name))
 				obj = _entitiesConnector.Query<T>(EntitiesCollectionName).FirstOrDefault(e => e.EntityType == typeof(T).FullName && e.GroupName == entity.GroupName);
@@ -98,7 +99,7 @@ namespace Neon.Engine.Services
 			return Task.CompletedTask;
 		}
 
-		public IObservable<T> GetEventStream<T>() where T : INeonIoTEntity
+		public IObservable<T> GetEventStream<T>() where T : class, INeonIoTEntity
 		{
 			return _iotEntitiesBus.OfType<T>();
 		}
@@ -109,7 +110,7 @@ namespace Neon.Engine.Services
 			_iotEntitiesBus.OnNext(@event);
 		}
 
-		private void PersistEvent<T>(T entity) where T : INeonIoTEntity
+		private void PersistEvent<T>(T entity) where T : class, INeonIoTEntity
 		{
 			var collectionName = entity.GetType().Name.ToLower().Pluralize();
 			var attr = entity.GetType().GetCustomAttribute<EventsCollectionAttribute>();
@@ -117,7 +118,7 @@ namespace Neon.Engine.Services
 			if (attr != null)
 				collectionName = attr.CollectionName;
 
-			entity.Id = Guid.NewGuid();
+			entity.Id = EntitiesUtils.GenerateId();
 
 			_eventsConnector.Insert(collectionName, entity);
 		}
@@ -158,7 +159,7 @@ namespace Neon.Engine.Services
 				document.Name == name && document.EntityType == type);
 		}
 
-		public List<T> GetEntitiesByType<T>() where T : INeonIoTEntity
+		public List<T> GetEntitiesByType<T>() where T : class, INeonIoTEntity
 		{
 			return _entitiesConnector.Query<T>(EntitiesCollectionName).Where(e => e.EntityType == typeof(T).FullName)
 				.ToList();

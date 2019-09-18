@@ -7,6 +7,7 @@ using Neon.Api.Interfaces.Services;
 using Neon.Engine.Components.Configs;
 using Neon.Engine.Components.Events;
 using System.Threading.Tasks;
+using DarkSky.Models;
 
 namespace Neon.Engine.Components.Weather
 {
@@ -35,7 +36,7 @@ namespace Neon.Engine.Components.Weather
 		public override async Task Poll()
 		{
 			var forecast = await _darkSkyService.GetForecast(_homeConfig.CoordinateConfig.Latitude,
-				_homeConfig.CoordinateConfig.Longitude, new DarkSkyService.OptionalParameters()
+				_homeConfig.CoordinateConfig.Longitude, new OptionalParameters()
 				{
 					LanguageCode = Config.LanguageCode,
 					MeasurementUnits = Config.MeasurementUnits

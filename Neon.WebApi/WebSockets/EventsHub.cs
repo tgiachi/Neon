@@ -12,7 +12,6 @@ namespace Neon.WebApi.WebSockets
 	[WebSocketHub("/ws/events")]
 	public class EventsHub : WebSocketHandler
 	{
-
 		public EventsHub(WebSocketConnectionManager webSocketConnectionManager, IIoTService ioTService) : base(webSocketConnectionManager)
 		{
 			ioTService.GetEventStream<INeonIoTEntity>().Subscribe(async entity =>

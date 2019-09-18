@@ -14,6 +14,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text;
 using System.Threading.Tasks;
+using Neon.Api.Utils;
 
 namespace Neon.Engine.Services
 {
@@ -55,7 +56,7 @@ namespace Neon.Engine.Services
 
 		private async Task ConnectToServer()
 		{
-			var clientOptions = new MqttClientOptionsBuilder().WithClientId($"Neon-Server-{Guid.NewGuid().ToString()}");
+			var clientOptions = new MqttClientOptionsBuilder().WithClientId($"Neon-Server-{EntitiesUtils.GenerateId()}");
 			if (_config.UseEmbeddedServer)
 			{
 				clientOptions = clientOptions.WithTcpServer("127.0.0.1", _config.EmbeddedServerPort);
