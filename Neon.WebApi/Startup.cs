@@ -13,7 +13,9 @@ using Neon.Api.Data.Config.Root;
 using Neon.Api.Logger;
 using Neon.Api.Utils;
 using System;
+using System.IO;
 using System.Reflection;
+using Microsoft.Extensions.FileProviders;
 using WebSocketManager;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -68,6 +70,10 @@ namespace Neon.WebApi
 		public async void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime appLifetime)
 		{
 
+			app.UseDefaultFiles();
+			app.UseStaticFiles();
+
+
 			appLifetime.ApplicationStopped.Register(async () => await Program.NeonManager.Shutdown());
 
 			if (env.IsDevelopment())
@@ -107,7 +113,7 @@ namespace Neon.WebApi
 
 				app.MapWebSocketManager(wsAttr.Path, ApplicationContainer.Resolve(t) as WebSocketHandler);
 			});
-
+			
 			app.UseMvc();
 
 			await Program.NeonManager.Start();

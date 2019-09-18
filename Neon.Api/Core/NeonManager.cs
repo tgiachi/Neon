@@ -97,13 +97,14 @@ namespace Neon.Api.Core
 
 		private void PrintHeader()
 		{
-			Console.WriteLine(@" 
+			Console.WriteLine($@" 
  _   _                  
 | \ | |                 
 |  \| | ___  ___  _ __  
 | . ` |/ _ \/ _ \| '_ \ 
 | |\  |  __/ (_) | | | |
-\_| \_/\___|\___/|_| |_|                       
+\_| \_/\___|\___/|_| |_|
+:: Home Control v {AssemblyUtils.GetVersion()}
                         ");
 			Console.WriteLine($"Starting Neon (branch {ThisAssembly.Git.Branch}) {ThisAssembly.Git.Commit} sha: {ThisAssembly.Git.Sha}");
 		}
@@ -120,7 +121,7 @@ namespace Neon.Api.Core
 					.WriteTo.File(new CompactJsonFormatter(), "logs/Neon.log",
 						rollingInterval: RollingInterval.Day)
 					.WriteTo.Console(
-						theme: AnsiConsoleTheme.Literate,
+						theme: AnsiConsoleTheme.Code,
 						outputTemplate:
 						"{Timestamp:HH:mm:ss} [{Level}] [{SourceContext:u3}] {Message}{NewLine}{Exception}")
 					.CreateLogger();

@@ -6,7 +6,18 @@ EXPOSE 1883
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
 WORKDIR /src
 RUN git clone https://github.com/tgiachi/Neon.git /src
+# Install NodeJs and compile frontend
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+RUN curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN apt-get update
+RUN apt-get install -y nodejs yarn
+WORKDIR /src/neon-frontend
+RUN yarn install
+RUN yarn build
+WORKDIR /src
+RUN cp -Rf neon-frontend/build/* Neon.WebApi/wwwroot
 RUN dotnet restore  
+
 COPY . .
 WORKDIR /src/Neon.WebApi
 RUN dotnet build -c Release -o /app
