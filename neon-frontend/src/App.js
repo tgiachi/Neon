@@ -1,26 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { ThemeProvider, ColorModeProvider, CSSReset } from "@chakra-ui/core";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Box } from "@chakra-ui/core";
+import HomeView  from "./views/home"
+import JsEditorComponent from "./components/js_editor";
+import WebSocketComponent from './components/websocket';
+
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider>
+      <CSSReset />
+      <ColorModeProvider>
+        <Router>
+          <WebSocketComponent />
+          <div>
+            <Box w="90%">
+              <JsEditorComponent />
+            </Box>
+            <Route exact path="/" component={HomeView} />
+          </div>
+        </Router>
+      </ColorModeProvider>
+    </ThemeProvider>
   );
 }
+
+
+
 
 export default App;

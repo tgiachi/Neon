@@ -61,6 +61,8 @@ namespace Neon.Engine.Components.Weather
 				if (forecast.Response.Currently.PrecipProbability != null)
 					entity.PrecipProbability = forecast.Response.Currently.PrecipProbability.Value * 100;
 
+				entity.PrecipType = forecast.Response.Currently.PrecipType.ToString();
+
 				PublishEntity(entity);
 			}
 			else

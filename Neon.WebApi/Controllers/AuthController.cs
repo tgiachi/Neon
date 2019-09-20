@@ -47,10 +47,10 @@ namespace Neon.WebApi.Controllers
 					oAuthResult.Status = HttpContext.Request.Query["status"];
 
 				oauthReceiver?.OnOAuthReceived(providerData.ProviderName, oAuthResult);
-				return Ok();
+				return Ok("ok");
 			}
 
-			return NotFound();
+			return NotFound("oAuth Receiver not found!");
 		}
 	}
 }

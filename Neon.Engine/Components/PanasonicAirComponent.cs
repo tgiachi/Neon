@@ -90,7 +90,17 @@ namespace Neon.Engine.Components
 			}
 			catch (Exception ex)
 			{
-				Logger.LogError($"Error during get Device groups {ex.Message}");
+				if (ex.Message == "Got HTTP Unauthorized: {\"message\":\"Token expires\",\"code\":4100}")
+				{
+					Logger.LogWarning($"Panasonic Token expired, re login");
+					_panasonicAirVault.AccessToken = "";
+					await Login();
+				}
+				else
+				{
+					Logger.LogError($"Error during get Device groups {ex.Message}");
+
+				}
 			}
 		}
 

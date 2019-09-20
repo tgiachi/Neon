@@ -64,6 +64,7 @@ namespace Neon.Engine.Notifiers
 			if (_telegramConfig.ApiKey == "change_me")
 			{
 				_logger.LogError($"Telegram notifier need api on config!");
+
 				return false;
 			}
 			else

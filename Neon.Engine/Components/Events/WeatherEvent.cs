@@ -16,6 +16,8 @@ namespace Neon.Engine.Components.Events
 
 		public double PrecipProbability { get; set; }
 
+		public string PrecipType { get; set; }
+
 		public string Icon { get; set; }
 
 	}
