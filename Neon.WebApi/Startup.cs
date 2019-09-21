@@ -44,7 +44,13 @@ namespace Neon.WebApi
 
 			services.AddCors(c =>
 			{
-				c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+				c.AddPolicy("AllowOrigin", options =>
+				{
+					options
+						.AllowAnyHeader()
+						.AllowAnyOrigin()
+						.AllowCredentials();
+				});
 			});
 
 
@@ -98,7 +104,7 @@ namespace Neon.WebApi
 				ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
 			});
 
-			app.UseCors(options => options.AllowAnyOrigin());
+			app.UseCors("AllowOrigin");
 			//app.UseHttpsRedirection();
 
 			if (_config.EngineConfig.UseSwagger)
@@ -121,7 +127,7 @@ namespace Neon.WebApi
 
 				app.MapWebSocketManager(wsAttr.Path, ApplicationContainer.Resolve(t) as WebSocketHandler);
 			});
-			
+
 			app.UseMvc();
 
 			await Program.NeonManager.Start();

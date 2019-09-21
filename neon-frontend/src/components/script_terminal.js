@@ -26,6 +26,24 @@ class ScriptTerminalComponent extends React.Component {
   }
 
 
+  sendCommand(cmd, print)
+  {
+    console.log(encodeURIComponent(cmd));
+    fetch('http://localhost:5000/api/scriptengine/execute/script', {
+      method: 'POST',
+      headers: 
+      { 'Content-Type': 'application/json'
+    },
+      body: encodeURIComponent(cmd)
+    }).then(data => data.json()).then(result => {
+      print(JSON.stringify(result));
+      
+    })
+    print('OK');
+
+  }
+
+
   downloadCommands() {
     fetch("http://localhost:5000/api/scriptengine/functions").then(response => response.json()).then(data => {
       const commands = {};
@@ -62,6 +80,7 @@ class ScriptTerminalComponent extends React.Component {
           backgroundColor='black'
           commands={this.state.commands}
           barColor='black'
+          commandPassThrough={(cmd, print) => this.sendCommand(cmd, print)}
           style={{ fontWeight: "bold", fontSize: "1em" }}
           msg={this.state.title}
         />
