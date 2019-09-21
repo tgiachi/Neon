@@ -1,15 +1,16 @@
 ﻿using System;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Neon.Api.Utils
 {
 	public static class YamlUtils
 	{
 		private static readonly IDeserializer Deserializer =
-			new DeserializerBuilder().Build();
+			new DeserializerBuilder().WithNamingConvention(new UnderscoredNamingConvention()).Build();
 
 		private static readonly ISerializer Serializer =
-			new SerializerBuilder().Build();
+			new SerializerBuilder().WithNamingConvention(new UnderscoredNamingConvention()).Build();
 
 
 		public static string ToYaml(this object obj)

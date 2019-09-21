@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Neon.Api.Data.FileSystem;
 
 namespace Neon.Api.Interfaces.Managers
 {
@@ -7,6 +9,7 @@ namespace Neon.Api.Interfaces.Managers
 		void CreateDirectory(string directory);
 
 		string BuildFilePath(string path);
+
 		void Start();
 
 		void Stop();
@@ -21,5 +24,9 @@ namespace Neon.Api.Interfaces.Managers
 		object ReadFromFile(string filename, Type type);
 
 		string ReadFromFile(string filename);
+
+		FileSystemLsResult LsDirectory(string directory);
+
+		FileSystemContent GetFile(string filename);
 	}
 }

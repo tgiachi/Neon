@@ -3,8 +3,11 @@ using Neon.Api.Interfaces.Managers;
 using Neon.Api.Utils;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Neon.Api.Data.FileSystem;
+using NodaTime.Text;
 
 
 namespace Neon.Api.Core
@@ -98,6 +101,46 @@ namespace Neon.Api.Core
 		public string ReadFromFile(string filename)
 		{
 			return File.ReadAllText(Path.Combine(_rootDirectory, filename));
+		}
+
+		public  FileSystemLsResult LsDirectory(string directory)
+		{
+			var lsResult = new FileSystemLsResult() {Directory = directory};
+			directory = BuildFilePath(directory);
+
+			if (!Directory.Exists(directory)) return lsResult;
+			var fileResult = Directory.GetFiles(directory);
+
+			foreach (var f in fileResult)
+			{
+				lsResult.Files.Add(new FileSystemFileInfoResult()
+				{
+					FileName = Path.GetFileName(f),
+					FileSize =  new FileInfo(f).Length
+				} );
+			}
+
+			return lsResult;
+
+		}
+
+		public FileSystemContent GetFile(string filename)
+		{
+			var result = new FileSystemContent()
+			{
+				FileName = filename,
+				FileSize = -1,
+			};
+
+			filename = BuildFilePath(filename);
+
+			if (!File.Exists(filename)) return result;
+
+			result.Content = File.ReadAllText(filename);
+			result.FileSize = new FileInfo(filename).Length;
+
+
+			return result;
 		}
 	}
 }

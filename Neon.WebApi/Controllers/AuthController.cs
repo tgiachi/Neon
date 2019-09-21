@@ -10,7 +10,7 @@ using System.Linq;
 namespace Neon.WebApi.Controllers
 {
 	[ApiController]
-	[Route("oauth")]
+	[Route("api/oauth")]
 	public class AuthController : ControllerBase
 	{
 		private readonly ILogger _logger;

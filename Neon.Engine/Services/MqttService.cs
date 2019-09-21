@@ -90,6 +90,8 @@ namespace Neon.Engine.Services
 
 			_mqttClient.UseApplicationMessageReceivedHandler(args =>
 			{
+				if (args.ApplicationMessage.Payload == null)
+					args.ApplicationMessage.Payload = Encoding.UTF8.GetBytes("");
 				OnMessageReceived(args.ApplicationMessage.Topic, Encoding.UTF8.GetString(args.ApplicationMessage.Payload));
 			});
 

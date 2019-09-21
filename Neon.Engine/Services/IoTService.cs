@@ -159,6 +159,13 @@ namespace Neon.Engine.Services
 				document.Name == name && document.EntityType == type);
 		}
 
+		public List<INeonIoTEntity> GetEntities()
+		{
+			var entities = _entitiesConnector.Query<NeonIoTBaseEntity>(EntitiesCollectionName).ToList();
+
+			return new List<INeonIoTEntity>();
+		}
+
 		public List<T> GetEntitiesByType<T>() where T : class, INeonIoTEntity
 		{
 			return _entitiesConnector.Query<T>(EntitiesCollectionName).Where(e => e.EntityType == typeof(T).FullName)

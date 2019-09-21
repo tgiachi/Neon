@@ -1,6 +1,6 @@
 import React from 'react';
 import Websocket from 'react-websocket';
-import { List, ListItem, ListIcon } from "@chakra-ui/core";
+import { List, ListItem, ListIcon, useToast  } from "@chakra-ui/core";
 class WebSocketComponent extends React.Component{
 
   constructor(props){
@@ -21,8 +21,9 @@ class WebSocketComponent extends React.Component{
   }
   handleData(data) {
     let result = JSON.parse(data);
-    if (result.messageType !== 2)
-      this.setState({ messages:  [...this.state.messages ,result] })
+    if (result.messageType !== 2) {
+        this.setState({ messages:  [...this.state.messages ,result] })
+      }
     console.log(result);
   }
 }

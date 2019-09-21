@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Neon.WebApi.Controllers
 {
 	[ApiController]
-	[Route("/components")]
+	[Route("api/components")]
 	public class ComponentsController : ControllerBase
 	{
 		private readonly IComponentsService _componentsService;
@@ -18,14 +18,14 @@ namespace Neon.WebApi.Controllers
 			_componentsService = componentsService;
 		}
 
-		[Route("/available")]
+		[Route("available")]
 		[HttpGet]
 		public ActionResult<List<AvailableComponent>> GetAvailableComponents()
 		{
 			return Ok(_componentsService.AvailableComponents);
 		}
 
-		[Route("/running")]
+		[Route("running")]
 		[HttpGet]
 		public ActionResult<List<ComponentData>> GetRunningComponents()
 		{
@@ -33,7 +33,7 @@ namespace Neon.WebApi.Controllers
 		}
 
 		[HttpPost]
-		[Route("/start/{name}")]
+		[Route("start/{name}")]
 		public async Task<ActionResult<bool>> StartComponent(string name)
 		{
 			return Ok(await _componentsService.LoadComponent(name));

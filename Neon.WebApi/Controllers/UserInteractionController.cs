@@ -4,7 +4,7 @@ using Neon.Api.Interfaces.Services;
 
 namespace Neon.WebApi.Controllers
 {
-	[Route("/user/interaction")]
+	[Route("api/user/interaction")]
 	public class UserInteractionController : ControllerBase
 	{
 
@@ -16,10 +16,19 @@ namespace Neon.WebApi.Controllers
 		}
 
 		[HttpGet]
-		[Route("/requests")]
+		[Route("requests")]
 		public ActionResult<UserInteractionData> GetData()
 		{
 			return Ok(_interactionService.NeedUserInteractionData);
+		}
+
+		[HttpPost]
+		[Route("perform")]
+		public ActionResult<bool> PerformUserInteraction([FromBody] UserInteractionInput input)
+		{
+			_interactionService.CompileEntry(input.Name, input.Field, input.Value);
+			return Ok(true);
+
 		}
 	}
 }

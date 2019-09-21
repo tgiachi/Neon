@@ -17,7 +17,7 @@ namespace Neon.Api.Data.Config.Plugins
 		{
 			PluginAuthorConfig = new PluginAuthorConfig();
 			PluginInfoConfig = new PluginInfoConfig();
-			PluginDllName = string.Empty;
+			PluginDllName = "plugin.dll";
 		}
 	}
 }

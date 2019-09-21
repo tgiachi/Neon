@@ -7,7 +7,7 @@ namespace Neon.WebApi.Controllers
 {
 
 	[ApiController]
-	[Route("/commands")]
+	[Route("api/commands")]
 	public class CommandsController : ControllerBase
 	{
 		private readonly ICommandDispatcherService _commandDispatcherService;

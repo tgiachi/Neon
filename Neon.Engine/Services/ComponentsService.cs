@@ -215,7 +215,7 @@ namespace Neon.Engine.Services
 
 		private static string GetComponentConfigFileName(ComponentData component)
 		{
-			return $"{component.Info.Name}.yml";
+			return $"{component.Info.Name}.yaml";
 		}
 
 		private static List<ComponentPollMethodData> GetComponentPollAttribute(Type component)

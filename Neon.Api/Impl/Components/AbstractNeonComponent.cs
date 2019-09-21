@@ -15,6 +15,7 @@ namespace Neon.Api.Impl.Components
 	public abstract class AbstractNeonComponent<TConfig> : INeonComponent where TConfig : INeonComponentConfig, new()
 	{
 		protected ILogger Logger { get; }
+
 		public string ComponentId { get; set; }
 
 		protected IIoTService IoTService { get; }
@@ -65,8 +66,6 @@ namespace Neon.Api.Impl.Components
 			throw ex;
 
 		}
-
-
 
 		public virtual Task<bool> Init(object config)
 		{

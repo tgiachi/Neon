@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="CompareNETObjects" Version="4.63.0" />
     <PackageReference Include="DarkSkyCore" Version="6.0.0" />
+    <PackageReference Include="Docker.DotNet" Version="3.125.2" />
     <PackageReference Include="FluentScheduler" Version="5.3.0" />
     <PackageReference Include="GeoCoordinate.NetCore" Version="1.0.0.1" />
     <PackageReference Include="GoogleCast" Version="1.6.7" />
@@ -20,6 +21,7 @@
     <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.9.1" />
     <PackageReference Include="MQTTnet" Version="3.0.8" />
+    <PackageReference Include="NewsAPI" Version="0.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="NReco.LambdaParser" Version="1.0.10" />
     <PackageReference Include="Q42.HueApi" Version="3.11.0" />

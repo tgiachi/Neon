@@ -8,7 +8,7 @@ using System.Linq;
 namespace Neon.WebApi.Controllers
 {
 	[ApiController]
-	[Route("/hooks")]
+	[Route("api/hooks")]
 	public class HooksController : ControllerBase
 	{
 

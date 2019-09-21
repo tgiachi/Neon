@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Neon.Api.Attributes.Notifiers;
 using Neon.Api.Data.Config.Root;
+using Neon.Api.Data.UserInteraction;
 using Neon.Api.Interfaces.NoSql;
 using Neon.Api.Interfaces.Notifiers;
 using Neon.Api.Interfaces.Services;
@@ -26,15 +27,17 @@ namespace Neon.Engine.Notifiers
 		private ITelegramBotClient _telegramBotClient;
 		private readonly HttpClient _httpClient;
 		private readonly INoSqlService _noSqlService;
-		private INoSqlConnector _persistenceConnector;
-		private IScriptEngineService _scriptEngineService;
+		private readonly IScriptEngineService _scriptEngineService;
+		private readonly IUserInteractionService _userInteractionService;
 		private readonly NeonConfig _neonConfig;
+		private INoSqlConnector _persistenceConnector;
 
 		private readonly ILogger _logger;
-		public TelegramNotifier(ILogger<TelegramNotifier> logger, INoSqlService noSqlService, NeonConfig neonConfig, IScriptEngineService scriptEngineService)
+		public TelegramNotifier(ILogger<TelegramNotifier> logger, INoSqlService noSqlService, NeonConfig neonConfig, IScriptEngineService scriptEngineService, IUserInteractionService userInteractionService)
 		{
 			_logger = logger;
 			_scriptEngineService = scriptEngineService;
+			_userInteractionService = userInteractionService;
 			_neonConfig = neonConfig;
 			_noSqlService = noSqlService;
 			_httpClient = new HttpClient();
@@ -64,6 +67,17 @@ namespace Neon.Engine.Notifiers
 			if (_telegramConfig.ApiKey == "change_me")
 			{
 				_logger.LogError($"Telegram notifier need api on config!");
+				_userInteractionService.AddUserInteractionData(new UserInteractionData()
+				{
+					Name = GetType().Name,
+					Fields = new List<UserInteractionField>()
+					{
+						new UserInteractionField() {FieldName = "Api key", Description = "Telegram bot Api key", FieldType = UserInteractionFieldTypeEnum.String, IsRequired = true,}
+					}
+				}, data =>
+				{
+
+				});
 
 				return false;
 			}

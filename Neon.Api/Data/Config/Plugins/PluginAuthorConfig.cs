@@ -10,5 +10,12 @@ namespace Neon.Api.Data.Config.Plugins
 		[YamlMember(Alias = "author_email")]
 		public string Email { get; set; } = string.Empty;
 
+
+		public PluginAuthorConfig()
+		{
+			Name = "none";
+			Email = "none@none";
+		}
+
 	}
 }

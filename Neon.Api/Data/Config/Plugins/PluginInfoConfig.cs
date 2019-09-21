@@ -13,5 +13,13 @@ namespace Neon.Api.Data.Config.Plugins
 		[YamlMember(Alias = "description")]
 		public string PluginDescription { get; set; } = string.Empty;
 
+
+		public PluginInfoConfig()
+		{
+			PluginName = "plugin_test";
+			PluginVersion = "v1.0.0.0";
+			PluginDescription = "This is test plugin";
+		}
+
 	}
 }

@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.FileProviders;
+using Newtonsoft.Json.Serialization;
 using WebSocketManager;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -57,6 +58,13 @@ namespace Neon.WebApi
 			services.AddHttpClient();
 			services.AddWebSocketManager();
 
+			services.AddMvc().AddJsonOptions(jo =>
+			{
+				jo.SerializerSettings.ContractResolver = new DefaultContractResolver()
+				{
+					NamingStrategy = new SnakeCaseNamingStrategy()
+				};
+			});
 			Program.NeonManager.ContainerBuilder.Populate(services);
 
 			Program.NeonManager.Init();

@@ -7,7 +7,7 @@ namespace Neon.WebApi.Controllers
 {
 
 	[ApiController]
-	[Route("/scriptengine/")]
+	[Route("api/scriptengine/")]
 	public class ScriptEngineController : ControllerBase
 	{
 		private readonly IScriptEngineService _scriptEngineService;

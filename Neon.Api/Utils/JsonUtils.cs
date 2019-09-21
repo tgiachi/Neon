@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using Newtonsoft.Json.Serialization;
 
 namespace Neon.Api.Utils
 {
@@ -8,6 +9,16 @@ namespace Neon.Api.Utils
 	/// </summary>
 	public static class JsonUtils
 	{
+
+		private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+		{
+			ContractResolver = new DefaultContractResolver
+			{
+				NamingStrategy = new SnakeCaseNamingStrategy()
+			},
+			Formatting = Formatting.Indented
+		};
+
 		/// <summary>
 		///     Serialize object to string
 		/// </summary>
@@ -15,7 +26,7 @@ namespace Neon.Api.Utils
 		/// <returns></returns>
 		public static string ToJson(this object value)
 		{
-			return JsonConvert.SerializeObject(value, Formatting.Indented);
+			return JsonConvert.SerializeObject(value, JsonSerializerSettings);
 		}
 
 		/// <summary>
@@ -28,7 +39,7 @@ namespace Neon.Api.Utils
 		{
 			try
 			{
-				return JsonConvert.DeserializeObject(obj, type);
+				return JsonConvert.DeserializeObject(obj, type, JsonSerializerSettings);
 			}
 			catch (Exception)
 			{
@@ -47,7 +58,7 @@ namespace Neon.Api.Utils
 		{
 			try
 			{
-				return JsonConvert.DeserializeObject<T>(obj);
+				return JsonConvert.DeserializeObject<T>(obj, JsonSerializerSettings);
 			}
 			catch (Exception)
 			{
