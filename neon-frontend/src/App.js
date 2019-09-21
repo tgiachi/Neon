@@ -6,6 +6,7 @@ import { Box } from "@chakra-ui/core";
 import HomeView  from "./views/home"
 import JsEditorComponent from "./components/js_editor";
 import WebSocketComponent from './components/websocket';
+import ScriptTerminalComponent from "./components/script_terminal";
 
 
 
@@ -19,6 +20,9 @@ function App() {
           <div>
             <Box w="90%">
               <JsEditorComponent />
+            </Box>
+            <Box w="90%">
+              <ScriptTerminalComponent />
             </Box>
             <Route exact path="/" component={HomeView} />
           </div>
