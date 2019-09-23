@@ -20,7 +20,7 @@ namespace Neon.WebApi.Controllers
 
 		[HttpGet]
 		[Route("all")]
-		public ActionResult<List<INeonIoTEntity>> GetEntities()
+		public ActionResult<List<object>> GetEntities()
 		{
 			return _ioTService.GetEntities();
 		}

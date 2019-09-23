@@ -1,96 +1,102 @@
 import React from 'react';
-import Terminal from 'terminal-in-react';
+import ReactTerminal from 'react-terminal-component';
+import {
+  EmulatorState,
+  CommandMapping,
+  OutputFactory
+} from 'javascript-terminal';
 
 class ScriptTerminalComponent extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      title: 'test',
-      commands: {
-        color: {
-          method: (args, print, runCommand) => {
-            print(`The color is ${args._[0] || args.color}`);
-          },
-          options: [
-            {
-              name: 'color',
-              description: 'The color the output should be',
-              defaultValue: 'white',
-            },
-          ],
-        },
-      }}
-      this.downloadCommands();
+      title: 'Neon',
+      commands: {},
+      emuState: EmulatorState.create({
+         'commandMapping': CommandMapping.create({
+           print: {
+             'function': (state, opts) => {
+               const input = opts.join(' ');
 
+               return {
+                 output: OutputFactory.makeTextOutput(input)
+               };
+             },
+             'optDef': {}
+           }
+         })
+      })}
+      console.log(this.state);
+  }
+
+  async componentDidMount()
+  {
+    await this.test();
+  }
+
+  async test() {
+      const response = await fetch("http://localhost:5000/api/scriptengine/functions");
+      const data = await response.json();
+      const commands = {};
+      data.map((cmd, index) => {
+
+        commands[cmd.function_name] = {
+          'function': (state, opts) => {
+            console.log(state)
+            this.sendCommand(cmd.function_name, (text) => {
+              console.log(text);
+            })
+           return {
+             output: OutputFactory.makeTextOutput(cmd.function_name)
+           }; 
+          },
+           'optDef': {}
+        }
+      });
+      console.log(`commands ${commands}`)
+      console.log(commands);
+      this.setState({
+         emuState: EmulatorState.create({
+               'commandMapping': CommandMapping.create(
+               commands
+               )
+             }
+      )}); 
+      
   }
 
 
   sendCommand(cmd, print)
   {
-    console.log(encodeURIComponent(cmd));
-    fetch('http://localhost:5000/api/scriptengine/execute/script', {
+    console.log(cmd);
+    print('sending command ' + cmd);
+    fetch(`http://localhost:5000/api/scriptengine/execute/script?script=${encodeURIComponent(cmd)}`, {
       method: 'POST',
       headers: 
       { 'Content-Type': 'application/json'
-    },
-      body: encodeURIComponent(cmd)
-    }).then(data => data.json()).then(result => {
-      print(JSON.stringify(result));
-      
-    })
-    print('OK');
-
-  }
-
-
-  downloadCommands() {
-    fetch("http://localhost:5000/api/scriptengine/functions").then(response => response.json()).then(data => {
-      const commands = {};
-
-      data.map((cmd, index) => {
-        commands[cmd.function_name] = {
-          name: cmd.function_name,
-          description: cmd.help_text,
-          options: []
+    }
+      }).then(data => data.json()
+      ).then(result => {
+        if (result.is_error)
+        {
+          print(`Error: ${result.error_message}`)
         }
-
-        cmd.parameters.map((param, index) => {
-          commands[cmd.function_name].options.push({
-            name: param.param_name,
-            description: param.param_type,
-            defaultValue: ''
-        })
-        })
-      });
-
-      this.setState({ title:' ok' ,commands });
-      console.log(commands);
-
-    });
+        else{
+          print(`> ${result.result}`)
+        }
+      console.log(result);
+    })
   }
   render() {
     console.log(this.state)
     return (
      <div>
-        <input type="button" value="OK" onClick={() => this.handleClick()} />
-        <Terminal
-          color='lime'
-          promptSymbol = "#>"
-          backgroundColor='black'
-          commands={this.state.commands}
-          barColor='black'
-          commandPassThrough={(cmd, print) => this.sendCommand(cmd, print)}
-          style={{ fontWeight: "bold", fontSize: "1em" }}
-          msg={this.state.title}
-        />
+       <ReactTerminal emulatorState={this.state.emuState} />
      </div>
     )
   }
 
-  handleClick = () => {
-    this.setState({title: 'OK2'});
-  }
 }
 
 export default ScriptTerminalComponent;

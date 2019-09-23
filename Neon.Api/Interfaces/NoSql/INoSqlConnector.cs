@@ -15,6 +15,8 @@ namespace Neon.Api.Interfaces.NoSql
 
 		List<TEntity> List<TEntity>(string collectionName) where TEntity : class, INeonEntity;
 
+		List<object> FindAllGeneric(string collectionName);
+
 		IQueryable<TEntity> Query<TEntity>(string collectionName) where TEntity : class, INeonEntity;
 
 		TEntity Insert<TEntity>(string collectionName, TEntity obj) where TEntity : class, INeonEntity;

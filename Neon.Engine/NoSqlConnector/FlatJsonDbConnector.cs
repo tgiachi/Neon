@@ -56,6 +56,11 @@ namespace Neon.Engine.NoSqlConnector
 			return _dataStore.GetCollection<TEntity>(collectionName).AsQueryable().ToList();
 		}
 
+		public List<object> FindAllGeneric(string collectionName)
+		{
+			return _dataStore.GetCollection<object>(collectionName).AsQueryable().ToList();
+		}
+
 		public IQueryable<TEntity> Query<TEntity>(string collectionName) where TEntity : class, INeonEntity
 		{
 			return _dataStore.GetCollection<TEntity>(collectionName).AsQueryable().AsQueryable();

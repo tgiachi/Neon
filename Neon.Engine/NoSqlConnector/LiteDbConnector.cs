@@ -76,6 +76,11 @@ namespace Neon.Engine.NoSqlConnector
 
 		}
 
+		public List<object> FindAllGeneric(string collectionName)
+		{
+			return _liteDatabase.GetCollection<object>(collectionName).FindAll().ToList();
+		}
+
 		public IQueryable<TEntity> Query<TEntity>(string collectionName) where TEntity : class,INeonEntity
 		{
 			lock (_databaseLock)

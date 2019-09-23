@@ -52,6 +52,11 @@ namespace Neon.Engine.NoSqlConnector
 			return _mongoDatabase.GetCollection<TEntity>(collectionName).FindSync(entity => true).ToList();
 		}
 
+		public List<object> FindAllGeneric(string collectionName)
+		{
+			return _mongoDatabase.GetCollection<object>(collectionName).FindSync(o => true).ToList();
+		}
+
 		public IQueryable<TEntity> Query<TEntity>(string collectionName) where TEntity : class, INeonEntity
 		{
 			return _mongoDatabase.GetCollection<TEntity>(collectionName).AsQueryable();

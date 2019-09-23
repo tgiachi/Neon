@@ -34,7 +34,7 @@ namespace Neon.WebApi.Controllers
 
 		[HttpPost]
 		[Route("execute/script")]
-		public ActionResult<ScriptExecutionResult> ExecuteScript([FromBody] string script)
+		public ActionResult<ScriptExecutionResult> ExecuteScript(string script)
 		{
 			var result = new ScriptExecutionResult();
 			result.Script = script;
