@@ -6,6 +6,8 @@ import {
   OutputFactory
 } from 'javascript-terminal';
 
+import config from "../env"
+
 class ScriptTerminalComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -36,7 +38,7 @@ class ScriptTerminalComponent extends React.Component {
   }
 
   async test() {
-      const response = await fetch("http://localhost:5000/api/scriptengine/functions");
+      const response = await fetch(`${config.api.API_URL}api/scriptengine/functions`);
       const data = await response.json();
       const commands = {};
       data.map((cmd, index) => {
@@ -71,7 +73,7 @@ class ScriptTerminalComponent extends React.Component {
   {
     console.log(cmd);
     print('sending command ' + cmd);
-    fetch(`http://localhost:5000/api/scriptengine/execute/script?script=${encodeURIComponent(cmd)}`, {
+    fetch(`${config.api.API_URL}api/scriptengine/execute/script?script=${encodeURIComponent(cmd)}`, {
       method: 'POST',
       headers: 
       { 'Content-Type': 'application/json'

@@ -5,6 +5,8 @@ import {
   connect
 } from "react-redux";
 
+import config from "../env"
+
 function mapDispatchToProps(dispatch) {
   return {
     onEventReceived: event => dispatch(onEventReceived(event))
@@ -14,7 +16,11 @@ class WebSocketComponent extends React.Component{
 
   render(){
     return (
-      <Websocket url="ws://localhost:5000/ws/events" onMessage={this.handleData.bind(this)} />      
+      < Websocket url = {config.api.WS_URL}
+      onMessage = {
+        this.handleData.bind(this)
+      }
+      />      
     )
   }
   handleData(data) {

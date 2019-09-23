@@ -22,7 +22,8 @@ namespace Neon.WebApi.Controllers
 		[Route("available")]
 		public ActionResult<List<CommandPreloadData>> GetAvailableCommands()
 		{
-			return Ok(_commandDispatcherService.CommandPreload);
+			var list = _commandDispatcherService.CommandPreload; 
+			return Ok(list);
 		}
 	}
 }

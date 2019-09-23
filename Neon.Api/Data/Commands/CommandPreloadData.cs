@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace Neon.Api.Data.Commands
 {
@@ -16,6 +17,7 @@ namespace Neon.Api.Data.Commands
 
 		public bool IsAsync { get; set; }
 
+		[JsonIgnore]
 		public MethodInfo Method { get; set; }
 
 		public List<CommandPreloadParam> Params { get; set; }
