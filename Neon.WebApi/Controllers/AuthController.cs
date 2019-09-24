@@ -26,6 +26,9 @@ namespace Neon.WebApi.Controllers
 		[HttpGet]
 		[HttpPost]
 		[Route("{provider}/auth")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+		[ProducesDefaultResponseType]
 		public ActionResult OAuth(string provider)
 		{
 			var providerData = _oAuthReceiverData.FirstOrDefault(r => r.ProviderName == provider);

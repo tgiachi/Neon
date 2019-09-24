@@ -4,6 +4,7 @@ using Neon.Api.Interfaces.Managers;
 using Neon.Api.Interfaces.WebHook;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace Neon.WebApi.Controllers
 {
@@ -22,6 +23,9 @@ namespace Neon.WebApi.Controllers
 		[HttpGet]
 		[HttpPost]
 		[Route("{provider}")]
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status404NotFound)]
+		[ProducesDefaultResponseType]
 		public ActionResult OAuth(string provider, [FromForm] string payload)
 		{
 			var providerData = _webHookReceiverData.FirstOrDefault(r => r.ProviderName == provider);

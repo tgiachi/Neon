@@ -27,6 +27,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using Neon.Api.Attributes.Notifiers;
 using Neon.Api.Data;
@@ -97,6 +98,18 @@ namespace Neon.Api.Core
 
 		private void PrintHeader()
 		{
+			var framework = Assembly
+				.GetEntryAssembly()?
+				.GetCustomAttribute<TargetFrameworkAttribute>()?
+				.FrameworkName;
+
+			var stats = new
+			{                
+				OsPlatform = System.Runtime.InteropServices.RuntimeInformation.OSDescription,
+				AspDotnetVersion = framework
+			};
+
+
 			Console.WriteLine($@" 
  _   _                  
 | \ | |                 
@@ -105,6 +118,8 @@ namespace Neon.Api.Core
 | |\  |  __/ (_) | | | |
 \_| \_/\___|\___/|_| |_|
 :: Home Control v {AssemblyUtils.GetVersion()}
+:: Os {stats.OsPlatform}
+:: .NET core version {stats.AspDotnetVersion}
                         ");
 			Console.WriteLine($"Starting Neon (branch {ThisAssembly.Git.Branch}) {ThisAssembly.Git.Commit} sha: {ThisAssembly.Git.Sha}");
 		}
