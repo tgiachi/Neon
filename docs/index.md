@@ -16,7 +16,7 @@ I'm looking for people to help me with the project, please contact me!
 
 ## Features
 
-- .NET Core 2.2  
+- .NET Core 3.0
 - Scripts Engine in JavaScript (using [Jint](https://github.com/sebastienros/jint) 3.0.0 beta)
 - UTF-8 support
 - Metric and imperial measurements support
