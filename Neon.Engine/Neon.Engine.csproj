@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,8 +18,7 @@
     <PackageReference Include="LiteDB" Version="4.1.4" />
     <PackageReference Include="Makaretu.Dns.Multicast" Version="0.25.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.9.1" />
     <PackageReference Include="MQTTnet" Version="3.0.8" />
     <PackageReference Include="NewsAPI" Version="0.5.0" />
@@ -29,10 +29,10 @@
     <PackageReference Include="SonarrSharp" Version="1.2.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="System.Reactive" Version="4.1.6" />
-     <PackageReference Include="SpotifyAPI.Web" Version="4.2.1" />
+     <PackageReference Include="SpotifyAPI.Web" Version="4.2.2" />
      <PackageReference Include="Telegram.Bot" Version="15.0.0" />
      <PackageReference Include="TypeMerger" Version="2.0.1" />
-     <PackageReference Include="Zeroconf" Version="3.1.29" />
+     <PackageReference Include="Zeroconf" Version="3.2.1" />
   </ItemGroup>
 
   <ItemGroup>

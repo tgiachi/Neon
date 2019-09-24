@@ -1,9 +1,9 @@
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-stretch-slim AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0.0-buster-slim AS base
 WORKDIR /app
 EXPOSE 5000
 EXPOSE 1883
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.2-stretch AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
 RUN git clone https://github.com/tgiachi/Neon.git /src
 # Install NodeJs and compile frontend

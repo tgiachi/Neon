@@ -16,6 +16,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using WebSocketManager;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
@@ -40,6 +41,8 @@ namespace Neon.WebApi
 
 			_config = Program.NeonManager.Config;
 
+			services.AddControllers();
+
 			services.AddOpenApiDocument();
 
 			services.AddCors(c =>
@@ -48,15 +51,12 @@ namespace Neon.WebApi
 				{
 					options
 						.AllowAnyHeader()
-						.AllowAnyOrigin()
-						.AllowCredentials();
+						.AllowAnyOrigin();
 				});
 			});
 
 
-			services.AddMvc().AddMetrics()
-				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-				.AddControllersAsServices();
+			services.AddMetrics();
 
 			services.AddSingleton(typeof(ILogger<>), typeof(LoggerEx<>));
 
@@ -64,13 +64,15 @@ namespace Neon.WebApi
 			services.AddHttpClient();
 			services.AddWebSocketManager();
 
-			services.AddMvc().AddJsonOptions(jo =>
+			services.AddMvc().AddNewtonsoftJson(jo =>
 			{
 				jo.SerializerSettings.ContractResolver = new DefaultContractResolver()
 				{
 					NamingStrategy = new SnakeCaseNamingStrategy()
 				};
 			});
+
+
 			Program.NeonManager.ContainerBuilder.Populate(services);
 
 			Program.NeonManager.Init();
@@ -81,7 +83,7 @@ namespace Neon.WebApi
 
 		}
 
-		public async void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime appLifetime)
+		public async void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime appLifetime)
 		{
 
 			app.UseDefaultFiles();
@@ -117,6 +119,8 @@ namespace Neon.WebApi
 				app.UseReDoc(settings => settings.Path = "/redoc");
 			}
 
+			
+           
 
 			app.UseWebSockets();
 
@@ -128,7 +132,13 @@ namespace Neon.WebApi
 				app.MapWebSocketManager(wsAttr.Path, ApplicationContainer.Resolve(t) as WebSocketHandler);
 			});
 
-			app.UseMvc();
+			app.UseRouting();
+
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllers();
+			});
+
 
 			await Program.NeonManager.Start();
 		}
