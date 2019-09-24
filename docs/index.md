@@ -60,7 +60,7 @@ I'm looking for people to help me with the project, please contact me!
 
 ```shell
 docker pull tgiachi/neon:dev
-docker run -it --rm  -p 5000:5000 -v /home/user/neon:/neon tgiachi/neon:dev
+docker run -it --rm  -p 5000:5000 -v /home/user/neon:/neon -e TZ="Europe/Rome" tgiachi/neon:dev
 ```
 
 ## Default config file

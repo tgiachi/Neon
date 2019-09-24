@@ -7,10 +7,10 @@ FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
 RUN git clone https://github.com/tgiachi/Neon.git /src
 # Install NodeJs and compile frontend
-RUN apt-get update && apt-get install -y curl
+RUN apt-get update && apt-get install -y curl 
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get update
-RUN apt-get install -y nodejs
+RUN apt-get install -y nodejs tzdata
 RUN npm install -g yarn
 WORKDIR /src/neon-frontend
 RUN yarn install
