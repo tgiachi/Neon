@@ -24,5 +24,33 @@ namespace Neon.WebApi.Controllers
 		{
 			return _ioTService.GetEntities();
 		}
+
+		[HttpGet]
+		[Route("names")]
+		public ActionResult<List<string>> GetEntitiesNames()
+		{
+			return _ioTService.GetEventsNames;
+		}
+
+		[HttpGet]
+		[Route("get/all")]
+		public ActionResult<List<INeonEntity>> GetAllEntities()
+		{
+			var result = new List<object>();
+			_ioTService.GetEventsNames.ForEach(e =>
+			{
+				result.AddRange(_ioTService.GetEntitiesCollectionByName(e));
+
+			});
+
+			return Ok(result);
+		}
+
+		[HttpGet]
+		[Route("get/{name}")]
+		public ActionResult<List<INeonIoTEntity>> GetEntityCollection(string name)
+		{
+			return Ok(_ioTService.GetEntitiesCollectionByName(name));
+		}
 	}
 }

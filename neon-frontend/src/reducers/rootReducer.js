@@ -1,8 +1,8 @@
 import {
-  EVENT_RECEIVED
+  EVENT_RECEIVED, ENTITY_UPDATED
 } from "../constants/"
 
-const initialState  = { events: [] };
+const initialState  = { events: [], data:[] };
 
 function rootReducer(state = initialState, action) {
 
@@ -11,6 +11,10 @@ function rootReducer(state = initialState, action) {
     return Object.assign({}, state, {
       events: state.events.concat(action.payload)
     })
+  }
+  if (action.type === ENTITY_UPDATED)
+  {
+    return { data: action.payload}
   }
   return state;
 }

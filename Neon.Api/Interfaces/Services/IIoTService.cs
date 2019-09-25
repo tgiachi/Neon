@@ -22,7 +22,13 @@ namespace Neon.Api.Interfaces.Services
 
 		T GetEntityByType<T>(string name, string type) where T :  NeonIoTBaseEntity;
 
+		List<object> GetEntitiesCollectionByType(Type type);
+
+		List<object> GetEntitiesCollectionByName(string name);
+
 		List<object> GetEntities();
+
+		List<string> GetEventsNames { get; }
 
 		List<T> GetEntitiesByType<T>() where T : class, INeonIoTEntity;
 

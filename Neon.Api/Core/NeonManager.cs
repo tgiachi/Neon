@@ -73,7 +73,8 @@ namespace Neon.Api.Core
 			PrintHeader();
 			_logger = Log.Logger.ForContext<NeonManager>();
 			_logger.Debug($"Pre-loading assemblies");
-			AssemblyUtils.GetAppAssemblies();
+			var assemblies =  AssemblyUtils.GetAppAssemblies();
+			_logger.Debug($"Loaded {assemblies.Count} assemblies");
 
 			AvailableServices = new List<Type>();
 			IsRunningInDocker = Environment.GetEnvironmentVariables()["DOTNET_RUNNING_IN_CONTAINER"] != null;

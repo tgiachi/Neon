@@ -15,6 +15,7 @@ using Neon.Api.Utils;
 using System;
 using System.IO;
 using System.Reflection;
+using Microsoft.AspNetCore.WebSockets;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
@@ -44,6 +45,12 @@ namespace Neon.WebApi
 			services.AddControllers();
 
 			services.AddOpenApiDocument();
+
+			services.AddWebSockets(options =>
+			{
+				options.KeepAliveInterval = TimeSpan.FromSeconds(120);
+				options.ReceiveBufferSize = 4 * 1024;
+			});
 
 			services.AddCors(c =>
 			{
@@ -126,7 +133,7 @@ namespace Neon.WebApi
 
 			AssemblyUtils.GetAttribute<WebSocketHubAttribute>().ForEach(t =>
 			{
-				var wsAttr = t.GetCustomAttribute<WebSocketHubAttribute>();
+					var wsAttr = t.GetCustomAttribute<WebSocketHubAttribute>();
 				_logger.LogInformation($"Registering websocket path {wsAttr.Path} to {t.Name}");
 
 				app.MapWebSocketManager(wsAttr.Path, ApplicationContainer.Resolve(t) as WebSocketHandler);

@@ -11,11 +11,13 @@ using Neon.Api.Interfaces.Entity;
 using Neon.Api.Interfaces.NoSql;
 using Neon.Api.Interfaces.Services;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Neon.Api.Utils;
@@ -32,8 +34,11 @@ namespace Neon.Engine.Services
 		private readonly ILogger _logger;
 		private readonly Subject<INeonIoTEntity> _iotEntitiesBus = new Subject<INeonIoTEntity>();
 		private readonly CompareLogic _compareLogic = new CompareLogic();
+		private readonly Dictionary<string, Type> _eventsCollectionNames = new Dictionary<string, Type>();
 		private INoSqlConnector _entitiesConnector;
 		private INoSqlConnector _eventsConnector;
+
+		public List<string> GetEventsNames => _eventsCollectionNames.Keys.ToList();
 
 		public IoTService(ILogger<IoTService> logger, INoSqlService noSqlService, NeonConfig neonConfig)
 		{
@@ -44,10 +49,29 @@ namespace Neon.Engine.Services
 
 		public async Task<bool> Start()
 		{
+			ScanEventCollectionNames();
 			await InitEntitiesDatabase();
 			await InitEventsDatabase();
 
 			return true;
+		}
+
+		private void ScanEventCollectionNames()
+		{
+			AssemblyUtils.GetAttribute<EventsCollectionAttribute>().ForEach(t =>
+			{
+				_eventsCollectionNames.Add(GetCollectionName(t), t);
+			});
+		}
+
+		private string GetCollectionName(Type t)
+		{
+			var attr = t.GetCustomAttribute<EventsCollectionAttribute>();
+			var collectionName = t.GetType().Name.ToLower().Pluralize();
+			if (!string.IsNullOrEmpty(attr.CollectionName))
+				collectionName = attr.CollectionName.ToLower();
+
+			return collectionName;
 		}
 
 		private async Task InitEntitiesDatabase()
@@ -112,15 +136,9 @@ namespace Neon.Engine.Services
 
 		private void PersistEvent<T>(T entity) where T : class, INeonIoTEntity
 		{
-			var collectionName = entity.GetType().Name.ToLower().Pluralize();
-			var attr = entity.GetType().GetCustomAttribute<EventsCollectionAttribute>();
-
-			if (attr != null)
-				collectionName = attr.CollectionName;
-
 			entity.Id = EntitiesUtils.GenerateId();
 
-			_eventsConnector.Insert(collectionName, entity);
+			_eventsConnector.Insert(GetCollectionName(entity.GetType()), entity);
 		}
 
 		public async Task<bool> Stop()
@@ -163,6 +181,21 @@ namespace Neon.Engine.Services
 		{
 			return _entitiesConnector.FindAllGeneric(EntitiesCollectionName);
 
+		}
+
+		public List<object> GetEntitiesCollectionByType(Type type)
+		{
+			
+			var openCast = _entitiesConnector.GetType().GetMethod(nameof(_entitiesConnector.Query));
+			var closeCast = openCast.MakeGenericMethod(type);
+			var queryable = closeCast.Invoke(_entitiesConnector, new object[] {GetCollectionName(type)}) as IQueryable<object>;
+
+			return queryable.ToList();
+		}
+
+		public List<object> GetEntitiesCollectionByName(string name)
+		{
+			return _eventsCollectionNames.ContainsKey(name) ? GetEntitiesCollectionByType(_eventsCollectionNames[name]) : new List<object>();
 		}
 
 		public List<T> GetEntitiesByType<T>() where T : class, INeonIoTEntity

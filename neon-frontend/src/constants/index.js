@@ -1,1 +1,2 @@
 export const EVENT_RECEIVED = 'EVENT_RECEIVED';
+export const ENTITY_UPDATED = 'ENTITY_UPDATED';

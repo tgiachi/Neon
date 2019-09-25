@@ -28,7 +28,7 @@ const EventViewer = ({events}) => (
             <Table.Cell>{event.data.group_name}</Table.Cell>
             <Table.Cell>{event.data.entity_type}</Table.Cell>
             <Table.Cell>
-              <Moment> {event.data.event_date_time} </Moment>
+              <Moment date={new Date(event.data.event_date_time)} /> 
             </Table.Cell>
           </Table.Row>
         );
