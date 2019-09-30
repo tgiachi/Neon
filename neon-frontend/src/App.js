@@ -7,6 +7,7 @@ import ScriptTerminalView from "./views/script_terminal_view"
 import EditorView from "./views/editor_view"
 import GridView from "./views/grid_view"
 import EventsView from "./views/event_view"
+import ComponentsView from "./views/components_view"
 import WebSocketComponent from './components/websocket';
 import { Provider } from 'react-redux';
 import store from './store';
@@ -24,7 +25,7 @@ function App() {
 
               <Menu.Item as='a' header>
                 Neon
-        </Menu.Item>
+              </Menu.Item>
               <Menu.Item as='div'>
                 <Icon name="home" />
                 <Link to='/'>
@@ -57,6 +58,17 @@ function App() {
             </Link>
               </Menu.Item>
 
+            
+              <Dropdown pointing className='link item' icon='wrench' text='Settings' >
+                  <Dropdown.Menu>
+                    <Dropdown.Item>
+                      <Link to='/components' >
+                         Components
+                      </Link>
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+           
             </Container>
           </Menu>
           <Container style={{ marginTop: '100px' }}>
@@ -65,6 +77,7 @@ function App() {
             <Route path="/editor/" component={EditorView} />
             <Route path="/events/" component={EventsView} />
             <Route path="/grid/" component={GridView} />
+            <Route path="/components/" component={ComponentsView} />
           </Container>
         </Router>
       </Provider>

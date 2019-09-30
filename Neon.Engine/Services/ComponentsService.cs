@@ -21,7 +21,8 @@ using System.Threading.Tasks;
 namespace Neon.Engine.Services
 {
 	[NeonService("Components Service", "Manage components", 6)]
-	public class ComponentsService : IComponentsService
+	public class 
+		ComponentsService : IComponentsService
 	{
 		private readonly ILogger _logger;
 		private readonly NeonConfig _neonConfig;
@@ -88,6 +89,8 @@ namespace Neon.Engine.Services
 				AvailableComponents.Add(new AvailableComponent()
 				{
 					Name = attr.Name,
+					Category = attr.Category,
+					Description = attr.Description,
 					ComponentType = f
 				});
 			});
