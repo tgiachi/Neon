@@ -31,6 +31,7 @@ using System.Runtime.Versioning;
 using System.Threading.Tasks;
 using Neon.Api.Attributes.Notifiers;
 using Neon.Api.Data;
+using Neon.Api.Interfaces.Base;
 
 
 namespace Neon.Api.Core
@@ -445,8 +446,19 @@ namespace Neon.Api.Core
 			_fileSystemManager.Stop();
 		}
 
+		public T ResolveInContext<T>()
+		{
+			return _container.BeginLifetimeScope().Resolve<T>();
+		}
+
+		public T GetService<T>() where T : INeonService
+		{
+			return _servicesManager.GetService<T>();
+		}
+
 		public T Resolve<T>()
 		{
+			
 			return _container.Resolve<T>();
 		}
 

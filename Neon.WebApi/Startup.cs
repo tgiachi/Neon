@@ -42,7 +42,7 @@ namespace Neon.WebApi
 
 			_config = Program.NeonManager.Config;
 
-			services.AddControllers();
+			services.AddControllers().AddControllersAsServices();
 
 			services.AddOpenApiDocument();
 

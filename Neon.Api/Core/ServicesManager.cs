@@ -7,6 +7,7 @@ using Neon.Api.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -64,6 +65,11 @@ namespace Neon.Api.Core
 			}
 
 			return true;
+		}
+
+		public T GetService<T>() where T : INeonService
+		{
+			return (T)_services.Values.FirstOrDefault(service => service.GetType().FullName == typeof(T).FullName);
 		}
 
 

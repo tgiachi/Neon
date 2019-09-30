@@ -3,6 +3,7 @@ using Neon.Api.Data.Config.Root;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Neon.Api.Interfaces.Base;
 
 namespace Neon.Api.Interfaces.Managers
 {
@@ -60,6 +61,9 @@ namespace Neon.Api.Interfaces.Managers
 		/// <param name="t"></param>
 		/// <returns></returns>
 		object Resolve(Type t);
+
+
+		T GetService<T>() where T : INeonService;
 
 
 	}

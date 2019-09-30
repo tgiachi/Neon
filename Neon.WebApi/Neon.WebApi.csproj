@@ -36,6 +36,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Neon.Api\Neon.Api.csproj" />
     <ProjectReference Include="..\Neon.Engine\Neon.Engine.csproj" />
+    <ProjectReference Include="..\Neon.Movie.Indexer.Plugin\Neon.Movie.Indexer.Plugin.csproj" />
   </ItemGroup>
 
 </Project>

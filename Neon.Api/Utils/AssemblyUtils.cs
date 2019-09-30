@@ -133,11 +133,13 @@ namespace Neon.Api.Utils
 
 						if (existsAssembly == null)
 						{
-							if (!file.Contains("Analysis"))
+							if (!file.Contains("Analysis")) 
 							{
-								var assembly = Assembly.LoadFile(file);
+								var assembly = Assembly.LoadFrom(file);
 								allAssemblies.Add(assembly);
 							}
+							
+
 
 						}
 					}
