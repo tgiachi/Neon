@@ -6,6 +6,7 @@ using Neon.Api.Interfaces.NoSql;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Neon.Api.Utils;
 
 namespace Neon.Engine.NoSqlConnector
 {
@@ -64,6 +65,9 @@ namespace Neon.Engine.NoSqlConnector
 
 		public TEntity Insert<TEntity>(string collectionName, TEntity obj) where TEntity : class, INeonEntity
 		{
+			if (obj.Id == null)
+				obj.Id = EntitiesUtils.GenerateId();
+
 			_mongoDatabase.GetCollection<TEntity>(collectionName).InsertOne(obj);
 			return obj;
 		}

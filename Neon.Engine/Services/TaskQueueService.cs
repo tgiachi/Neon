@@ -24,7 +24,7 @@ namespace Neon.Engine.Services
 
 		public Task<bool> Start()
 		{
-			_maxParallelizationCount = 5;
+			_maxParallelizationCount = Environment.ProcessorCount - 1;
 			_maxQueueLength = int.MaxValue / 2;
 
 			return Task.FromResult(true);
@@ -41,8 +41,16 @@ namespace Neon.Engine.Services
 			if (_processingQueue.Count < _maxQueueLength)
 			{
 				_processingQueue.Enqueue(futureTask);
+				if (RunningTaskCount == 0)
+				{
+					ProcessBackground();
+				}
+
 				return true;
+
 			}
+
+			
 			return false;
 		}
 

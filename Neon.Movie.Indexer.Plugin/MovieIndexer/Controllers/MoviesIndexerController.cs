@@ -22,10 +22,17 @@ namespace Neon.Movie.Indexer.Plugin.MovieIndexer.Controllers
 
 
 		[HttpGet]
-		[Route("test")]
-		public ActionResult<string> TestGet()
+		[Route("available/indexers")]
+		public ActionResult<List<string>> GetAvailableIndexers()
 		{
-			return Ok("ok");
+			return _moviesIndexerService.AvailableIndexers;
+		}
+
+		[HttpGet]
+		[Route("start/{name}")]
+		public ActionResult<bool> StartIndexer(string name)
+		{
+			return Ok(_moviesIndexerService.StartIndexer(name));
 		}
 	}
 }
