@@ -107,6 +107,11 @@ namespace Neon.Movie.Indexer.Plugin.MovieIndexer.Indexers
 				videoLinkRaw = videoLinkRaw.Split("\n")[0];
 
 				var videoLink = videoLinkRaw.Replace("window.location = '", "").Replace("';", "");
+				if (videoLink.Contains("oload.site"))
+				{
+					videoLink = videoLink.Replace("oload.site", "openload.co");
+				}
+
 
 				var videoUrl = new Url(videoLink);
 

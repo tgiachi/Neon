@@ -277,3 +277,4 @@ __pycache__/
 
 # End of https://www.gitignore.io/api/aspnetcore
 Neon.WebApi/neon-config.yaml
+Neon.WebApi/neon/
