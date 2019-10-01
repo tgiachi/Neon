@@ -33,7 +33,7 @@ namespace Neon.Movie.Indexer.Plugin.MovieIndexer.Services
 
 		public List<string> AvailableIndexers => _moviesIndexersTypes.Keys.ToList();
 
-
+	
 		private readonly Dictionary<string, MoviesIndexerData> _moviesIndexersTypes = new Dictionary<string, MoviesIndexerData>();
 
 
@@ -127,6 +127,21 @@ namespace Neon.Movie.Indexer.Plugin.MovieIndexer.Services
 
 			return entity;
 
+		}
+
+		public List<MovieCategory> GetMovieCategories()
+		{
+			return _noSqlConnector.List<MovieCategory>("movies_categories");
+		}
+
+		public List<Entities.Movie> GetMoviesByCategoryId(string categoryId)
+		{
+			return _noSqlConnector.Query<Entities.Movie>("movies").Where(m => m.MovieCategoryId == categoryId).ToList();
+		}
+
+		public List<MovieLink> GetMovieLinkById(string movieId)
+		{
+			return _noSqlConnector.Query<MovieLink>("movies_link").Where(m => m.MovieId == movieId).ToList();
 		}
 
 		public bool StartIndexer(string name)

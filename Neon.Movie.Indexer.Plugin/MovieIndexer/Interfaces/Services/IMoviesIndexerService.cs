@@ -14,11 +14,15 @@ namespace Neon.Movie.Indexer.Plugin.MovieIndexer.Interfaces.Services
 
 		MovieCategory AddMovieCategory(string name);
 
-
 		Entities.Movie AddMovie(MovieCategory category, string name);
 
 		MovieLink AddMovieLink(Entities.Movie movie, string provider, string link);
 
+		List<MovieCategory> GetMovieCategories();
+
+		List<Entities.Movie> GetMoviesByCategoryId(string categoryId);
+
+		List<MovieLink> GetMovieLinkById(string movieId);
 		bool StartIndexer(string name);
 
 		IHttpClientFactory HttpClientFactory { get; }
